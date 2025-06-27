@@ -1,0 +1,9 @@
+{
+  "name": "afi-core",
+  "role": "runtime",
+  "description": "Core runtime for agent signal validation in AFI Protocol",
+  "language": "TypeScript",
+  "tags": ["validator", "mentor", "runtime", "afi", "typescript"],
+  "entry": "runtime/mentor_registry.ts",
+  "factory_ready": true
+}

@@ -1,0 +1,13 @@
+{
+  "name": "afi-signal-schema-test",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsx signal_schema.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "zod": "^3.25.67"
+  }
+}

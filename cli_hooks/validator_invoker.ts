@@ -1,4 +1,4 @@
-// Invokes PoIValidator and MentorRegistry from afi-core
+import { SignalScorer } from '../validators/SignalScorer';
 export const invokePoIValidator = () => {
   console.log("PoIValidator invoked.");
 };

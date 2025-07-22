@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { SignalSchema } from '../schemas/universal_signal_schema';
 
 export interface SignalScoreResult {

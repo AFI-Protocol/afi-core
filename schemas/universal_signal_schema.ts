@@ -1,53 +1,39 @@
 import { z } from "zod";
 
-/* ---------- ENUMS ---------- */
-export const Action  = z.enum(["buy", "sell", "alert", "info"]);
-export const Source  = z.enum(["tradingview", "bot", "manual"]);
-export const Market  = z.enum(["crypto", "forex", "stocks", "commodities", "futures"]);
-
-/* ---------- MAIN SCHEMA ---------- */
 export const SignalSchema = z.object({
   id: z.string().optional(),
-  timestamp: z.number().default(() => Date.now()),
-
-  /* origin */
-  source: Source.default("tradingview"),
   symbol: z.string(),
-  market: Market.optional(),
-
-  /* core */
-  action: Action,
-  strategy: z.string().optional(),   // Pine strategy name
-  scriptId: z.string().optional(),   // unique script hash
-
-  /* price block */
-  price:        z.number().optional(),
-  targetPrice:  z.number().optional(),
-  stopLoss:     z.number().optional(),
-
-  /* meta */
+  market: z.string().optional(),
+  action: z.enum(["buy", "sell", "hold"]),
+  price: z.number().optional(),
+  timestamp: z.union([z.number(), z.string()]).optional(),
+  source: z.string().optional(),
+  strategy: z.string().optional(),
+  notes: z.string().optional(),
+  targetPrice: z.number().optional(),
+  stopLoss: z.number().optional(),
   timeframe: z.string().optional(),
-  strength:  z.union([z.string(), z.number()]).optional(),
+  strength: z.enum(["low", "medium", "high"]).optional(),
 
-  /* indicators */
+  // ✨ This field is required by SignalScorer.ts
+  content: z.string().min(1).max(280),
+
   indicators: z.array(
     z.object({
       name: z.string(),
-      value: z.any(),
-      timeframe: z.string().optional()
+      value: z.union([z.string(), z.number(), z.boolean(), z.null()]),
+      timeframe: z.string().optional(),
     })
   ).optional(),
 
-  /* analysis */
   analysis: z.array(
     z.object({
       type: z.string(),
       result: z.string(),
-      confidence: z.number().min(0).max(100).optional()
+      confidence: z.number().optional(),
     })
   ).optional(),
 
-  /* free-form */
-  note:       z.string().optional(), // Pine alert_message
-  subscribed: z.boolean().optional() // true / false only
+  subscribed: z.boolean().optional(),
+  score: z.number().optional(),
 });

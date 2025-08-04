@@ -1,0 +1,1 @@
+{"version":3,"file":"CryptoMomentum.d.ts","sourceRoot":"","sources":["../../../validators/modules/CryptoMomentum.ts"],"names":[],"mappings":"AAKA,OAAO,EAAE,kBAAkB,EAAE,eAAe,EAAE,MAAM,0BAA0B,CAAC;AAG/E,qBAAa,cAAe,SAAQ,kBAAkB;IACpD,IAAI,SAAoB;IACxB,WAAW,SAA+D;IAE1E,QAAQ,CAAC,MAAM,EAAE,GAAG,GAAG,eAAe;CAsBvC;AAGD,eAAe,cAAc,CAAC"}

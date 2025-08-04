@@ -1,34 +1,44 @@
+import { describe, it, expect } from 'vitest';
 import { SignalSchema } from '../schemas/universal_signal_schema.mjs';
 
-const exampleSignal = {
-  id: "abc123",
-  symbol: "BTCUSDT",
-  market: "crypto",
-  action: "buy",
-  price: 30300.55,
-  timestamp: Date.now(),
-  source: "bot",
-  strategy: "Scalping RSI Divergence",
-  notes: "Alert triggered after RSI crosses 30 on 1h",
-  targetPrice: 32500.00,
-  stopLoss: 29500.00,
-  timeframe: "1h",
-  strength: "high",
-  indicators: [
-    { name: "RSI", value: 70, timeframe: "1h" },
-    { name: "MACD", value: "bullish", timeframe: "1h" }
-  ],
-  analysis: [
-    { type: "trend", result: "up", confidence: 90 }
-  ],
-  score: 88,
-  subscribed: true
-};
+describe('SignalSchema', () => {
+  it('validates a fully populated signal', () => {
+    const validSignal = {
+      id: 'test-signal-1',
+      symbol: 'BTCUSDT',      // ✅ required
+      market: 'crypto',
+      action: 'buy',          // ✅ required
+      price: 68000,
+      timestamp: Date.now(),
+      source: 'TradingView',
+      strategy: 'Momentum',
+      notes: 'Breaking resistance with high volume',
+      targetPrice: 70000,
+      stopLoss: 65000,
+      timeframe: '1h',
+      strength: 'high',
+      indicators: [
+        { name: 'RSI', value: 65 },
+        { name: 'Volume', value: 'strong' },
+      ],
+      analysis: [
+        { type: 'trend', result: 'uptrend', confidence: 0.9 },
+      ],
+      subscribed: true,
+      score: 95,
+    };
 
-const result = SignalSchema.safeParse(exampleSignal);
-if (result.success) {
-  console.log("✅ Signal validated successfully.");
-} else {
-  console.error("❌ Validation failed:", result.error.format());
-  process.exit(1);
-}
+    const parsed = SignalSchema.safeParse(validSignal);
+    expect(parsed.success).toBe(true);
+  });
+
+  it('fails validation when required fields are missing', () => {
+    const invalidSignal = {
+      market: 'crypto',
+      price: 68000,
+    };
+
+    const parsed = SignalSchema.safeParse(invalidSignal);
+    expect(parsed.success).toBe(false);
+  });
+});

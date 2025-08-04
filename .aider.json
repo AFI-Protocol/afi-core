@@ -1,0 +1,19 @@
+{
+  "include": [
+    "schemas/",
+    "agent-stubs/",
+    "agent-prompts/",
+    "agent-roles/",
+    "afi-codex/",
+    "docs/",
+    "README.md",
+    "README_schema_overview.md"
+  ],
+  "exclude": [
+    "node_modules/",
+    ".git/",
+    ".DS_Store"
+  ],
+  "system_message": "You are an expert TypeScript and protocol architect helping improve modular decentralized finance agent schemas.",
+  "default_model": "gpt-4o"
+}

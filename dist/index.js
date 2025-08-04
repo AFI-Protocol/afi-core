@@ -13,13 +13,7 @@ export * from './validators/index.js';
 // Schemas
 export * from './schemas/index.js';
 
-// DAG stubs (expand as real DAGs are implemented)
-export const dagStubs = {
-  // Example stub: Replace with real DAG exports as needed
-  signalProcessing: () => {
-    throw new Error('DAG signalProcessing not yet implemented');
-  }
-};
+export * from './dags/index.js';
 
 // Agent-first: allow dynamic extension in the future
 export const registerAgentExtension = (ext) => {

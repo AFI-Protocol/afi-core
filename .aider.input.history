@@ -404,3 +404,173 @@
 
 # 2025-07-23 12:00:36.158240
 +Y
+
+# 2025-08-04 14:06:59.524306
++You are auditing the AFI Protocol's core repository (afi-core) to prepare it for finalization. 
++Objectives:
++1. Verify ESM compliance (ECMAScript Modules)
++2. Identify structural inconsistencies
++3. Flag missing or incomplete components (schemas, DAGs, CLI entrypoints)
++4. Suggest a safe, modular path to 100% completion
++Constraints:
++- Preserve agent-first design
++- Keep all existing scaffolding aligned with AFI Codex and AOS
+
+# 2025-08-04 14:09:30.435037
++Y
+
+# 2025-08-04 14:14:36.204599
++You are auditing the AFI Protocol's core repository (afi-core) to prepare it for finalization.
++
++Objectives:
++1. Verify ESM compliance (ECMAScript Modules)
++2. Identify structural inconsistencies
++3. Flag missing or incomplete components (schemas, DAGs, CLI entrypoints)
++4. Suggest a safe, modular path to 100% completion
++
++Constraints:
++- Preserve agent-first design
++- Keep all existing scaffolding aligned with AFI Codex and AOS
++
++Provide:
++- A prioritized list of issues
++- Recommended file/folder restructuring if needed
++- Safe, incremental changes to reach 100% completion
++- Search/replace or code suggestions where applicable
+
+# 2025-08-04 14:16:03.682138
++Y
+
+# 2025-08-04 14:20:05.965345
++Continue the AFI Protocol audit and prepare `dist/index.js` as a proper ESM entrypoint.
++- Ensure it aligns with AFI Codex and AOS.
++- Export all core modules, validators, and schemas.
++- Suggest minimal DAG export stubs if needed.
++- Keep all scaffolding agent-first and modular.
+
+# 2025-08-04 14:21:34.162434
++Y
+
+# 2025-08-04 14:22:11.490613
++Now audit the overall structure and provide:
++1. A final checklist to reach 100% AFI-core readiness.
++2. Confirm ESM compliance across all files you have.
++3. Identify any DAG, schema, or validator gaps.
++4. Suggest the safest modular path to complete and publish the repo.
++
++Constraints:
++- Preserve AFI Codex and AOS alignment.
++- Avoid unnecessary implementation logic—focus on scaffolding and modular integrity.
+
+# 2025-08-04 14:23:14.914890
++Y
+
+# 2025-08-04 14:31:01.024598
++DAG scaffolding for AFI-core
++
++Please do the following:
++
++1. Create a new folder: dist/dags/
++2. Add these files:
++   - dist/dags/index.js
++   - dist/dags/signalProcessingDAG.js
++
++3. Populate them as follows:
++
++# dist/dags/index.js
++/**
++ * AFI Protocol — DAGs Index
++ * Main entry point for all DAG modules (scaffolding only).
++ */
++export * from './signalProcessingDAG.js';
++
++# dist/dags/signalProcessingDAG.js
++/**
++ * Minimal DAG stub for AFI Protocol.
++ * Replace with real DAG logic as needed.
++ */
++export function signalProcessingDAG() {
++  throw new Error('signalProcessingDAG not yet implemented');
++}
++
++4. Update dist/index.js:
++   - Remove the current `dagStubs` placeholder export.
++   - Add `export * from './dags/index.js';`
++
++This will ensure:
++• Proper DAG scaffolding
++• Clean ESM re-exports
++• Full AFI-core readiness
+
+# 2025-08-04 14:31:43.340602
++Y
+
+# 2025-08-04 14:32:07.393157
++/run mkdir -p dist/dags
+
+# 2025-08-04 14:32:07.393576
++/run mkdir -p dist/dags
+
+# 2025-08-04 14:32:08.623539
++/run touch dist/dags/index.js dist/dags/signalProcessingDAG.js
+
+# 2025-08-04 14:32:08.623658
++/run touch dist/dags/index.js dist/dags/signalProcessingDAG.js
+
+# 2025-08-04 14:33:49.066041
++Add type declarations (.d.ts) for AFI-core
++
++Please create the following TypeScript declaration files:
++
++1. dist/index.d.ts
++2. dist/schemas/index.d.ts  (already exists, confirm it exports all new schemas)
++3. dist/validators/index.d.ts (already exists, confirm it exports all validators)
++
++Contents for dist/index.d.ts:
++
++/**
++ * AFI Protocol — Main Module Declarations
++ */
++
++export * from './schemas/index.js';
++export * from './validators/index.js';
++export * from './dags/index.js';
++
++---
++
++Then verify:
++• All d.ts files match the ESM export structure.
++• All schema and validator files are referenced in the indexes.
++• No dangling or missing type exports.
++
++This ensures:
++• Full ESM + TypeScript coverage
++• IDE intellisense and type safety for AFI-core
++• 100% audit readiness
+
+# 2025-08-04 14:36:05.495267
++Y
+
+# 2025-08-04 14:36:11.162892
++/run touch dist/index.d.ts
+
+# 2025-08-04 14:36:11.163147
++/run touch dist/index.d.ts
+
+# 2025-08-04 14:47:45.447394
++Please scan all files under dist/ for any CommonJS usage (require, module.exports, exports.*).  
++Replace them with proper ESM syntax:
++
++- Convert `const X = require('module')` → `import X from 'module'`  
++- Convert `const { A, B } = require('module')` → `import { A, B } from 'module'`  
++- Convert `module.exports = ...` → `export default ...`  
++- Convert `exports.something = ...` → `export const something = ...`
++
++Ensure all converted files remain valid ES modules and work with the existing imports/exports in AFI-core.  
++After completing this, there should be **no CommonJS usage** in the dist/ folder.
+
+# 2025-08-04 14:52:05.665133
++/bye
+
+# 2025-08-04 14:52:14.237608
++/exit

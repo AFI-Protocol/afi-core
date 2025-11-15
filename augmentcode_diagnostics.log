@@ -1,0 +1,976 @@
+npm verbose cli /Users/secretservice/.nvm/versions/node/v22.14.0/bin/node /opt/homebrew/bin/npm
+npm info using npm@11.2.0
+npm info using node@v22.14.0
+npm verbose title npm run build
+npm verbose argv "run" "build" "--loglevel" "verbose"
+npm verbose logfile logs-max:10 dir:/Users/secretservice/.npm/_logs/2025-08-03T21_02_39_497Z-
+npm verbose logfile /Users/secretservice/.npm/_logs/2025-08-03T21_02_39_497Z-debug-0.log
+
+> afi-core@1.0.0 build
+> tsc
+
+backups/universal_signal_schema.backup.ts(40,14): error TS2323: Cannot redeclare exported variable 'BaseSignalSchema'.
+backups/universal_signal_schema.backup.ts(51,14): error TS2323: Cannot redeclare exported variable 'SignalSchema'.
+backups/universal_signal_schema.backup.ts(77,14): error TS2323: Cannot redeclare exported variable 'RawSignalSchema'.
+backups/universal_signal_schema.backup.ts(83,14): error TS2323: Cannot redeclare exported variable 'EnrichedSignalSchema'.
+backups/universal_signal_schema.backup.ts(90,14): error TS2323: Cannot redeclare exported variable 'AnalyzedSignalSchema'.
+backups/universal_signal_schema.backup.ts(103,14): error TS2323: Cannot redeclare exported variable 'ScoredSignalSchema'.
+backups/universal_signal_schema.backup.ts(115,14): error TS2323: Cannot redeclare exported variable 'PipelineConfigSchema'.
+backups/universal_signal_schema.backup.ts(135,3): error TS2323: Cannot redeclare exported variable 'SignalSchema'.
+backups/universal_signal_schema.backup.ts(135,3): error TS2484: Export declaration conflicts with exported declaration of 'SignalSchema'.
+backups/universal_signal_schema.backup.ts(136,3): error TS2323: Cannot redeclare exported variable 'BaseSignalSchema'.
+backups/universal_signal_schema.backup.ts(136,3): error TS2484: Export declaration conflicts with exported declaration of 'BaseSignalSchema'.
+backups/universal_signal_schema.backup.ts(137,3): error TS2323: Cannot redeclare exported variable 'RawSignalSchema'.
+backups/universal_signal_schema.backup.ts(137,3): error TS2484: Export declaration conflicts with exported declaration of 'RawSignalSchema'.
+backups/universal_signal_schema.backup.ts(138,3): error TS2323: Cannot redeclare exported variable 'EnrichedSignalSchema'.
+backups/universal_signal_schema.backup.ts(138,3): error TS2484: Export declaration conflicts with exported declaration of 'EnrichedSignalSchema'.
+backups/universal_signal_schema.backup.ts(139,3): error TS2323: Cannot redeclare exported variable 'AnalyzedSignalSchema'.
+backups/universal_signal_schema.backup.ts(139,3): error TS2484: Export declaration conflicts with exported declaration of 'AnalyzedSignalSchema'.
+backups/universal_signal_schema.backup.ts(140,3): error TS2323: Cannot redeclare exported variable 'ScoredSignalSchema'.
+backups/universal_signal_schema.backup.ts(140,3): error TS2484: Export declaration conflicts with exported declaration of 'ScoredSignalSchema'.
+backups/universal_signal_schema.backup.ts(141,3): error TS2323: Cannot redeclare exported variable 'PipelineConfigSchema'.
+backups/universal_signal_schema.backup.ts(141,3): error TS2484: Export declaration conflicts with exported declaration of 'PipelineConfigSchema'.
+ignored/useSignalEvaluation.ts(1,37): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+ignored/useSignalEvaluation.ts(9,33): error TS2307: Cannot find module '../mock/signal.json' or its corresponding type declarations.
+runtime/LifecycleManager.ts(45,5): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+schemas/index.ts(7,15): error TS2307: Cannot find module './validators/index.js' or its corresponding type declarations.
+schemas/index.ts(10,15): error TS2307: Cannot find module './src/core/index.js' or its corresponding type declarations.
+schemas/index.ts(13,15): error TS2307: Cannot find module './schemas/index.js' or its corresponding type declarations.
+schemas/index.ts(16,15): error TS2307: Cannot find module './utils/index.js' or its corresponding type declarations.
+signal_schema_test/universal_signal_schema.ts(40,14): error TS2323: Cannot redeclare exported variable 'BaseSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(51,14): error TS2323: Cannot redeclare exported variable 'SignalSchema'.
+signal_schema_test/universal_signal_schema.ts(77,14): error TS2323: Cannot redeclare exported variable 'RawSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(83,14): error TS2323: Cannot redeclare exported variable 'EnrichedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(90,14): error TS2323: Cannot redeclare exported variable 'AnalyzedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(103,14): error TS2323: Cannot redeclare exported variable 'ScoredSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(115,14): error TS2323: Cannot redeclare exported variable 'PipelineConfigSchema'.
+signal_schema_test/universal_signal_schema.ts(135,3): error TS2323: Cannot redeclare exported variable 'SignalSchema'.
+signal_schema_test/universal_signal_schema.ts(135,3): error TS2484: Export declaration conflicts with exported declaration of 'SignalSchema'.
+signal_schema_test/universal_signal_schema.ts(136,3): error TS2323: Cannot redeclare exported variable 'BaseSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(136,3): error TS2484: Export declaration conflicts with exported declaration of 'BaseSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(137,3): error TS2323: Cannot redeclare exported variable 'RawSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(137,3): error TS2484: Export declaration conflicts with exported declaration of 'RawSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(138,3): error TS2323: Cannot redeclare exported variable 'EnrichedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(138,3): error TS2484: Export declaration conflicts with exported declaration of 'EnrichedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(139,3): error TS2323: Cannot redeclare exported variable 'AnalyzedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(139,3): error TS2484: Export declaration conflicts with exported declaration of 'AnalyzedSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(140,3): error TS2323: Cannot redeclare exported variable 'ScoredSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(140,3): error TS2484: Export declaration conflicts with exported declaration of 'ScoredSignalSchema'.
+signal_schema_test/universal_signal_schema.ts(141,3): error TS2323: Cannot redeclare exported variable 'PipelineConfigSchema'.
+signal_schema_test/universal_signal_schema.ts(141,3): error TS2484: Export declaration conflicts with exported declaration of 'PipelineConfigSchema'.
+validators/ValidatorExtension.ts(10,10): error TS2305: Module '"../schemas/pipeline_config_schema.js"' has no exported member 'SignalSchema'.
+npm verbose cwd /Users/secretservice/AFI_Modular_Repos/afi-core
+npm verbose os Darwin 24.5.0
+npm verbose node v22.14.0
+npm verbose npm  v11.2.0
+npm verbose exit 2
+npm verbose code 2
+npm verbose cli /Users/secretservice/.nvm/versions/node/v22.14.0/bin/node /opt/homebrew/bin/npm
+npm info using npm@11.2.0
+npm info using node@v22.14.0
+npm warn Unknown cli config "--runInBand". This will stop working in the next major version of npm.
+npm verbose title npm run test
+npm verbose argv "run" "test" "--loglevel" "verbose" "--runInBand"
+npm verbose logfile logs-max:10 dir:/Users/secretservice/.npm/_logs/2025-08-03T21_02_41_083Z-
+npm verbose logfile /Users/secretservice/.npm/_logs/2025-08-03T21_02_41_083Z-debug-0.log
+
+> afi-core@1.0.0 test
+> vitest
+
+
+ DEV  v3.2.4 /Users/secretservice/AFI_Modular_Repos/afi-core
+
+stderr | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.getVaultedSignals() > should return empty array when vault does not exist
+⚠️ Vault file does not exist, returning empty array
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.getVaultedSignals() > should return vaulted signals without crashing
+[VaultService] 🏦 Vaulted signal: undefined
+[VaultService] Signal undefined already vaulted
+
+ ❯ tests/baseline_validator.test.ts (2 tests | 2 failed) 6ms
+   × BaselineValidator > scores strong crypto signal higher than weak stock signal 5ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × BaselineValidator > assigns proper marketType metadata 1ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ tests/log_codex.test.ts (1 test | 1 failed) 6ms
+   × logToCodex > logs a signal to .afi-codex.json 5ms
+     → expected undefined to be 'log-test-001' // Object.is equality
+stdout | tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should vault mature signals correctly
+[VaultService] 🏦 Vaulted signal: vault-test-001
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should filter by lifecycleStage
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should prevent duplicate vaulting
+[VaultService] 🏦 Vaulted signal: duplicate-test
+[VaultService] Signal duplicate-test already vaulted
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should filter by stage alias
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should filter by marketType
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+
+ ❯ tests/metadata_verification.test.ts (14 tests | 13 failed) 10ms
+   ✓ Metadata Verification > should handle extension results with proper typing 1ms
+   × Metadata Verification > should generate valid metadata structure 4ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should return metadata with all required keys 1ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should generate fallback signalId when signal.id is missing 1ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should use provided signal.id when available 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should have consistent finalComposite with result.composite 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should include extensions array with proper structure 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should have valid timestamp format 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should have correct validator name 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should determine correct market types 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should classify decayStage correctly 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should log structured metadata to codex with proper format 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should handle multiple signals and maintain codex integrity 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Metadata Verification > should preserve extension evaluation results in metadata 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+stdout | tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should handle vault corruption gracefully
+[VaultService] 🏦 Vaulted signal: corruption-test
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should apply limit correctly
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should combine multiple filters
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.replaySignal() > should replay signal without crashing
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/vault_replay.test.ts > Integration: Codex → Vault → Replay > should complete full cycle: signal → vault → replay
+[VaultService] Signal undefined already vaulted
+
+stdout | tests/vault_replay.test.ts > Integration: Codex → Vault → Replay > should update codex during replay with replay metadata
+[VaultService] Signal undefined already vaulted
+
+ ❯ tests/lifecycle_orchestration.test.ts (17 tests | 14 failed) 20ms
+   ✓ Lifecycle Orchestration > should handle extension results with explicit types 1ms
+   × Lifecycle Orchestration > should process lifecycle stages correctly 6ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > LifecycleManager > should correctly determine lifecycle stages based on age 3ms
+     → expected 'new' to be 'live' // Object.is equality
+   ✓ Lifecycle Orchestration > LifecycleManager > should force mature stage for expired decay stage 0ms
+   × Lifecycle Orchestration > LifecycleManager > should update metadata with lifecycle information 1ms
+     → expected 'new' to be 'live' // Object.is equality
+   ✓ Lifecycle Orchestration > LifecycleManager > should provide lifecycle stage summary 0ms
+   × Lifecycle Orchestration > VaultService > should vault mature signals correctly 3ms
+     → expected false to be true // Object.is equality
+   × Lifecycle Orchestration > VaultService > should prevent duplicate vaulting 2ms
+     → ENOENT: no such file or directory, open '/Users/secretservice/AFI_Modular_Repos/afi-core/tssd_vault/vault.json'
+   × Lifecycle Orchestration > VaultService > should provide accurate vault statistics 1ms
+     → expected 3 to be +0 // Object.is equality
+   × Lifecycle Orchestration > VaultService > should handle vault corruption gracefully 1ms
+     → ENOENT: no such file or directory, open '/Users/secretservice/AFI_Modular_Repos/afi-core/tssd_vault/vault.json'
+   × Lifecycle Orchestration > BaselineValidator Integration > should integrate lifecycle management into scoring process 1ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > BaselineValidator Integration > should vault mature signals during scoring 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > BaselineValidator Integration > should maintain sync between codex and vault 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > Lifecycle Transitions > should demonstrate complete lifecycle progression 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > Lifecycle Transitions > should handle edge cases in lifecycle determination 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > Vault and Codex Synchronization > should maintain consistent signal tracking across vault and codex 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Lifecycle Orchestration > Vault Replay Integration > should support vault replay functionality 0ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ tests/vault_replay.test.ts (12 tests | 8 failed) 23ms
+   ✓ Vault Replay Functionality > VaultService.getVaultedSignals() > should return empty array when vault does not exist 2ms
+   × Vault Replay Functionality > VaultService.getVaultedSignals() > should return vaulted signals without crashing 7ms
+     → expected [ { …(3) } ] to have a length of 2 but got 1
+   × Vault Replay Functionality > VaultService.getVaultedSignals() > should handle corrupted vault gracefully 3ms
+     → expected [ { …(3) } ] to deeply equal []
+   ✓ Vault Replay Functionality > VaultService.queryVault() > should filter by lifecycleStage 2ms
+   × Vault Replay Functionality > VaultService.queryVault() > should filter by stage alias 2ms
+     → expected [ { signal: { …(2) }, …(2) }, …(2) ] to have a length of 2 but got 3
+   × Vault Replay Functionality > VaultService.queryVault() > should filter by marketType 1ms
+     → expected [ Array(1) ] to have a length of 2 but got 1
+   ✓ Vault Replay Functionality > VaultService.queryVault() > should apply limit correctly 1ms
+   ✓ Vault Replay Functionality > VaultService.queryVault() > should combine multiple filters 0ms
+   × Vault Replay Functionality > VaultService.replaySignal() > should replay signal without crashing 1ms
+     → expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+   × Integration: Codex → Vault → Replay > should complete full cycle: signal → vault → replay 1ms
+     → expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+   × Integration: Codex → Vault → Replay > should prevent double-vaulting during replay 2ms
+     → Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+   × Integration: Codex → Vault → Replay > should update codex during replay with replay metadata 1ms
+     → expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+stdout | tests/mentor_registry.test.ts > MentorRegistry > registers and retrieves mentor by ID
+Mentor Athena registered with ID: m-001
+
+stdout | tests/mentor_registry.test.ts > MentorRegistry > retrieves mentors by tag
+Mentor Hermes registered with ID: m-002
+
+stdout | tests/mentor_registry.test.ts > MentorRegistry > pairs mentor based on matching tag
+Mentor Apollo registered with ID: m-003
+
+stdout | tests/integration.test.ts > Integration Tests > should integrate mentor registry with telemetry
+Mentor Test Mentor registered with ID: test-mentor-1
+[TELEMETRY] mentor-registered: { mentorId: [32m'test-mentor-1'[39m }
+
+ ✓ tests/mentor_registry.test.ts (4 tests) 3ms
+stdout | tests/telemetry.test.ts > TelemetryCollector > should emit and store events
+[TELEMETRY] test-event: { value: [33m42[39m }
+
+ ✓ tests/integration.test.ts (1 test) 2ms
+stdout | tests/telemetry.test.ts > TelemetryCollector > should filter events by type
+[TELEMETRY] type-a: { a: [33m1[39m }
+[TELEMETRY] type-b: { b: [33m2[39m }
+
+ ✓ tests/telemetry.test.ts (2 tests) 3ms
+stderr | tests/validate_codex_cli.test.ts > Validate Codex CLI > should handle main() execution without throwing (when no codex exists)
+[validate-codex] ❌ Validation failed: process.exit called
+
+ ✓ tests/validate_codex_cli.test.ts (4 tests) 10ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/crypto_equity_modules.test.ts [ tests/crypto_equity_modules.test.ts ]
+TypeError: Class extends value undefined is not a constructor or null
+ ❯ validators/extensions/DecayExtension.ts:8:37
+      6| import { ValidatorExtension, ExtensionResult } from '../ValidatorExten…
+      7| 
+      8| export class DecayExtension extends ValidatorExtension {
+       |                                     ^
+      9|   name = 'DecayExtension';
+     10|   description = 'Time-based decay factor for signal freshness';
+ ❯ validators/ValidatorExtension.ts:163:1
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/39]⎯
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 38 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/baseline_validator.test.ts > BaselineValidator > scores strong crypto signal higher than weak stock signal
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/baseline_validator.test.ts:16:43
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/39]⎯
+
+ FAIL  tests/baseline_validator.test.ts > BaselineValidator > assigns proper marketType metadata
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/baseline_validator.test.ts:27:43
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > should process lifecycle stages correctly
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:75:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > LifecycleManager > should correctly determine lifecycle stages based on age
+AssertionError: expected 'new' to be 'live' // Object.is equality
+
+Expected: [32m"live"[39m
+Received: [31m"new"[39m
+
+ ❯ tests/lifecycle_orchestration.test.ts:100:69
+     98|         content: 'Live signal'
+     99|       };
+    100|       expect(LifecycleManager.determineStage(liveSignal, 'recent')).to…
+       |                                                                     ^
+    101| 
+    102|       // Decaying signal (< 24h)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > LifecycleManager > should update metadata with lifecycle information
+AssertionError: expected 'new' to be 'live' // Object.is equality
+
+Expected: [32m"live"[39m
+Received: [31m"new"[39m
+
+ ❯ tests/lifecycle_orchestration.test.ts:148:46
+    146|       const updatedMetadata = LifecycleManager.updateLifecycle(signal,…
+    147|       
+    148|       expect(updatedMetadata.lifecycleStage).toBe('live');
+       |                                              ^
+    149|       expect(updatedMetadata.stageTransition).toBeDefined();
+    150|       expect(updatedMetadata.stageTransition.to).toBe('live');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should vault mature signals correctly
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ tests/lifecycle_orchestration.test.ts:191:40
+    189| 
+    190|       // Verify vault file exists and contains the signal
+    191|       expect(fs.existsSync(vaultPath)).toBe(true);
+       |                                        ^
+    192|       
+    193|       const vaultContent = JSON.parse(fs.readFileSync(vaultPath, 'utf-…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should prevent duplicate vaulting
+Error: ENOENT: no such file or directory, open '/Users/secretservice/AFI_Modular_Repos/afi-core/tssd_vault/vault.json'
+ ❯ tests/lifecycle_orchestration.test.ts:220:42
+    218| 
+    219|       // Should only have one entry
+    220|       const vaultContent = JSON.parse(fs.readFileSync(vaultPath, 'utf-…
+       |                                          ^
+    221|       expect(vaultContent.length).toBe(1);
+    222|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should provide accurate vault statistics
+AssertionError: expected 3 to be +0 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 3[39m
+
+ ❯ tests/lifecycle_orchestration.test.ts:227:34
+    225|       // Initially empty
+    226|       let stats = VaultService.getVaultStats();
+    227|       expect(stats.totalSignals).toBe(0);
+       |                                  ^
+    228| 
+    229|       // Add some signals
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > VaultService > should handle vault corruption gracefully
+Error: ENOENT: no such file or directory, open '/Users/secretservice/AFI_Modular_Repos/afi-core/tssd_vault/vault.json'
+ ❯ tests/lifecycle_orchestration.test.ts:265:42
+    263|       VaultService.vaultSignal(signal, metadata);
+    264| 
+    265|       const vaultContent = JSON.parse(fs.readFileSync(vaultPath, 'utf-…
+       |                                          ^
+    266|       expect(Array.isArray(vaultContent)).toBe(true);
+    267|       expect(vaultContent.length).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > BaselineValidator Integration > should integrate lifecycle management into scoring process
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:280:40
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > BaselineValidator Integration > should vault mature signals during scoring
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:295:40
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > BaselineValidator Integration > should maintain sync between codex and vault
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:313:51
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > Lifecycle Transitions > should demonstrate complete lifecycle progression
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:345:42
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > Lifecycle Transitions > should handle edge cases in lifecycle determination
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:365:41
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > Vault and Codex Synchronization > should maintain consistent signal tracking across vault and codex
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:424:68
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/39]⎯
+
+ FAIL  tests/lifecycle_orchestration.test.ts > Lifecycle Orchestration > Vault Replay Integration > should support vault replay functionality
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/lifecycle_orchestration.test.ts:459:51
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/39]⎯
+
+ FAIL  tests/log_codex.test.ts > logToCodex > logs a signal to .afi-codex.json
+AssertionError: expected undefined to be 'log-test-001' // Object.is equality
+
+[32m- Expected:[39m 
+"log-test-001"
+
+[31m+ Received:[39m 
+undefined
+
+ ❯ tests/log_codex.test.ts:28:46
+     26|     const codex = JSON.parse(fs.readFileSync(codexPath, 'utf-8'));
+     27|     expect(Array.isArray(codex)).toBe(true);
+     28|     expect(codex[codex.length - 1].signalId).toBe('log-test-001');
+       |                                              ^
+     29|   });
+     30| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should generate valid metadata structure
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:68:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should return metadata with all required keys
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:79:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should generate fallback signalId when signal.id is missing
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:109:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should use provided signal.id when available
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:117:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should have consistent finalComposite with result.composite
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:130:40
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should include extensions array with proper structure
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:137:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should have valid timestamp format
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:161:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should have correct validator name
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:176:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should determine correct market types
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:185:44
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should classify decayStage correctly
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:202:43
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should log structured metadata to codex with proper format
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:250:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should handle multiple signals and maintain codex integrity
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:298:61
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/39]⎯
+
+ FAIL  tests/metadata_verification.test.ts > Metadata Verification > should preserve extension evaluation results in metadata
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/metadata_verification.test.ts:324:38
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.getVaultedSignals() > should return vaulted signals without crashing
+AssertionError: expected [ { …(3) } ] to have a length of 2 but got 1
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 1[39m
+
+ ❯ tests/vault_replay.test.ts:59:23
+     57| 
+     58|       const signals = VaultService.getVaultedSignals();
+     59|       expect(signals).toHaveLength(2);
+       |                       ^
+     60|       expect(signals[0].signalId).toBe('test-1');
+     61|       expect(signals[1].signalId).toBe('test-2');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.getVaultedSignals() > should handle corrupted vault gracefully
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "metadata": {[39m
+[31m+       "lifecycleStage": "mature",[39m
+[31m+       "stageTransition": {[39m
+[31m+         "from": "unknown",[39m
+[31m+         "to": "mature",[39m
+[31m+       },[39m
+[31m+     },[39m
+[31m+     "signal": {[39m
+[31m+       "content": "Test signal 1",[39m
+[31m+       "id": "test-1",[39m
+[31m+     },[39m
+[31m+     "vaultedAt": "2025-08-03T21:02:41.643Z",[39m
+[31m+   },[39m
+[31m+ ][39m
+
+ ❯ tests/vault_replay.test.ts:69:23
+     67|       
+     68|       const signals = VaultService.getVaultedSignals();
+     69|       expect(signals).toEqual([]);
+       |                       ^
+     70|     });
+     71|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should filter by stage alias
+AssertionError: expected [ { signal: { …(2) }, …(2) }, …(2) ] to have a length of 2 but got 3
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 3[39m
+
+ ❯ tests/vault_replay.test.ts:95:29
+     93|     it('should filter by stage alias', () => {
+     94|       const matureSignals = VaultService.queryVault({ stage: 'mature' …
+     95|       expect(matureSignals).toHaveLength(2);
+       |                             ^
+     96|       expect(matureSignals.every((s: VaultEntry) => s.metadata.lifecyc…
+     97|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.queryVault() > should filter by marketType
+AssertionError: expected [ Array(1) ] to have a length of 2 but got 1
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 1[39m
+
+ ❯ tests/vault_replay.test.ts:101:29
+     99|     it('should filter by marketType', () => {
+    100|       const cryptoSignals = VaultService.queryVault({ marketType: 'cry…
+    101|       expect(cryptoSignals).toHaveLength(2);
+       |                             ^
+    102|       expect(cryptoSignals.every((s: VaultEntry) => s.metadata.marketT…
+    103|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Vault Replay Functionality > VaultService.replaySignal() > should replay signal without crashing
+AssertionError: expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 4[39m
+
+ ❯ tests/vault_replay.test.ts:128:30
+    126|       
+    127|       const vaultedSignals = VaultService.getVaultedSignals();
+    128|       expect(vaultedSignals).toHaveLength(1);
+       |                              ^
+    129|       
+    130|       // Should not throw
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Integration: Codex → Vault → Replay > should complete full cycle: signal → vault → replay
+AssertionError: expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 4[39m
+
+ ❯ tests/vault_replay.test.ts:172:28
+    170|     // 2. Retrieve from vault
+    171|     const vaultedSignals = VaultService.getVaultedSignals();
+    172|     expect(vaultedSignals).toHaveLength(1);
+       |                            ^
+    173|     expect(vaultedSignals[0].signalId).toBe('integration-test');
+    174| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Integration: Codex → Vault → Replay > should prevent double-vaulting during replay
+Error: Cannot find module './ValidatorExtension.js'
+Require stack:
+- /Users/secretservice/AFI_Modular_Repos/afi-core/validators/BaselineValidator.ts
+ ❯ Function.getSyncExtensionsForMarketType validators/BaselineValidator.ts:268:37
+    266|   private static getSyncExtensionsForMarketType(marketType: string): V…
+    267|     // Use pre-loaded extensions or fallback instances
+    268|     const { getLoadedExtensions } = require('./ValidatorExtension.js');
+       |                                     ^
+    269|     const loadedExtensions = getLoadedExtensions();
+    270|     
+ ❯ Function.score validators/BaselineValidator.ts:96:46
+ ❯ tests/vault_replay.test.ts:196:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/39]⎯
+
+ FAIL  tests/vault_replay.test.ts > Integration: Codex → Vault → Replay > should update codex during replay with replay metadata
+AssertionError: expected [ { signal: { …(2) }, …(2) }, …(3) ] to have a length of 1 but got 4
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 4[39m
+
+ ❯ tests/vault_replay.test.ts:224:28
+    222|     // Get vaulted signal and simulate replay through BaselineValidator
+    223|     const vaultedSignals = VaultService.getVaultedSignals();
+    224|     expect(vaultedSignals).toHaveLength(1);
+       |                            ^
+    225| 
+    226|     // Replay should update codex (this would be done in the actual re…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/39]⎯
+
+
+ Test Files  6 failed | 4 passed (10)
+      Tests  38 failed | 19 passed (57)
+   Start at  17:02:41
+   Duration  458ms (transform 200ms, setup 0ms, collect 351ms, tests 82ms, environment 1ms, prepare 559ms)
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+npm verbose cwd /Users/secretservice/AFI_Modular_Repos/afi-core
+npm verbose os Darwin 24.5.0
+npm verbose node v22.14.0
+npm verbose npm  v11.2.0
+npm verbose exit 1
+npm verbose code 1

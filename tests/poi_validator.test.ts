@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { PoIValidator } from '../validators/PoIValidator';
 
-describe('PoIValidator', () => {
+describe('SignalScorer', () => {
   it('scores numeric signals higher', () => {
     const result = PoIValidator.evaluate({
       id: '1',

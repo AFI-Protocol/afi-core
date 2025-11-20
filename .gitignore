@@ -3,6 +3,10 @@ node_modules
 .env
 .aider*
 
+# Build artifacts (never commit)
+/dist
+/coverage
+
 # ============================================================================
 # AFI-CORE BOUNDARY ENFORCEMENT
 # ============================================================================

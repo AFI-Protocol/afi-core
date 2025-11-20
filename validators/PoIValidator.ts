@@ -8,7 +8,13 @@
  *
  * This is MVP logic – replace with ML / on‑chain calls later.
  */
-import { SignalPayload } from '../runtime/types';
+
+// Minimal type definition (runtime/types.ts doesn't exist yet)
+export interface SignalPayload {
+  signalId: string;
+  content: string;
+  metadata?: Record<string, unknown>;
+}
 
 export interface PoIResult {
   insightScore: number;

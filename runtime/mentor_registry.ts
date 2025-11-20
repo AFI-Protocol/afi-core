@@ -16,7 +16,7 @@ export class MentorRegistry {
   }
 
   // Placeholder for async-safe archetype pairing logic
-  async pairMentor(signalId: string): Promise<string | null> {
+  async pairMentor(_signalId: string): Promise<string | null> {
     // For now, return the first mentor if available
     return this.mentors.length > 0 ? this.mentors[0] : null;
   }

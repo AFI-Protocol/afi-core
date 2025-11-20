@@ -1,1 +1,0 @@
-{"version":3,"file":"validator_invoker.js","sourceRoot":"","sources":["../../cli_hooks/validator_invoker.ts"],"names":[],"mappings":"AACA,MAAM,CAAC,MAAM,kBAAkB,GAAG,GAAG,EAAE;IACrC,OAAO,CAAC,GAAG,CAAC,uBAAuB,CAAC,CAAC;AACvC,CAAC,CAAC;AAEF,MAAM,CAAC,MAAM,oBAAoB,GAAG,GAAG,EAAE;IACvC,OAAO,CAAC,GAAG,CAAC,4BAA4B,CAAC,CAAC;AAC5C,CAAC,CAAC"}

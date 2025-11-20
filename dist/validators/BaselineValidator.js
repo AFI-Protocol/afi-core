@@ -3,8 +3,8 @@
 // ┃ Role: Core scoring logic for market signals┃
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 import { logToCodex, generateSignalId } from '../utils/index.js';
-import { CryptoMomentum } from './modules/CryptoMomentum.js';
-import { EquitySentiment } from './modules/EquitySentiment.js';
+import { CryptoMomentumValidator } from './modules/CryptoMomentumValidator.js';
+import { EquitySentimentValidator } from './modules/EquitySentimentValidator.js';
 import { LifecycleManager } from '../src/core/LifecycleManager.js';
 import { VaultService } from '../src/core/VaultService.js';
 export class BaselineValidator {
@@ -206,22 +206,22 @@ export class BaselineValidator {
             if (loadedExtensions.length === 0) {
                 // Fallback to direct imports if registry is empty
                 return marketType === 'crypto'
-                    ? [new CryptoMomentum()]
-                    : [new EquitySentiment()];
+                    ? [new CryptoMomentumValidator()]
+                    : [new EquitySentimentValidator()];
             }
             return loadedExtensions.filter((ext) => {
                 if (marketType === 'crypto')
-                    return ext.name === 'CryptoMomentum';
+                    return ext.name === 'CryptoMomentumValidator';
                 if (marketType === 'equity')
-                    return ext.name === 'EquitySentiment';
+                    return ext.name === 'EquitySentimentValidator';
                 return true; // Default: include all extensions
             });
         }
         catch (error) {
             // Fallback if ValidatorExtension module fails
             return marketType === 'crypto'
-                ? [new CryptoMomentum()]
-                : [new EquitySentiment()];
+                ? [new CryptoMomentumValidator()]
+                : [new EquitySentimentValidator()];
         }
     }
     /**
@@ -231,10 +231,10 @@ export class BaselineValidator {
         const coreExtensions = extensions.filter(ext => ext.name === 'DecayExtension' || ext.name === 'GreeksExtension');
         switch (marketType) {
             case 'crypto':
-                const cryptoExt = extensions.find(ext => ext.name === 'CryptoMomentum');
+                const cryptoExt = extensions.find(ext => ext.name === 'CryptoMomentumValidator');
                 return cryptoExt ? [...coreExtensions, cryptoExt] : coreExtensions;
             case 'stock':
-                const equityExt = extensions.find(ext => ext.name === 'EquitySentiment');
+                const equityExt = extensions.find(ext => ext.name === 'EquitySentimentValidator');
                 return equityExt ? [...coreExtensions, equityExt] : coreExtensions;
             default:
                 return coreExtensions;

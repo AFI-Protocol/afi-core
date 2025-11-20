@@ -1,5 +1,6 @@
 /**
  * AFI Protocol — DAGs Index
- * Main entry point for all DAG modules (scaffolding only).
+ * Exports all DAG processing functions
  */
+
 export * from './signalProcessingDAG.js';

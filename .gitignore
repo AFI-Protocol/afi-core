@@ -2,3 +2,55 @@
 node_modules
 .env
 .aider*
+
+# ============================================================================
+# AFI-CORE BOUNDARY ENFORCEMENT
+# ============================================================================
+
+# Block UI/Frontend Framework Content
+pages/
+src/app/
+src/sections/
+src/components/
+src/utils/
+src/global-config*
+src/lib/
+public/
+styles/
+assets/
+
+# Block Civic-Tech/DFTP Content Keywords
+*budget*
+*decoder*
+*dftp*
+*spotlight*
+*virginia*
+
+# Block Archives & Vendored Dependencies
+.archive/
+vendor/
+vendored/
+
+# Block Empty Placeholders
+tssd_vault/
+afi-agents/
+
+# Block OS Junk
+**/.DS_Store
+Thumbs.db
+desktop.ini
+
+# Block IDE Junk
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Allow Legitimate Core Directories (explicit whitelist)
+!schemas/
+!validators/
+!runtime/
+!tests/
+!docs/
+!cli_hooks/

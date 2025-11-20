@@ -1,23 +1,17 @@
 /**
- * AFI Protocol — Main ESM Entrypoint
- * Exports all core modules, validators, schemas, and DAG stubs.
- * Agent-first, modular, and Codex/AOS-aligned.
+ * AFI Protocol — Core Runtime Entry Point
+ * Main exports for the AFI-Core module
  */
 
-// Core modules (add more as needed)
-// Example: export * from './core/AgentRuntime.js';
-
-// Validators
-export * from './validators/index.js';
-
-// Schemas
-export * from './schemas/index.js';
-
+// DAG exports
 export * from './dags/index.js';
 
-// Agent-first: allow dynamic extension in the future
-export const registerAgentExtension = (ext) => {
-  // Placeholder for agent extension registration
-  // (Codex/AOS-aligned, safe for future modularity)
-  console.warn('registerAgentExtension: Not yet implemented', ext);
-};
+// Schema exports
+export * from './schemas/index.js';
+
+// Validator exports
+export * from './validators/index.js';
+
+// Core services
+export { LifecycleManager } from './src/core/LifecycleManager.js';
+export { VaultService } from './src/core/VaultService.js';

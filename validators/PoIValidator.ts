@@ -9,12 +9,7 @@
  * This is MVP logic – replace with ML / on‑chain calls later.
  */
 
-// Minimal type definition (runtime/types.ts doesn't exist yet)
-export interface SignalPayload {
-  signalId: string;
-  content: string;
-  metadata?: Record<string, unknown>;
-}
+import { MinimalSignalPayload } from '../runtime/types';
 
 export interface PoIResult {
   insightScore: number;
@@ -24,7 +19,7 @@ export interface PoIResult {
 }
 
 export class PoIValidator {
-  static evaluate(signal: SignalPayload): PoIResult {
+  static evaluate(signal: MinimalSignalPayload): PoIResult {
     // very naive heuristics for demo purposes
     const lengthFactor = Math.min(signal.content.length / 280, 1);   // tweet‑sized bias
     const hasNumbers  = /\d/.test(signal.content) ? 1 : 0.6;

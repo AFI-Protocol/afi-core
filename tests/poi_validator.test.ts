@@ -4,10 +4,13 @@ import { PoIValidator } from '../validators/PoIValidator';
 describe('PoIValidator', () => {
   it('scores numeric signals higher', () => {
     const result = PoIValidator.evaluate({
-      id: '1',
+      signalId: 'test-signal-1',
       content: 'BTC +5% on volume 2.3B',
-    } as any);
+    });
 
-    expect(result).toBeDefined(); // Adjust expectation as scoring evolves
+    expect(result).toBeDefined();
+    expect(result.insightScore).toBeGreaterThan(0);
+    expect(result.confidence).toBeGreaterThan(0);
+    expect(result.derivedTags).toContain('macro');
   });
 });

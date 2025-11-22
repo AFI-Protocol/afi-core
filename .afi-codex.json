@@ -1,0 +1,34 @@
+{
+  "repo": "afi-core",
+  "role": "Core runtime for agent signal validation, ElizaOS integration layer",
+  "status": "active",
+  "language": "typescript",
+  "entrypoints": [
+    "validators/PoIValidator.ts",
+    "schemas/universal_signal_schema.mjs"
+  ],
+  "provides": [
+    "signal-validation",
+    "eliza-runtime",
+    "validator-registry",
+    "mentor-evaluation",
+    "poi-validation",
+    "poinsight-validation"
+  ],
+  "dependsOn": [
+    "afi-config",
+    "afi-math"
+  ],
+  "consumers": [
+    "afi-reactor",
+    "afi-plugins"
+  ],
+  "droid_ready": true,
+  "notes": [
+    "Core runtime library",
+    "ElizaOS integration",
+    "Code in validators/ and schemas/ (not src/)",
+    "Consider moving to src/ for consistency"
+  ]
+}
+

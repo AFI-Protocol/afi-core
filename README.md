@@ -2,6 +2,12 @@
 
 Welcome to `afi-core`, the neural spine of the AFI Protocol’s agentic intelligence system. This module contains core logic for processing and evaluating market signals—laying the groundwork for decentralized financial reasoning.
 
+## 🤖 Droid Instructions
+
+**For AI agents and automated contributors**: See [AGENTS.md](./AGENTS.md) for canonical repo constraints, allowed tasks, and safe patch patterns.
+
+> **Note**: If AGENTS.md conflicts with this README, AGENTS.md wins.
+
 ### 📦 What's Inside
 
 - **Signal Validators** – Deterministic modules to vet raw input before scoring  

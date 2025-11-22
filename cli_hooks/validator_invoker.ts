@@ -1,4 +1,3 @@
-// Invokes PoIValidator and MentorRegistry from afi-core
 export const invokePoIValidator = () => {
   console.log("PoIValidator invoked.");
 };

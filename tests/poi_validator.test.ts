@@ -1,11 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { PoIValidator } from '../validators/PoIValidator';
+import { SignalScorer } from '../validators/SignalScorer';
 
-describe('PoIValidator', () => {
+describe('SignalScorer', () => {
   it('scores numeric signals higher', () => {
-    const result = PoIValidator.evaluate({
-      signalId: 'test-signal-1',
+    const result = SignalScorer.evaluate({
+      symbol: 'BTCUSDT',
+      action: 'buy' as const,
       content: 'BTC +5% on volume 2.3B',
+      source: 'test',
+      timestamp: new Date().toISOString(),
     });
 
     expect(result).toBeDefined();

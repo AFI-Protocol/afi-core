@@ -1,9 +1,15 @@
 {
   "name": "afi-core",
   "role": "runtime",
-  "description": "Core runtime for agent signal validation in AFI Protocol",
+  "description": "ElizaOS-based runtime layer for AFI, bridging AFI-Reactor DAG plans to agents and mint instructions",
   "language": "TypeScript",
-  "tags": ["validator", "mentor", "runtime", "afi", "typescript"],
-  "entry": "runtime/mentor_registry.ts",
-  "factory_ready": true
+  "tags": ["validator", "mentor", "runtime", "afi", "typescript", "elizaos", "agents"],
+  "entry": "runtime/afiRuntimeAdapter.ts",
+  "dependsOn": ["afi-reactor", "afi-token"],
+  "factory_ready": true,
+  "elizaOSIntegration": {
+    "status": "planned",
+    "softForkPlanned": true,
+    "currentPhase": "thin-layer-scaffolding"
+  }
 }

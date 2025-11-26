@@ -58,22 +58,28 @@ npm run mentor-eval
 
 ## Architecture Overview
 
-**Purpose**: Core runtime behavior, validators, scoring, ElizaOS integration. **Not** for orchestration (that's afi-reactor).
+**Purpose**: Core runtime behavior, validators, scoring, shared types and client libraries. **Not** for orchestration (that's afi-reactor).
 
 **Key directories**:
 - `src/validators/` — Validator implementations (PoI, PoInsight)
 - `src/scoring/` — Signal scoring logic
 - `src/registry/` — Validator and mentor registry
-- `src/eliza/` — ElizaOS integration lane
-- `src/types/` — TypeScript type definitions
+- `src/types/` — TypeScript type definitions (shared with Eliza gateways)
+- `src/clients/` — Client libraries for AFI services
 - `test/` — Vitest tests
 
-**Consumed by**: afi-reactor (orchestration), afi-ops (deployment)  
+**Consumed by**: afi-reactor (orchestration), afi-ops (deployment), Eliza gateways (types/clients)
 **Depends on**: afi-config (schemas)
 
 **Boundary with afi-reactor**:
-- `afi-core` = runtime behavior (validators, scoring, ElizaOS)
+- `afi-core` = runtime behavior (validators, scoring)
 - `afi-reactor` = orchestration (DAG wiring, pipeline execution)
+
+**Eliza integration**:
+- `afi-core` defines shared types, client libraries, and helpers used by AFI services and Eliza plugins.
+- Eliza gateways may import these types/clients to call AFI APIs.
+- `afi-core` MUST NOT import ElizaOS code or assume anything about Eliza's internal structure.
+- **Dependency direction**: Eliza gateways depend on afi-core; afi-core never depends on Eliza.
 
 ---
 

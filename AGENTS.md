@@ -1,167 +1,130 @@
-# AGENTS.md — AFI Core Droid Instructions (v1)
+# afi-core — Agent Instructions
 
-This file is the canonical instruction set for Factory.ai droids and other agents working in this repository.
-If AGENTS.md conflicts with README or docs, **AGENTS.md wins.**
+**afi-core** is the core runtime for AFI Protocol. It provides signal validation, PoI/PoInsight scoring, validator/mentor registry logic, and ElizaOS integration. This is the "neural spine" of the agentic intelligence system.
 
----
-
-## 0. Repo Purpose
-
-**What this repo is for:**  
-Core runtime for AFI Protocol agent signal validation, ElizaOS integration layer, validator/mentor registry logic, and PoI/PoInsight validation. This is the neural spine of the agentic intelligence system.
-
-**What this repo is NOT for:**  
-- UI/Next.js/React components (use afi-research-site)
-- Deployment/infrastructure (use afi-ops, afi-infra)
-- Token contracts (use afi-token)
-- DAG orchestration (use afi-reactor)
+**Global Authority**: All agents operating in AFI Protocol repos must follow `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`. If this AGENTS.md conflicts with the Charter, **the Charter wins**.
 
 ---
 
-## 1. Prime Directives (Global AFI Rules)
+## Build & Test
 
-- **Scaffold, wire, and align context only.** Do not expand full feature logic unless explicitly instructed.
-- **Keep changes minimal and deterministic.**
-- **Preserve modular boundaries.** No cross-repo code moves unless asked.
-- **Codex + AOS are truth sources.** Whitepaper is narrative, not canonical.
-- **Never delete or overwrite without a replacement plan.**
-- **Prefer small patches over large refactors.**
-
----
-
-## 2. Allowed Tasks
-
-Droids MAY:
-- Add or update validators in `validators/`
-- Add or update schemas in `schemas/`
-- Add runtime adapters in `runtime/`
-- Create tests in `tests/`
-- Fix obvious bugs that block tooling/CI or violate repo invariants
-- Improve documentation in `docs/` to reduce ambiguity for agents
-- Add type definitions and interfaces
-- Update `.afi-codex.json` metadata if repo capabilities change
-
----
-
-## 3. Forbidden Tasks
-
-Droids MUST NOT:
-- Change PoI (Proof of Insight) or PoInsight validation semantics without explicit instruction
-- Modify scoring logic or validator math without approval
-- Rename core concepts (PoI, PoInsight, Epoch Pulse, etc.)
-- Move code to/from other repos
-- Add dependencies beyond standard AFI stack (TypeScript, Zod, Vitest)
-- Modify ElizaOS integration contracts without understanding downstream impact
-
----
-
-## 4. Key Invariants
-
-These must remain true after changes:
-- Signal schema remains compatible with afi-reactor DAG
-- Validator interface stability (PoIValidator, mentor registry)
-- ElizaOS runtime adapter contracts preserved
-- Test coverage does not decrease
-- All schemas export valid Zod types
-
----
-
-## 5. Repo Layout Map
-
-- `validators/` — PoIValidator, signal validators, core validation logic
-- `schemas/` — Universal signal schema, validator metadata, governance schemas
-- `runtime/` — ElizaOS adapter, mentor registry, mint pipeline driver
-- `tests/` — Unit tests for validators and runtime
-- `docs/` — Architecture docs, readiness reports
-- `cli_hooks/` — Validator invoker for CLI integration
-- `.afi-codex.json` — Repo metadata (role, provides, dependsOn, consumers)
-
----
-
-## 6. Codex / AOS Touchpoints
-
-- `.afi-codex.json` location: Root of repo
-- AOS streams / registries referenced:
-  - `signal-validation` stream
-  - `validator-registry` stream
-  - `mentor-evaluation` stream
-- Schema contracts this repo must obey:
-  - `universal_signal_schema.mjs` (canonical signal format)
-  - `validator_metadata_schema.ts` (validator registration)
-  - `validator_governance_schema.ts` (governance proposals)
-
----
-
-## 7. Safe Patch Patterns
-
-When editing, prefer:
-- Small diffs, one intent per commit/patch
-- Additive changes over rewrites
-- Clear comments stating why a stub exists and what droids should generate next
-- Type-safe changes (leverage TypeScript strict mode)
-- Test-first for validators (add test, then implementation)
-
-Example safe patch:
-```typescript
-// TODO(droid): Add validator for signal confidence threshold
-// Expected behavior: Reject signals with confidence < 0.7
-// Test case: tests/confidence_validator.test.ts
-export function validateSignalConfidence(signal: Signal): boolean {
-  // Stub: Always returns true for now
-  return true;
-}
-```
-
----
-
-## 8. How to Validate Locally
-
-Run these before finalizing:
 ```bash
+# Install dependencies
 npm install
+
+# Build TypeScript
 npm run build
+
+# Clean build
+npm run build:clean
+
+# Run tests (Vitest)
 npm test
-npm run typecheck  # if available
+
+# Run tests once
+npm run test:run
+
+# Validate all configs
+npm run validate-all
+
+# Simulate signal processing
+npm run simulate-signal
 ```
 
-Expected outcomes:
-- Tests pass (Vitest)
-- TypeScript compiles without errors
-- No linter errors
-- Schemas export valid types
+**Expected outcomes**: All tests pass, TypeScript compiles, signal validation succeeds.
 
 ---
 
-## 9. CI / PR Expectations
+## Run Locally / Dev Workflow
 
-- CI must stay green
-- Any new validator must include at least one unit test
-- Any new schema must include type exports and validation test
-- Documentation updates should reduce ambiguity for agents
-- PR description must explain: what changed, why, and how to test
+```bash
+# Simulate a signal
+npm run simulate-signal
 
----
+# Simulate from vault
+npm run simulate-from-vault
 
-## 10. Current Priorities
+# Replay vault for determinism testing
+npm run replay-vault
 
-1. Stabilize PoIValidator interface for afi-reactor integration
-2. Add comprehensive tests for mentor registry
-3. Document ElizaOS runtime adapter contracts
-4. Migrate code from `validators/` and `schemas/` to `src/` for consistency (low priority)
+# Lint Codex metadata
+npm run codex-lint
 
----
-
-## 11. If You're Unsure
-
-Default to:
-1. Do nothing risky
-2. Add a stub + TODO comment
-3. Document the uncertainty in a short comment
-4. Ask a human maintainer (tag @afi-core-team in PR)
+# Run mentor evaluations
+npm run mentor-eval
+```
 
 ---
 
-**Last Updated**: 2025-11-22  
+## Architecture Overview
+
+**Purpose**: Core runtime behavior, validators, scoring, ElizaOS integration. **Not** for orchestration (that's afi-reactor).
+
+**Key directories**:
+- `src/validators/` — Validator implementations (PoI, PoInsight)
+- `src/scoring/` — Signal scoring logic
+- `src/registry/` — Validator and mentor registry
+- `src/eliza/` — ElizaOS integration lane
+- `src/types/` — TypeScript type definitions
+- `test/` — Vitest tests
+
+**Consumed by**: afi-reactor (orchestration), afi-ops (deployment)  
+**Depends on**: afi-config (schemas)
+
+**Boundary with afi-reactor**:
+- `afi-core` = runtime behavior (validators, scoring, ElizaOS)
+- `afi-reactor` = orchestration (DAG wiring, pipeline execution)
+
+---
+
+## Security
+
+- **Validator logic is security-critical**: Incorrect validation can corrupt signal integrity.
+- **PoI/PoInsight are validator traits, not signal fields**: Do not mislabel these concepts.
+- **No secrets in code**: Use environment variables.
+- **Signal schema compatibility**: Changes must be compatible with afi-reactor.
+
+---
+
+## Git Workflows
+
+- **Base branch**: `main` or `migration/multi-repo-reorg`
+- **Branch naming**: `feat/`, `fix/`, `refactor/`
+- **Commit messages**: Conventional commits (e.g., `feat(validators): add PoInsight v2`)
+- **Before committing**: Run `npm test && npm run validate-all`
+
+---
+
+## Conventions & Patterns
+
+- **Language**: TypeScript (ESM)
+- **Validators**: Follow validator interface contract
+- **Scoring**: Deterministic where possible, document non-determinism
+- **Tests**: Vitest, comprehensive coverage for validators
+- **ElizaOS**: Follow ElizaOS adapter contracts
+
+---
+
+## Scope & Boundaries for Agents
+
+**Allowed**:
+- Small, well-scoped changes to validators, types, runtime glue when requested
+- Add tests for existing validators
+- Improve ElizaOS integration with clear spec
+- Update `.afi-codex.json` if capabilities change
+
+**Forbidden**:
+- Large-scale refactors without explicit spec
+- Renaming core concepts (PoI, PoInsight, validators)
+- Introducing PoI/PoInsight mislabeling (they are validator traits, not signal fields)
+- Adding orchestration logic (that belongs in afi-reactor)
+- Breaking signal schema compatibility with afi-reactor
+
+**When unsure**: Ask for explicit spec. Prefer small, reversible changes. Do not refactor without clear reason.
+
+---
+
+**Last Updated**: 2025-11-26  
 **Maintainers**: AFI Core Team  
-**Version**: 1.0.0
+**Charter**: `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`
 

@@ -4,6 +4,11 @@
 
 **Global Authority**: All agents operating in AFI Protocol repos must follow `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`. If this AGENTS.md conflicts with the Charter, **the Charter wins**.
 
+For global droid behavior and terminology, see:
+- `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`
+- `afi-config/codex/governance/droids/AFI_DROID_PLAYBOOK.v0.1.md`
+- `afi-config/codex/governance/droids/AFI_DROID_GLOSSARY.md`
+
 ---
 
 ## Build & Test
@@ -130,7 +135,5 @@ npm run mentor-eval
 
 ---
 
-**Last Updated**: 2025-11-26  
-**Maintainers**: AFI Core Team  
-**Charter**: `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`
+**Last Updated**: 2025-11-26 | **Maintainers**: AFI Core Team | **Charter**: `afi-config/codex/governance/droids/AFI_DROID_CHARTER.v0.1.md`
 

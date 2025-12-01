@@ -1,2 +1,2 @@
 export * from './SignalScorer';
-
+export * from './NoveltyTypes';

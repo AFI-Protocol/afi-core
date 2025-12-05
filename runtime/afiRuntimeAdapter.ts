@@ -180,7 +180,7 @@ export interface AFIRuntimeAdapter {
    * - Log to T.S.S.D. Vault for audit
    * 
    * @param instruction - Mint instruction to emit
-   * @see runtime/mintPipelineDriver.ts
+ * @see runtime/mintPipelineDriver.ts
    */
   emitMintInstruction(instruction: unknown): Promise<void>;
   
@@ -240,4 +240,3 @@ export class StubRuntimeAdapter implements AFIRuntimeAdapter {
     // TODO: Implement real cleanup
   }
 }
-

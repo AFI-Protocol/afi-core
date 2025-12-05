@@ -40,7 +40,7 @@ validators/
   PoIValidator.ts          # Proof of Insight validator
   
 schemas/
-  universal_signal_schema.mjs  # Canonical signal format
+  universal_signal_schema.ts  # Canonical v0.1 signal schema
   validator_metadata_schema.ts # Validator registration
   
 runtime/
@@ -110,4 +110,3 @@ See `10_common_tasks.md` for detailed workflows.
 ---
 
 **Last Updated**: 2025-11-22
-

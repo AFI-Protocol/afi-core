@@ -1,6 +1,7 @@
 /**
- * Novelty types for validator-facing, deterministic novelty evaluation.
- * See docs/NOVELTY_SPEC.v0.1.md for context and lifecycle placement.
+ * NoveltyResult v0.1 — validator-facing, deterministic novelty envelope.
+ * Novelty is cohort-relative metadata and MUST NOT override UWR, TSSD vault
+ * finality, or emissions. See docs/NOVELTY_SPEC.v0.1.md for lifecycle and examples.
  */
 
 /**

@@ -1,4 +1,9 @@
 #!/bin/bash
+# ============================================================
+# Local maintainer/dev helper script for afi-core.
+# NOT part of runtime logic; NOT required for droids or automation.
+# Runs simple build artifact checks (dist presence/ESM scan) for local verification.
+# ============================================================
 # afi-core-verify.sh
 # Verifies AFI-core ESM compliance, DAG/schema/validator coverage, and type declarations
 

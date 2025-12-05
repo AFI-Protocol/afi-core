@@ -1,4 +1,9 @@
 #!/bin/zsh
+# ============================================================
+# Local maintainer/dev helper script for afi-core.
+# NOT part of runtime logic; NOT required for droids or automation.
+# Helps commit/push staged changes from a local clone.
+# ============================================================
 
 echo "✏️ Starting AFI Commit Process..."
 

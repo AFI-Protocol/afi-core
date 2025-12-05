@@ -20,21 +20,10 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --noEmit",
     "build:clean": "rm -rf dist && npm run build",
-    "simulate-signal": "node dist/ops/runner/simulate-full-pipeline.js",
-    "simulate-from-vault": "node dist/ops/runner/simulate-full-pipeline.js --from-vault",
-    "replay-vault": "node dist/ops/runner/replay-vault-signals.js",
-    "replay-vault-crypto": "node dist/ops/runner/replay-vault-signals.js --filter marketType:crypto",
-    "replay-vault-mature": "node dist/ops/runner/replay-vault-signals.js --filter lifecycleStage:mature --limit 10",
-    "codex-lint": "node dist/ops/codexLint.js",
-    "mentor-eval": "node dist/ops/mentorChain.js",
     "test": "vitest",
-    "test:run": "vitest run",
-    "validate-all": "npm run build:clean && npm run codex-lint && npm run simulate-signal && npm run mentor-eval && npm run test:run",
-    "validate-phase2": "node validate-phase2.js",
-    "architecture-test": "npm run build && node -e \"console.log('Architecture test passed')\"",
-    "phase2-verify": "npm run build && npm run test:run && echo 'Phase 2 verification complete'"
+    "test:run": "vitest run"
   },
   "dependencies": {
     "zod": "^3.22.4"

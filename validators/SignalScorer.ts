@@ -1,3 +1,8 @@
+/**
+ * SignalScorer v0.1 — baseline content heuristic for AFI-Core.
+ * Not PoI or PoInsight; those live at the validator level. Early validator/demo
+ * scorer that can be upgraded later without changing the external contract.
+ */
 import { z } from 'zod';
 import { SignalSchema } from '../schemas/universal_signal_schema';
 
@@ -14,9 +19,10 @@ const CONFIDENCE_MULTIPLIER = 0.6;
 
 export class SignalScorer {
   static evaluate(signal: z.infer<typeof SignalSchema>): SignalScoreResult {
-    const lengthFactor = SignalScorer.calculateLengthFactor(signal.content.length);
-    const hasNumbers = SignalScorer.containsNumbers(signal.content);
-    const sentiment = SignalScorer.determineSentiment(signal.content);
+    const content = signal.content ?? '';
+    const lengthFactor = SignalScorer.calculateLengthFactor(content.length);
+    const hasNumbers = SignalScorer.containsNumbers(content);
+    const sentiment = SignalScorer.determineSentiment(content);
 
     const insightScore = SignalScorer.calculateInsightScore(lengthFactor, hasNumbers);
     const confidence = SignalScorer.calculateConfidence(lengthFactor);

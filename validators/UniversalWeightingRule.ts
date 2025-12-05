@@ -59,6 +59,8 @@ export const defaultUwrConfig: Readonly<UniversalWeightingRuleConfig> = {
  * uwrConfidence. UWR is a canonical protocol primitive and should be
  * invoked by analysts (e.g., Froggie) and validators (e.g., Val Dook) after
  * they translate their strategy-specific metrics into {@link UwrAxesInput}.
+ * The current implementation is a stub and MUST NOT be used for production emissions;
+ * it exists solely to satisfy type-checking until governance-approved UWR math is wired.
  *
  * @param axes - Normalized axis inputs supplied by scoring agents.
  * @param config - Optional UWR configuration; defaults to {@link defaultUwrConfig}.

@@ -1,5 +1,10 @@
-// Validator decision types: deterministic, validator-facing contract tying together
-// scoring outputs, novelty evaluation, and optional regime tagging.
+/**
+ * ValidatorDecision v0.1 + UWR contracts
+ * - Defines validator-facing decision envelopes and UWR structural contracts.
+ * - UWR is a protocol primitive; weights/math must come from governance-approved config in afi-config.
+ * - Reputation, PoI, and PoInsight MUST NOT override UWR output or TSSD vault finality.
+ * - Structural envelopes only; emissions/mint/replay wiring live in afi-token / afi-reactor / afi-infra.
+ */
 
 import type { NoveltyResult } from "./NoveltyTypes";
 

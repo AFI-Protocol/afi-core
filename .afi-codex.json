@@ -5,7 +5,7 @@
   "language": "typescript",
   "entrypoints": [
     "validators/PoIValidator.ts",
-    "schemas/universal_signal_schema.mjs"
+    "schemas/universal_signal_schema.ts"
   ],
   "provides": [
     "signal-validation",
@@ -31,4 +31,3 @@
     "Consider moving to src/ for consistency"
   ]
 }
-

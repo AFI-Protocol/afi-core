@@ -2,6 +2,8 @@
 
 This document describes the **validator-facing decision envelope** used in `afi-core` types. It ties together scoring output, novelty evaluation, optional regime tagging, and the decision payload that validators emit for audit/replay. This is not the canonical protocol spec (that will live in `afi-docs`); it is a lightweight reference for implementers.
 
+Canonical metadata schema: see `afi-infra/agent-roles/validator_metadata_v1.md` in the AFI-Infra repo.
+
 ## Contract Overview
 
 - `ValidatorDecisionBase` captures:
@@ -23,6 +25,7 @@ This document describes the **validator-facing decision envelope** used in `afi-
 - Consumed by validators after scoring and novelty evaluation, before mint gating.
 - Provides a deterministic envelope for replay and audit; does **not** define emissions, tokenomics, or PoI/PoInsight formulas.
 - `uwrConfidence` references UWR outputs but this file does **not** implement UWR.
+- PoI (Proof-of-Intelligence) and PoInsight (Proof-of-Insight) are validator-level traits only; they are not per-signal metrics. PoI/PoInsight and any reputation scores may influence validator selection/weighting, but must never override UWR or vault finality for already-scored/recorded signals.
 
 ## Notes
 

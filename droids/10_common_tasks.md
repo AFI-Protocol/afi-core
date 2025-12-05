@@ -18,7 +18,7 @@ Frequent tasks with step-by-step instructions.
 2. **Implement validator interface**:
    ```typescript
    // validators/MyNewValidator.ts
-   import { Signal } from '../schemas/universal_signal_schema.mjs';
+   import { Signal } from '../schemas/universal_signal_schema';
    
    export class MyNewValidator {
      validate(signal: Signal): boolean {
@@ -72,7 +72,7 @@ Frequent tasks with step-by-step instructions.
 
 2. **Update schema**:
    ```typescript
-   // schemas/universal_signal_schema.mjs
+   // schemas/universal_signal_schema.ts (canonical signal schema)
    export const SignalSchema = z.object({
      // ... existing fields
      newField: z.string().optional(),  // Add new field
@@ -240,4 +240,3 @@ If stuck on any task:
 ---
 
 **Last Updated**: 2025-11-22
-

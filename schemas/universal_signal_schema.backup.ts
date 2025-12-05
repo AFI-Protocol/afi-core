@@ -1,5 +1,21 @@
 import { z } from "zod";
 
+/**
+ * LEGACY STAGED PIPELINE SCHEMA (ARCHIVED)
+ * ----------------------------------------
+ * This file captures an older "all-in-one" view of the signal lifecycle
+ * (RAW → ENRICHED → ANALYZED → SCORED) and an embedded PipelineConfigSchema.
+ *
+ * It is kept only as a design artifact.
+ * DO NOT use this file for new runtime behavior.
+ * DO NOT export anything from here via schemas/index.ts.
+ *
+ * Canonical v0.1 schemas now live in:
+ * - schemas/universal_signal_schema.ts      (SignalSchema)
+ * - schemas/pipeline_config_schema.ts      (PipelineConfigSchema)
+ * - afi-infra/schemas/*.ts                 (TSSD + enrichment)
+ */
+
 /* ---------- ENUMS ---------- */
 export const SignalActionSchema = z.enum(["buy", "sell"]);
 export const SignalStrengthSchema = z.enum(["low", "medium", "high", "very-high"]);

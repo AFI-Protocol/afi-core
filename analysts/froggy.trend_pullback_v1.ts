@@ -4,6 +4,8 @@ import {
   type UniversalWeightingRuleConfig,
   type UwrAxesInput
 } from "../validators/UniversalWeightingRule";
+import type { FroggyEnrichedView } from "./froggy.enrichment_adapter";
+import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_adapter";
 
 type Bias = "long" | "short" | "neutral";
 type AtrRegime = "low" | "normal" | "high" | "extreme";
@@ -194,4 +196,11 @@ export function scoreFroggyTrendPullback(
     uwrScore,
     notes: notes.length ? notes : undefined
   };
+}
+
+export function scoreFroggyTrendPullbackFromEnriched(
+  enriched: FroggyEnrichedView
+): FroggyTrendPullbackScore {
+  const input = buildFroggyTrendPullbackInputFromEnriched(enriched);
+  return scoreFroggyTrendPullback(input);
 }

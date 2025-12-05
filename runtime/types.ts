@@ -40,9 +40,9 @@ export interface SignalAnalysis {
  * This is the primary data structure passed through the signal lifecycle:
  * ingestion → validation → scoring → DAG processing → finalization
  * 
- * Aligns with schemas/universal_signal_schema.mjs (Zod schema).
+ * Aligns with schemas/universal_signal_schema.ts (Zod schema).
  * 
- * @see schemas/universal_signal_schema.mjs
+ * @see schemas/universal_signal_schema.ts
  */
 export interface SignalPayload {
   /** Unique signal identifier (optional during ingestion, required after) */
@@ -123,4 +123,3 @@ export interface MinimalSignalPayload {
  * @deprecated Use SignalPayload instead
  */
 export type Signal = SignalPayload;
-

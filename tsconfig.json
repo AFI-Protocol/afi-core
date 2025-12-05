@@ -23,8 +23,11 @@
   "include": [
     "schemas/**/*",
     "validators/**/*",
+    "analysts/**/*",
     "runtime/**/*",
     "cli_hooks/**/*",
+    "signal_schema_test/**/*",
+    "src/**/*",
     "tests/**/*",
     "docs/**/*"
   ],
@@ -35,4 +38,3 @@
     "**/*.backup.ts"
   ]
 }
-

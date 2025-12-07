@@ -1,3 +1,3 @@
-export * from './SignalScorer';
-export * from './NoveltyTypes';
-export * from './ValidatorDecision';
+export * from './SignalScorer.js';
+export * from './NoveltyTypes.js';
+export * from './ValidatorDecision.js';

@@ -3,7 +3,70 @@
 // but lives locally in afi-core to avoid cross-repo coupling. Future work may swap this
 // to a shared @afi/domain type once a domain package exists.
 
-import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1";
+import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
+
+/**
+ * EnrichmentProfile - Configuration for which enrichment categories to apply
+ *
+ * This is the "enrichment design" that Pixel Rick (and similar personas) will configure.
+ * It specifies which enrichment categories should be enabled and how they should be parameterized.
+ *
+ * Categories map to DAG enrichment nodes:
+ * - technical: Technical indicators (EMA, RSI, volume, etc.)
+ * - pattern: Chart pattern detection (engulfing, hammer, etc.)
+ * - sentiment: Market sentiment analysis
+ * - news: News/event analysis
+ * - aiMl: AI/ML ensemble predictions
+ *
+ * Missing categories are treated as "use default behavior" (typically enabled with default preset).
+ *
+ * @example
+ * // Trend-pullback profile with all categories enabled
+ * const fullProfile: EnrichmentProfile = {
+ *   technical: { enabled: true, preset: "trend_pullback" },
+ *   pattern: { enabled: true, preset: "reversal_patterns" },
+ *   sentiment: { enabled: true },
+ *   news: { enabled: true },
+ *   aiMl: { enabled: true, preset: "ensemble_v1" }
+ * };
+ *
+ * @example
+ * // TA-only profile (no sentiment or news)
+ * const taOnlyProfile: EnrichmentProfile = {
+ *   technical: { enabled: true, preset: "full_suite" },
+ *   pattern: { enabled: true },
+ *   sentiment: { enabled: false },
+ *   news: { enabled: false },
+ *   aiMl: { enabled: false }
+ * };
+ */
+export interface EnrichmentProfile {
+  technical?: {
+    enabled: boolean;
+    preset?: string;
+    params?: Record<string, unknown>;
+  };
+  pattern?: {
+    enabled: boolean;
+    preset?: string;
+    params?: Record<string, unknown>;
+  };
+  sentiment?: {
+    enabled: boolean;
+    preset?: string;
+    params?: Record<string, unknown>;
+  };
+  news?: {
+    enabled: boolean;
+    preset?: string;
+    params?: Record<string, unknown>;
+  };
+  aiMl?: {
+    enabled: boolean;
+    preset?: string;
+    params?: Record<string, unknown>;
+  };
+}
 
 export interface FroggyEnrichedView {
   signalId: string;

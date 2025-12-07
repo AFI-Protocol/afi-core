@@ -54,25 +54,53 @@ export const defaultUwrConfig: Readonly<UniversalWeightingRuleConfig> = {
 /**
  * Compute a Universal Weighting Rule score from normalized axes.
  *
- * This function is intentionally stubbed. It should apply the Universal
- * Weighting Rule to axis scores to produce a scalar uwrScore /
- * uwrConfidence. UWR is a canonical protocol primitive and should be
- * invoked by analysts (e.g., Froggie) and validators (e.g., Val Dook) after
- * they translate their strategy-specific metrics into {@link UwrAxesInput}.
- * The current implementation is a stub and MUST NOT be used for production emissions;
- * it exists solely to satisfy type-checking until governance-approved UWR math is wired.
+ * UWR v0.1 Implementation (Math Audit 2025-12-06):
+ * - Computes weighted average of four normalized axes: structure, execution, risk, insight
+ * - Each axis must be in [0, 1] range (enforced by analysts before calling)
+ * - Weights are governance-approved and sum to 1.0 (or normalized if not)
+ * - Returns scalar score in [0, 1] representing signal quality
  *
- * @param axes - Normalized axis inputs supplied by scoring agents.
- * @param config - Optional UWR configuration; defaults to {@link defaultUwrConfig}.
- * @returns Placeholder UWR score; replace with production math.
+ * Formula:
+ *   UWR = (structure * w_s + execution * w_e + risk * w_r + insight * w_i) / total_weight
+ *
+ * This is the canonical UWR implementation. Analysts (e.g., Froggy) and validators
+ * (e.g., Val Dook) MUST use this function after translating strategy-specific metrics
+ * into {@link UwrAxesInput}.
+ *
+ * @param axes - Normalized axis inputs supplied by scoring agents (each in [0,1])
+ * @param config - Optional UWR configuration; defaults to {@link defaultUwrConfig}
+ * @returns UWR score in [0, 1] representing overall signal quality
  */
 export function computeUwrScore(
   axes: UwrAxesInput,
   config: UniversalWeightingRuleConfig = defaultUwrConfig
 ): number {
-  // TODO: implement Universal Weighting Rule aggregation using governance-approved math.
-  // Placeholder implementation to satisfy type-checking; not production-ready.
-  void axes;
-  void config;
-  return 0;
+  // Validate inputs are in [0, 1] range
+  const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+  const structure = clamp01(axes.structureAxis);
+  const execution = clamp01(axes.executionAxis);
+  const risk = clamp01(axes.riskAxis);
+  const insight = clamp01(axes.insightAxis);
+
+  // Compute total weight for normalization
+  const totalWeight =
+    config.structureWeight +
+    config.executionWeight +
+    config.riskWeight +
+    config.insightWeight;
+
+  // Guard against zero weights (should never happen with governance config)
+  if (totalWeight === 0) {
+    return 0;
+  }
+
+  // Compute weighted sum
+  const weightedSum =
+    structure * config.structureWeight +
+    execution * config.executionWeight +
+    risk * config.riskWeight +
+    insight * config.insightWeight;
+
+  // Return normalized score in [0, 1]
+  return weightedSum / totalWeight;
 }

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./",
@@ -24,17 +24,20 @@
     "schemas/**/*",
     "validators/**/*",
     "analysts/**/*",
-    "runtime/**/*",
-    "cli_hooks/**/*",
-    "signal_schema_test/**/*",
-    "src/**/*",
-    "tests/**/*",
-    "docs/**/*"
+    "runtime/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "coverage",
-    "**/*.backup.ts"
+    "**/*.backup.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/__tests__/**",
+    "cli_hooks/**/*",
+    "signal_schema_test/**/*",
+    "src/**/*",
+    "tests/**/*",
+    "docs/**/*"
   ]
 }

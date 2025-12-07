@@ -6,7 +6,7 @@
  * - Structural envelopes only; emissions/mint/replay wiring live in afi-token / afi-reactor / afi-infra.
  */
 
-import type { NoveltyResult } from "./NoveltyTypes";
+import type { NoveltyResult } from "./NoveltyTypes.js";
 
 /**
  * Allowed validator decision kinds.

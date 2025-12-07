@@ -4,7 +4,7 @@
  * scorer that can be upgraded later without changing the external contract.
  */
 import { z } from 'zod';
-import { SignalSchema } from '../schemas/universal_signal_schema';
+import { SignalSchema } from '../schemas/universal_signal_schema.js';
 
 export interface SignalScoreResult {
   insightScore: number;

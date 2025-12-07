@@ -29,6 +29,9 @@ npm test
 # Run tests once
 npm run test:run
 
+# Check ESM invariants (lint for missing .js extensions, etc.)
+npm run esm:check
+
 # Validate all configs
 npm run validate-all
 
@@ -113,6 +116,40 @@ npm run mentor-eval
 - **Scoring**: Deterministic where possible, document non-determinism
 - **Tests**: Vitest, comprehensive coverage for validators
 - **ElizaOS**: Follow ElizaOS adapter contracts
+
+---
+
+## ESM Invariants
+
+**afi-core is pure ESM**. All code must follow strict ESM conventions to ensure compatibility with downstream consumers (afi-reactor, Eliza gateways).
+
+**Required practices**:
+- All relative imports in TypeScript source files **must** include `.js` extensions:
+  ```typescript
+  // ✅ CORRECT
+  import { computeUwrScore } from "../validators/UniversalWeightingRule.js";
+  import type { FroggyEnrichedView } from "./froggy.enrichment_adapter.js";
+
+  // ❌ WRONG
+  import { computeUwrScore } from "../validators/UniversalWeightingRule";
+  import type { FroggyEnrichedView } from "./froggy.enrichment_adapter";
+  ```
+- External package imports (e.g., `from "zod"`) do **not** need `.js` extensions.
+- No imports may reference `.ts` files at runtime (TypeScript compiles to `.js`).
+- All public symbols must be exported via `package.json` `exports` field and/or barrel files (`index.ts`).
+- New modules must follow the same ESM pattern—no CommonJS (`require`, `module.exports`).
+
+**Why `.js` extensions are required**:
+- afi-core uses plain `tsc` compilation (no bundler).
+- Node.js ESM requires explicit file extensions for relative imports.
+- TypeScript preserves import paths as-written, so `.js` in source becomes `.js` in compiled output.
+
+**Validation**:
+- Run `npm run build` to verify TypeScript compiles without errors.
+- Run `npm test` to ensure all tests pass with ESM imports.
+- Downstream consumers (afi-reactor) will fail at runtime if ESM invariants are violated.
+
+**For new contributors**: When adding new files or imports, always include `.js` extensions for relative paths. This is non-negotiable for ESM compatibility.
 
 ---
 

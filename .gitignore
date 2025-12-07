@@ -7,6 +7,15 @@ node_modules
 /dist
 /coverage
 
+# Compiled JS/TS artifacts (only in dist/)
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+!jest.config.js
+!vitest.config.js
+!*.config.js
+
 # ============================================================================
 # AFI-CORE BOUNDARY ENFORCEMENT
 # ============================================================================

@@ -3,9 +3,9 @@ import {
   defaultUwrConfig,
   type UniversalWeightingRuleConfig,
   type UwrAxesInput
-} from "../validators/UniversalWeightingRule";
-import type { FroggyEnrichedView } from "./froggy.enrichment_adapter";
-import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_adapter";
+} from "../validators/UniversalWeightingRule.js";
+import type { FroggyEnrichedView } from "./froggy.enrichment_adapter.js";
+import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_adapter.js";
 
 type Bias = "long" | "short" | "neutral";
 type AtrRegime = "low" | "normal" | "high" | "extreme";
@@ -129,29 +129,6 @@ const scoreInsightAxis = (input: FroggyTrendPullbackInput): number => {
   return clamp01(score);
 };
 
-const computeWeightedFallbackScore = (
-  axes: UwrAxesInput,
-  config: UniversalWeightingRuleConfig
-): number => {
-  const totalWeight =
-    config.structureWeight +
-    config.executionWeight +
-    config.riskWeight +
-    config.insightWeight;
-
-  if (!totalWeight) {
-    return 0;
-  }
-
-  const weightedSum =
-    axes.structureAxis * config.structureWeight +
-    axes.executionAxis * config.executionWeight +
-    axes.riskAxis * config.riskWeight +
-    axes.insightAxis * config.insightWeight;
-
-  return weightedSum / totalWeight;
-};
-
 export const buildUwrAxesFromFroggyInput = (
   input: FroggyTrendPullbackInput
 ): UwrAxesInput => {
@@ -168,14 +145,10 @@ export function scoreFroggyTrendPullback(
   config: UniversalWeightingRuleConfig = defaultUwrConfig
 ): FroggyTrendPullbackScore {
   const uwrAxes = buildUwrAxesFromFroggyInput(input);
-  const uwrScoreFromCore = computeUwrScore(uwrAxes, config);
 
-  // UWR implementation is currently a stub; fallback to a simple weighted mean
-  // so analysts can still reason about relative quality until governance math is wired.
-  const uwrScore =
-    uwrScoreFromCore !== 0
-      ? uwrScoreFromCore
-      : computeWeightedFallbackScore(uwrAxes, config);
+  // Math Audit 2025-12-06: Now using real UWR implementation from afi-core
+  // computeUwrScore() now implements the canonical weighted average formula
+  const uwrScore = computeUwrScore(uwrAxes, config);
 
   const notes: string[] = [];
 

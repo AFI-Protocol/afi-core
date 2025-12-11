@@ -121,11 +121,43 @@ export interface FroggyEnrichedView {
     hasShockEvent?: boolean | null;
     shockDirection?: "bullish" | "bearish" | "mixed" | "none" | "unknown" | null;
     headlines?: string[] | null;
+    /** Structured news items with full metadata (optional, v2 format) */
+    items?: {
+      title: string;
+      source: string;
+      url: string;
+      publishedAt: string; // ISO 8601 string
+    }[] | null;
   };
 
   aiMl?: {
     ensembleScore?: number | null;
     modelTags?: string[] | null;
+  };
+
+  /**
+   * News Features (UWR-ready, not wired yet)
+   *
+   * Derived summary of news enrichment for potential use in UWR scoring.
+   * Currently not used by UWR math - this is a future input layer.
+   *
+   * Computed from the `news` field (headlines, items, timestamps).
+   */
+  newsFeatures?: {
+    /** True if hasShockEvent === true */
+    hasNewsShock: boolean;
+    /** Number of unique headlines in the time window */
+    headlineCount: number;
+    /** Minutes since most recent article (null if no items) */
+    mostRecentMinutesAgo: number | null;
+    /** Minutes since oldest article (null if no items) */
+    oldestMinutesAgo: number | null;
+    /** True if headlines mention exchanges (Binance, Coinbase, etc.) */
+    hasExchangeEvent: boolean;
+    /** True if headlines mention regulation (SEC, ETF, lawsuit, etc.) */
+    hasRegulatoryEvent: boolean;
+    /** True if headlines mention macro events (Fed, inflation, etc.) */
+    hasMacroEvent: boolean;
   };
 
   enrichmentMeta?: {

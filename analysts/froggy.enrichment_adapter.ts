@@ -84,6 +84,32 @@ export interface FroggyEnrichedView {
   pattern?: {
     patternName?: string | null;
     patternConfidence?: number | null;
+    regime?: {
+      cyclePhase?:
+        | "early_bull"
+        | "mid_bull"
+        | "late_bull"
+        | "bear"
+        | "sideways"
+        | "capitulation"
+        | "accumulation"
+        | "euphoria"
+        | "unknown";
+      trendState?: "uptrend" | "downtrend" | "range" | "choppy";
+      volRegime?: "low" | "normal" | "high" | "extreme";
+      topBottomRisk?: "top_risk" | "bottom_risk" | "neutral";
+      externalLabels?: {
+        fearGreedValue?: number;
+        fearGreedLabel?:
+          | "extreme_fear"
+          | "fear"
+          | "neutral"
+          | "greed"
+          | "extreme_greed"
+          | "unknown";
+        notes?: string;
+      };
+    };
   };
 
   sentiment?: {
@@ -93,7 +119,7 @@ export interface FroggyEnrichedView {
 
   news?: {
     hasShockEvent?: boolean | null;
-    shockDirection?: "bullish" | "bearish" | "mixed" | "none" | null;
+    shockDirection?: "bullish" | "bearish" | "mixed" | "none" | "unknown" | null;
     headlines?: string[] | null;
   };
 

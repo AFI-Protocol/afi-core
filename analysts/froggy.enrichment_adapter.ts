@@ -68,6 +68,39 @@ export interface EnrichmentProfile {
   };
 }
 
+/**
+ * FroggyAiMlV1 - AI/ML model predictions from Tiny Brains
+ *
+ * This interface represents predictions from external ML models (Tiny Brains).
+ * It is a read-only context field that downstream code can optionally use.
+ *
+ * **Important:**
+ * - UWR (Universal Weighting Rule) scoring does NOT currently depend on this field.
+ * - Froggy strategy scoring (e.g., trend_pullback_v1) does NOT currently use this field.
+ * - This is a future integration point for ML-based signals.
+ *
+ * @example
+ * const aiMlPrediction: FroggyAiMlV1 = {
+ *   convictionScore: 0.85,
+ *   direction: "long",
+ *   regime: "bull",
+ *   riskFlag: false,
+ *   notes: "Strong uptrend detected by ensemble model"
+ * };
+ */
+export interface FroggyAiMlV1 {
+  /** Confidence in the suggested direction (0–1 range) */
+  convictionScore: number;
+  /** Suggested trade direction from ML model */
+  direction: "long" | "short" | "neutral";
+  /** Optional market regime detected by model (e.g., "bull", "bear", "highVol") */
+  regime?: string;
+  /** True if model detects elevated risk conditions */
+  riskFlag?: boolean;
+  /** Optional human-readable notes or explanation from model */
+  notes?: string | null;
+}
+
 export interface FroggyEnrichedView {
   signalId: string;
   symbol: string;
@@ -130,10 +163,13 @@ export interface FroggyEnrichedView {
     }[] | null;
   };
 
-  aiMl?: {
-    ensembleScore?: number | null;
-    modelTags?: string[] | null;
-  };
+  /**
+   * AI/ML predictions from Tiny Brains (optional, read-only context)
+   *
+   * Populated by external ML models. Not currently used by UWR scoring or
+   * Froggy strategy logic. This is a future integration point.
+   */
+  aiMl?: FroggyAiMlV1;
 
   /**
    * News Features (UWR-ready, not wired yet)

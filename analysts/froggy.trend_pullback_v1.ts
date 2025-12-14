@@ -6,6 +6,10 @@ import {
 } from "../validators/UniversalWeightingRule.js";
 import type { FroggyEnrichedView } from "./froggy.enrichment_adapter.js";
 import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_adapter.js";
+import {
+  type AnalystScoreTemplate,
+  AnalystScoreTemplateSchema
+} from "../src/analyst/AnalystScoreTemplate.js";
 
 type Bias = "long" | "short" | "neutral";
 type AtrRegime = "low" | "normal" | "high" | "extreme";
@@ -30,11 +34,20 @@ export interface FroggyTrendPullbackInput {
   rrMultiplePlanned: number;
 }
 
+/**
+ * FroggyTrendPullbackScore - Canonical analyst output for Froggy's trend_pullback_v1 strategy
+ *
+ * This interface now uses AnalystScoreTemplate as the single source of truth.
+ * All scoring information (UWR axes, UWR score, market context, etc.) is contained
+ * in the analystScore field.
+ *
+ * Legacy top-level fields (uwrAxes, uwrScore) have been removed. Consumers should
+ * read from analystScore instead.
+ */
 export interface FroggyTrendPullbackScore {
-  analystId: "froggy";
-  strategyId: "trend_pullback_v1";
-  uwrAxes: UwrAxesInput;
-  uwrScore: number;
+  /** Canonical analyst score template - single source of truth for all scoring data */
+  analystScore: AnalystScoreTemplate;
+  /** Optional human-readable notes (also available in analystScore.rationale) */
   notes?: string[];
 }
 
@@ -140,9 +153,125 @@ export const buildUwrAxesFromFroggyInput = (
   };
 };
 
+/**
+ * Build AnalystScoreTemplate from Froggy input and UWR results
+ *
+ * This helper populates the canonical analyst score template with:
+ * - Market context (perp, crypto, BTC/USDT)
+ * - UWR axes and score
+ * - Risk bucket and conviction derived from Froggy heuristics
+ * - Optional narrative fields
+ *
+ * @param input - Froggy trend pullback input
+ * @param uwrAxes - Computed UWR axes
+ * @param uwrScore - Computed UWR score
+ * @param notes - Optional notes array
+ * @param enriched - Optional enriched view for additional context
+ * @returns AnalystScoreTemplate
+ */
+function buildAnalystScoreTemplate(
+  input: FroggyTrendPullbackInput,
+  uwrAxes: UwrAxesInput,
+  uwrScore: number,
+  notes?: string[],
+  enriched?: FroggyEnrichedView
+): AnalystScoreTemplate {
+  // Derive risk bucket from ATR regime
+  const riskBucket: "low" | "medium" | "high" | "extreme" =
+    input.atrRegime === "low" ? "low" :
+    input.atrRegime === "normal" ? "medium" :
+    input.atrRegime === "high" ? "high" : "extreme";
+
+  // Derive conviction from UWR score (simple mapping: uwrScore is already 0-1)
+  const conviction = uwrScore;
+
+  // Derive direction from bias
+  const direction: "long" | "short" | "neutral" | "unknown" =
+    input.weeklyBias === "long" && input.dailyBias === "long" ? "long" :
+    input.weeklyBias === "short" && input.dailyBias === "short" ? "short" :
+    input.weeklyBias === "neutral" || input.dailyBias === "neutral" ? "neutral" : "unknown";
+
+  // Parse symbol from enriched view if available (e.g., "BTC/USDT" -> baseAsset: "BTC", quoteAsset: "USDT")
+  let baseAsset = "BTC"; // default
+  let quoteAsset = "USDT"; // default
+  if (enriched?.symbol) {
+    const parts = enriched.symbol.split("/");
+    if (parts.length === 2) {
+      baseAsset = parts[0];
+      quoteAsset = parts[1];
+    }
+  }
+
+  // Build axis notes from notes array
+  const axisNotes: AnalystScoreTemplate["axisNotes"] = {};
+  if (notes && notes.length > 0) {
+    if (notes.some(n => n.includes("structure") || n.includes("HTF") || n.includes("EMA"))) {
+      axisNotes.structure = notes.filter(n => n.includes("structure") || n.includes("HTF") || n.includes("EMA")).join(" ");
+    }
+    if (notes.some(n => n.includes("execution") || n.includes("Trigger") || n.includes("pattern"))) {
+      axisNotes.execution = notes.filter(n => n.includes("execution") || n.includes("Trigger") || n.includes("pattern")).join(" ");
+    }
+    if (notes.some(n => n.includes("risk"))) {
+      axisNotes.risk = notes.filter(n => n.includes("risk")).join(" ");
+    }
+    if (notes.some(n => n.includes("insight") || n.includes("Liquidity") || n.includes("volatility"))) {
+      axisNotes.insight = notes.filter(n => n.includes("insight") || n.includes("Liquidity") || n.includes("volatility")).join(" ");
+    }
+  }
+
+  const analystScore: AnalystScoreTemplate = {
+    // Identity
+    analystId: "froggy",
+    strategyId: "trend_pullback_v1",
+    strategyVersion: "1.0.0",
+
+    // Market context
+    marketType: "perp",
+    assetClass: "crypto",
+    instrumentType: "linear-perp",
+    baseAsset,
+    quoteAsset,
+    venue: undefined, // Not available in current Froggy input
+
+    // Time / horizon
+    signalTimeframe: enriched?.timeframe || "1h", // default to 1h if not available
+    holdingHorizon: "swing", // Froggy trend_pullback_v1 is typically swing trading
+
+    // Direction & risk
+    direction,
+    riskBucket,
+    conviction,
+
+    // UWR axes + score
+    uwrAxes: {
+      structure: uwrAxes.structureAxis,
+      execution: uwrAxes.executionAxis,
+      risk: uwrAxes.riskAxis,
+      insight: uwrAxes.insightAxis,
+    },
+    uwrScore,
+
+    // Optional narrative
+    axisNotes: Object.keys(axisNotes).length > 0 ? axisNotes : undefined,
+    rationale: notes && notes.length > 0 ? notes.join(" ") : undefined,
+    tags: ["trend-following", "pullback", "ema-based"],
+  };
+
+  // Validate with schema
+  const validationResult = AnalystScoreTemplateSchema.safeParse(analystScore);
+  if (!validationResult.success) {
+    throw new Error(
+      `AnalystScoreTemplate validation failed: ${JSON.stringify(validationResult.error.errors)}`
+    );
+  }
+
+  return analystScore;
+}
+
 export function scoreFroggyTrendPullback(
   input: FroggyTrendPullbackInput,
-  config: UniversalWeightingRuleConfig = defaultUwrConfig
+  config: UniversalWeightingRuleConfig = defaultUwrConfig,
+  enriched?: FroggyEnrichedView
 ): FroggyTrendPullbackScore {
   const uwrAxes = buildUwrAxesFromFroggyInput(input);
 
@@ -162,12 +291,18 @@ export function scoreFroggyTrendPullback(
     notes.push("Liquidity or volatility context is weak.");
   }
 
-  return {
-    analystId: "froggy",
-    strategyId: "trend_pullback_v1",
+  // Build canonical analyst score template
+  const analystScore = buildAnalystScoreTemplate(
+    input,
     uwrAxes,
     uwrScore,
-    notes: notes.length ? notes : undefined
+    notes.length ? notes : undefined,
+    enriched
+  );
+
+  return {
+    analystScore,
+    notes: notes.length ? notes : undefined,
   };
 }
 
@@ -175,5 +310,5 @@ export function scoreFroggyTrendPullbackFromEnriched(
   enriched: FroggyEnrichedView
 ): FroggyTrendPullbackScore {
   const input = buildFroggyTrendPullbackInputFromEnriched(enriched);
-  return scoreFroggyTrendPullback(input);
+  return scoreFroggyTrendPullback(input, defaultUwrConfig, enriched);
 }

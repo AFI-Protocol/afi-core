@@ -26,6 +26,14 @@
       "import": "./dist/schemas/*",
       "types": "./dist/schemas/*"
     },
+    "./analyst": {
+      "import": "./dist/src/analyst/index.js",
+      "types": "./dist/src/analyst/index.d.ts"
+    },
+    "./analyst/*": {
+      "import": "./dist/src/analyst/*",
+      "types": "./dist/src/analyst/*"
+    },
     "./analysts/*": {
       "import": "./dist/analysts/*",
       "types": "./dist/analysts/*"

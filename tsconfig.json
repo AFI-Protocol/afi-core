@@ -24,7 +24,8 @@
     "schemas/**/*",
     "validators/**/*",
     "analysts/**/*",
-    "runtime/**/*"
+    "runtime/**/*",
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
@@ -36,7 +37,6 @@
     "**/__tests__/**",
     "cli_hooks/**/*",
     "signal_schema_test/**/*",
-    "src/**/*",
     "tests/**/*",
     "docs/**/*"
   ]

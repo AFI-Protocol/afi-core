@@ -34,6 +34,14 @@
       "import": "./dist/src/analyst/*",
       "types": "./dist/src/analyst/*"
     },
+    "./decay": {
+      "import": "./dist/src/decay/index.js",
+      "types": "./dist/src/decay/index.d.ts"
+    },
+    "./decay/*": {
+      "import": "./dist/src/decay/*",
+      "types": "./dist/src/decay/*"
+    },
     "./analysts/*": {
       "import": "./dist/analysts/*",
       "types": "./dist/analysts/*"

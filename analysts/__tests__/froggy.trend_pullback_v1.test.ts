@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   scoreFroggyTrendPullback,
+  scoreFroggyTrendPullbackFromEnriched,
   type FroggyTrendPullbackInput
 } from "../froggy.trend_pullback_v1";
+import { AnalystScoreTemplateSchema } from "../../src/analyst/AnalystScoreTemplate.js";
+import type { FroggyEnrichedView } from "../froggy.enrichment_adapter.js";
 
 const baseGoodInput: FroggyTrendPullbackInput = {
   weeklyBias: "long",
@@ -21,11 +24,12 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
   it("scores a high-quality setup with strong axes", () => {
     const result = scoreFroggyTrendPullback(baseGoodInput);
 
-    expect(result.uwrAxes.structureAxis).toBeGreaterThan(0.6);
-    expect(result.uwrAxes.executionAxis).toBeGreaterThan(0.6);
-    expect(result.uwrAxes.riskAxis).toBeGreaterThan(0.6);
-    expect(result.uwrAxes.insightAxis).toBeGreaterThan(0.6);
-    expect(result.uwrScore).toBeGreaterThan(0.6);
+    // All scoring data is now in analystScore (canonical)
+    expect(result.analystScore.uwrAxes.structure).toBeGreaterThan(0.6);
+    expect(result.analystScore.uwrAxes.execution).toBeGreaterThan(0.6);
+    expect(result.analystScore.uwrAxes.risk).toBeGreaterThan(0.6);
+    expect(result.analystScore.uwrAxes.insight).toBeGreaterThan(0.6);
+    expect(result.analystScore.uwrScore).toBeGreaterThan(0.6);
   });
 
   it("penalizes weak structure when HTF alignment and HA confirmation are missing", () => {
@@ -38,7 +42,7 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
       brokeEmaWithBody: true
     });
 
-    expect(result.uwrAxes.structureAxis).toBeLessThan(0.4);
+    expect(result.analystScore.uwrAxes.structure).toBeLessThan(0.4);
   });
 
   it("penalizes insight when liquidity sweep is absent", () => {
@@ -47,9 +51,58 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
       liquiditySwept: false
     });
 
-    expect(result.uwrAxes.insightAxis).toBeLessThan(0.5);
-    expect(result.uwrScore).toBeLessThan(
-      scoreFroggyTrendPullback(baseGoodInput).uwrScore
+    expect(result.analystScore.uwrAxes.insight).toBeLessThan(0.5);
+    expect(result.analystScore.uwrScore).toBeLessThan(
+      scoreFroggyTrendPullback(baseGoodInput).analystScore.uwrScore
     );
   });
+
+  it("emits a valid AnalystScoreTemplate", () => {
+    const result = scoreFroggyTrendPullback(baseGoodInput);
+
+    // Verify analystScore is present
+    expect(result.analystScore).toBeDefined();
+
+    // Validate with schema
+    const validationResult = AnalystScoreTemplateSchema.safeParse(result.analystScore);
+    expect(validationResult.success).toBe(true);
+
+    // Verify Froggy-specific fields
+    expect(result.analystScore.analystId).toBe("froggy");
+    expect(result.analystScore.strategyId).toBe("trend_pullback_v1");
+    expect(result.analystScore.marketType).toBe("perp");
+    expect(result.analystScore.assetClass).toBe("crypto");
+    expect(result.analystScore.instrumentType).toBe("linear-perp");
+    expect(result.analystScore.direction).toBe("long"); // baseGoodInput has long bias
+  });
+
+  it("emits AnalystScoreTemplate with enriched view context", () => {
+    const enrichedView: FroggyEnrichedView = {
+      signalId: "test-signal-123",
+      symbol: "ETH/USDT",
+      market: "perp",
+      timeframe: "4h",
+      technical: {
+        emaDistancePct: 0.5,
+        isInValueSweetSpot: true,
+        brokeEmaWithBody: false,
+      },
+      pattern: {
+        patternName: "bullish_engulfing",
+        patternConfidence: 0.8,
+      },
+    };
+
+    const result = scoreFroggyTrendPullbackFromEnriched(enrichedView);
+
+    // Verify analystScore uses enriched view data
+    expect(result.analystScore.baseAsset).toBe("ETH");
+    expect(result.analystScore.quoteAsset).toBe("USDT");
+    expect(result.analystScore.signalTimeframe).toBe("4h");
+
+    // Validate with schema
+    const validationResult = AnalystScoreTemplateSchema.safeParse(result.analystScore);
+    expect(validationResult.success).toBe(true);
+  });
 });
+

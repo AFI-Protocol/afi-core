@@ -29,11 +29,12 @@ describe("froggy.enrichment_adapter", () => {
     const result: FroggyTrendPullbackScore =
       scoreFroggyTrendPullbackFromEnriched(enriched);
 
-    expect(result.uwrAxes.structureAxis).toBeGreaterThan(0.3);
-    expect(result.uwrAxes.executionAxis).toBeGreaterThan(0.3);
-    expect(result.uwrAxes.riskAxis).toBeGreaterThan(0.3);
-    expect(result.uwrAxes.insightAxis).toBeGreaterThan(0.3);
-    expect(result.uwrScore).toBeGreaterThan(0.3);
+    // All scoring data is now in analystScore (canonical)
+    expect(result.analystScore.uwrAxes.structure).toBeGreaterThan(0.3);
+    expect(result.analystScore.uwrAxes.execution).toBeGreaterThan(0.3);
+    expect(result.analystScore.uwrAxes.risk).toBeGreaterThan(0.3);
+    expect(result.analystScore.uwrAxes.insight).toBeGreaterThan(0.3);
+    expect(result.analystScore.uwrScore).toBeGreaterThan(0.3);
   });
 
   it("falls back to safe defaults when optional sections are missing", () => {
@@ -47,10 +48,11 @@ describe("froggy.enrichment_adapter", () => {
 
     const result = scoreFroggyTrendPullbackFromEnriched(enriched);
 
-    expect(result.uwrAxes.structureAxis).toBeDefined();
-    expect(result.uwrAxes.executionAxis).toBeDefined();
-    expect(result.uwrAxes.riskAxis).toBeDefined();
-    expect(result.uwrAxes.insightAxis).toBeDefined();
-    expect(result.uwrScore).toBeDefined();
+    // All scoring data is now in analystScore (canonical)
+    expect(result.analystScore.uwrAxes.structure).toBeDefined();
+    expect(result.analystScore.uwrAxes.execution).toBeDefined();
+    expect(result.analystScore.uwrAxes.risk).toBeDefined();
+    expect(result.analystScore.uwrAxes.insight).toBeDefined();
+    expect(result.analystScore.uwrScore).toBeDefined();
   });
 });

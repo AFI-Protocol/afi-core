@@ -54,13 +54,14 @@
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf dist && npm run build",
+    "prepare": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
     "esm:check": "bash scripts/esm-check.sh"
   },
   "dependencies": {
-    "@afi-protocol/afi-math": "file:../afi-math",
+    "@afi-protocol/afi-math": "git+ssh://git@github.com/AFI-Protocol/afi-math.git#7200ce0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

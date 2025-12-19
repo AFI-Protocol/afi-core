@@ -8,6 +8,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
     "./validators": {
@@ -28,18 +29,22 @@
     },
     "./analyst": {
       "import": "./dist/src/analyst/index.js",
+      "require": "./dist/src/analyst/index.js",
       "types": "./dist/src/analyst/index.d.ts"
     },
     "./analyst/*": {
       "import": "./dist/src/analyst/*",
+      "require": "./dist/src/analyst/*",
       "types": "./dist/src/analyst/*"
     },
     "./decay": {
       "import": "./dist/src/decay/index.js",
+      "require": "./dist/src/decay/index.js",
       "types": "./dist/src/decay/index.d.ts"
     },
     "./decay/*": {
       "import": "./dist/src/decay/*",
+      "require": "./dist/src/decay/*",
       "types": "./dist/src/decay/*"
     },
     "./analysts/*": {

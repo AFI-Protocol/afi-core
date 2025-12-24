@@ -10,8 +10,8 @@
  *
  * IMPORTANT BOUNDARIES:
  * 1. This template is PER-SIGNAL analyst scoring only.
- * 2. PoI (Proof of Intelligence) and PoInsight are VALIDATOR-LEVEL traits, not per-signal fields.
- *    They are tracked in validator registries and reputation systems, NOT in this template.
+ * 2. PoI (Proof of Intelligence) and PoInsight are ANALYST-LEVEL reputation metrics, not per-signal fields.
+ *    They are tracked in analyst reputation systems and computed by validators over time, NOT in this template.
  * 3. AFI Index "execution multiplier" (capital-followed weighting) is an INDEX-LEVEL concern
  *    and is defined elsewhere. Do NOT add execution multipliers to this template.
  * 4. UWR (Universal Weighting Rule) math is defined in validators/UniversalWeightingRule.ts.
@@ -127,7 +127,7 @@ export interface AnalystScoreTemplate {
  * - Required vs optional fields
  * - Reasonable ranges (conviction in [0, 1], UWR axes in [0, 1], UWR score in [0, 1])
  * - Enum constraints for categorical fields
- * - No PoI / PoInsight fields (those are validator-level)
+ * - No PoI / PoInsight fields (those are analyst-level reputation metrics)
  * - No AFI Index execution multipliers (those are index-level)
  */
 export const AnalystScoreTemplateSchema = z.object({

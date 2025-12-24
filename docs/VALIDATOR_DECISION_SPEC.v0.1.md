@@ -25,7 +25,7 @@ Canonical metadata schema: see `afi-infra/agent-roles/validator_metadata_v1.md` 
 - Consumed by validators after scoring and novelty evaluation, before mint gating.
 - Provides a deterministic envelope for replay and audit; does **not** define emissions, tokenomics, or PoI/PoInsight formulas.
 - `uwrConfidence` references UWR outputs but this file does **not** implement UWR.
-- PoI (Proof-of-Intelligence) and PoInsight (Proof-of-Insight) are validator-level traits only; they are not per-signal metrics. PoI/PoInsight and any reputation scores may influence validator selection/weighting, but must never override UWR or vault finality for already-scored/recorded signals.
+- PoI (Proof-of-Intelligence) and PoInsight (Proof-of-Insight) are analyst-level reputation metrics computed by validators over time; they are not per-signal metrics. Analyst reputation scores may influence validator selection/weighting, but must never override UWR or vault finality for already-scored/recorded signals.
 
 ## Notes
 

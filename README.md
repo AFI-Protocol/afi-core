@@ -8,26 +8,30 @@ Welcome to `afi-core`, the neural spine of the AFI Protocol’s agentic intellig
 
 ### 📦 What's Inside
 
-- **Signal Validators** – Deterministic modules to vet raw input before scoring  
-- **Analysts** – Strategy scorers (e.g., Froggy) using UWR heuristics  
-- **Schemas** – Canonical v0.1 Zod schemas (signal, pipeline config, validator metadata, etc.)  
-- **Runtime Contracts** – Adapter/type stubs for future runtime integration  
-- **Tests** – Vitest suites for validators/analysts/schemas  
+- **Signal Validators** – Deterministic modules to vet raw input before scoring
+- **Analysts** – Strategy scorers (e.g., Froggy) using UWR heuristics with enrichment adapters
+- **Signal Decay** – Time-based signal degradation and lifecycle management
+- **Signal Scoring** – Advanced scoring algorithms for signal evaluation
+- **Validator Decision** – Automated decision-making logic for validators
+- **Validator Governance** – Governance schemas and registry for validator coordination
+- **Schemas** – Canonical v0.1 Zod schemas (signal, pipeline config, validator metadata, governance, etc.)
+- **Runtime Contracts** – Adapter/type stubs for future runtime integration
+- **Tests** – Vitest suites for all components
 - **Docs/Droids** – Repo guidance and specs
 
 ### 🗂 Structure
 
 ```
-analysts/           # Analyst logic (e.g., Froggy)
-validators/         # Validator logic, UWR contracts, novelty types
-schemas/            # Canonical v0.1 schemas
+analysts/           # Analyst logic (e.g., Froggy) with enrichment adapters
+src/analyst/        # Core analyst templates and scoring
+src/decay/          # Signal decay templates and processing
+validators/         # Validator logic, UWR contracts, novelty types, scoring, decision, governance
+schemas/            # Canonical v0.1 schemas (signal, pipeline, validator, governance)
 runtime/            # Runtime adapter/types stubs
-signal_schema_test/ # Legacy sandbox (deprecated; retained only if reintroduced for experiments)
 tests/              # Vitest suites
 droids/             # Repo-scoped droid instructions
 docs/               # Specs and reference docs
 scripts/            # Local dev helper scripts
-src/components/     # Future-facing UI stub (ModalSignalReview), not wired into runtime
 ```
 
 ### 🚀 Quick Start

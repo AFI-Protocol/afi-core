@@ -188,3 +188,108 @@ export const AnalystScoreTemplateSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
+/**
+ * AFI DAG configuration for analyst score template
+ *
+ * Configuration for AFI DAG integration with the analyst score template.
+ * This allows analysts to specify enrichment nodes and parallel processing options.
+ */
+export interface AFIDAGConfig {
+  /** Enrichment nodes to use. Array of node IDs to execute. */
+  enrichmentNodes: string[];
+
+  /** Whether to enable parallel processing. */
+  parallelProcessing: boolean;
+
+  /** Maximum parallel nodes. Limits the number of nodes that can run in parallel. */
+  maxParallelNodes?: number;
+
+  /** Timeout for enrichment nodes in milliseconds. */
+  enrichmentTimeout?: number;
+}
+
+/**
+ * Extended AnalystScoreTemplate with AFI DAG configuration
+ *
+ * Extends the base AnalystScoreTemplate with optional AFI DAG-specific fields.
+ * This allows analysts to include enrichment results and AFI DAG configuration
+ * in their score output.
+ */
+export interface AnalystScoreTemplateWithAFIDAG extends AnalystScoreTemplate {
+  /** Optional AFI DAG configuration. */
+  afiDAGConfig?: AFIDAGConfig;
+
+  /** Optional enrichment results. Map of node ID to enrichment result. */
+  enrichmentResults?: Map<string, unknown>;
+}
+
+/**
+ * Type guard to check if an object is an AFIDAGConfig
+ */
+export function isAFIDAGConfig(obj: unknown): obj is AFIDAGConfig {
+  if (typeof obj !== 'object' || obj === null) {
+    return false;
+  }
+
+  const config = obj as unknown as Record<string, unknown>;
+
+  return (
+    Array.isArray(config.enrichmentNodes) &&
+    typeof config.parallelProcessing === 'boolean' &&
+    (config.maxParallelNodes === undefined || typeof config.maxParallelNodes === 'number') &&
+    (config.enrichmentTimeout === undefined || typeof config.enrichmentTimeout === 'number')
+  );
+}
+
+/**
+ * Type guard to check if an object is an AnalystScoreTemplateWithAFIDAG
+ */
+export function isAnalystScoreTemplateWithAFIDAG(obj: unknown): obj is AnalystScoreTemplateWithAFIDAG {
+  if (typeof obj !== 'object' || obj === null) {
+    return false;
+  }
+
+  const template = obj as unknown as Record<string, unknown>;
+
+  // Check base AnalystScoreTemplate fields
+  if (
+    typeof template.analystId !== 'string' ||
+    typeof template.strategyId !== 'string' ||
+    typeof template.marketType !== 'string' ||
+    typeof template.assetClass !== 'string' ||
+    typeof template.instrumentType !== 'string' ||
+    typeof template.baseAsset !== 'string' ||
+    typeof template.signalTimeframe !== 'string' ||
+    typeof template.direction !== 'string' ||
+    typeof template.riskBucket !== 'string' ||
+    typeof template.conviction !== 'number' ||
+    typeof template.uwrScore !== 'number'
+  ) {
+    return false;
+  }
+
+  // Check uwrAxes
+  const uwrAxes = template.uwrAxes as unknown as Record<string, unknown> | undefined;
+  if (
+    typeof uwrAxes !== 'object' ||
+    uwrAxes === null ||
+    typeof uwrAxes.structure !== 'number' ||
+    typeof uwrAxes.execution !== 'number' ||
+    typeof uwrAxes.risk !== 'number' ||
+    typeof uwrAxes.insight !== 'number'
+  ) {
+    return false;
+  }
+
+  // Check optional AFI DAG fields
+  if (template.afiDAGConfig !== undefined && !isAFIDAGConfig(template.afiDAGConfig)) {
+    return false;
+  }
+
+  if (template.enrichmentResults !== undefined && !(template.enrichmentResults instanceof Map)) {
+    return false;
+  }
+
+  return true;
+}
+

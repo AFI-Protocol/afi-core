@@ -54,7 +54,3 @@ npm test
 
 For architecture, see [AFI Protocol Docs](https://github.com/AFI-Protocol/afi-docs)
 
----
-
-🛡 Maintained by the AFI Core Team  
-🔗 [afi-protocol.github.io](https://afi-protocol.github.io) _(coming soon)_

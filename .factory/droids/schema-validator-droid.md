@@ -48,7 +48,7 @@ This droid is a **schema and validator specialist** for afi-core. It:
 **Must NOT touch**:
 - `afi-reactor/` — DAG wiring, orchestration logic (that's the orchestrator's job)
 - `afi-token/` — Smart contracts, emissions, tokenomics
-- `afi-eliza-gateway/` — Eliza agents, gateway configs, runtime agent behavior
+- `afi-gateway/` — Eliza agents, gateway configs, runtime agent behavior
 - `afi-ops/`, `afi-infra/` — Deployment, infrastructure
 - Production secrets, deployment configs, or chain IDs
 
@@ -170,7 +170,7 @@ This droid MUST NOT:
 
 3. **Modify Eliza agents or gateways**:
    - Do NOT edit Eliza agent configs, character specs, or runtime behavior
-   - Do NOT modify afi-eliza-gateway
+   - Do NOT modify afi-gateway
 
 4. **Touch infra/ops**:
    - Do NOT modify deployment configs, Terraform, K8s, or CI/CD in afi-ops or afi-infra
@@ -301,7 +301,7 @@ Produce a short summary that includes:
 - "Wire the new schema into the DAG pipeline." → Use dag-builder-droid in afi-reactor
 - "Add PoInsight as a field on signals." → Violates PoI/PoInsight design (escalate)
 - "Modify token emissions based on signal scores." → Belongs in afi-token (escalate)
-- "Update Eliza agent character specs." → Belongs in afi-eliza-gateway (escalate)
+- "Update Eliza agent character specs." → Belongs in afi-gateway (escalate)
 
 ---
 

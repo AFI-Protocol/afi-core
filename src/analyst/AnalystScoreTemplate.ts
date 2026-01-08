@@ -64,6 +64,8 @@ export interface AnalystScoreTemplate {
   signalTimeframe: string;
   /** Holding horizon: scalp, intraday, swing, position, long-term, unknown */
   holdingHorizon?: "scalp" | "intraday" | "swing" | "position" | "long-term" | "unknown";
+  /** ISO timestamp when scoring was completed (for decay calculation) */
+  scoredAt: string;
 
   // ========== Direction & Risk ==========
   /** Trade direction: long, short, neutral, unknown */
@@ -151,6 +153,7 @@ export const AnalystScoreTemplateSchema = z.object({
   // Time / horizon
   signalTimeframe: z.string().min(1),
   holdingHorizon: z.enum(["scalp", "intraday", "swing", "position", "long-term", "unknown"]).optional(),
+  scoredAt: z.string().datetime(), // ISO 8601 timestamp
 
   // Direction & risk
   direction: z.enum(["long", "short", "neutral", "unknown"]),
@@ -263,7 +266,8 @@ export function isAnalystScoreTemplateWithAFIDAG(obj: unknown): obj is AnalystSc
     typeof template.direction !== 'string' ||
     typeof template.riskBucket !== 'string' ||
     typeof template.conviction !== 'number' ||
-    typeof template.uwrScore !== 'number'
+    typeof template.uwrScore !== 'number' ||
+    typeof template.scoredAt !== 'string'
   ) {
     return false;
   }
@@ -292,4 +296,3 @@ export function isAnalystScoreTemplateWithAFIDAG(obj: unknown): obj is AnalystSc
 
   return true;
 }
-

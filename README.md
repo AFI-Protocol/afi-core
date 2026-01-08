@@ -1,6 +1,6 @@
 # 🧠 AFI Core
 
-Welcome to `afi-core`, the neural spine of the AFI Protocol’s agentic intelligence system. This module contains core logic for processing and evaluating market signals—laying the groundwork for decentralized financial reasoning.
+Welcome to `afi-core`, the neural spine of the AFI Protocol's agentic intelligence system. This module contains core logic for processing and evaluating market signals—laying the groundwork for decentralized financial reasoning.
 
 ## 🤖 Droid Instructions
 
@@ -8,10 +8,10 @@ Welcome to `afi-core`, the neural spine of the AFI Protocol’s agentic intellig
 
 ### 📦 What's Inside
 
-- **Signal Validators** – Deterministic modules to vet raw input before scoring
+- **Validation Primitives** – UWR, novelty scoring, and validator decision types
 - **Analysts** – Strategy scorers (e.g., Froggy) using UWR heuristics with enrichment adapters
 - **Signal Decay** – Time-based signal degradation and lifecycle management
-- **Signal Scoring** – Advanced scoring algorithms for signal evaluation
+- **Scoring** – Advanced scoring algorithms (UWR-based)
 - **Validator Decision** – Automated decision-making logic for validators
 - **Validator Governance** – Governance schemas and registry for validator coordination
 - **Schemas** – Canonical v0.1 Zod schemas (signal, pipeline config, validator metadata, governance, etc.)
@@ -25,7 +25,7 @@ Welcome to `afi-core`, the neural spine of the AFI Protocol’s agentic intellig
 analysts/           # Analyst logic (e.g., Froggy) with enrichment adapters
 src/analyst/        # Core analyst templates and scoring
 src/decay/          # Signal decay templates and processing
-validators/         # Validator logic, UWR contracts, novelty types, scoring, decision, governance
+validators/         # Validator primitives (UWR, novelty, decision, governance)
 schemas/            # Canonical v0.1 schemas (signal, pipeline, validator, governance)
 runtime/            # Runtime adapter/types stubs
 tests/              # Vitest suites
@@ -53,4 +53,3 @@ npm test
 - `afi-docs` – Specs and documentation
 
 For architecture, see [AFI Protocol Docs](https://github.com/AFI-Protocol/afi-docs)
-

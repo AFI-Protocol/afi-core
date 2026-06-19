@@ -1,5 +1,7 @@
 # EnrichmentProfile Specification v0.1
 
+> ℹ️ Persona names below (e.g. "Pixel Rick") are illustrative of an enrichment-design role only. The legacy Froggy demo chain has been removed and the reactor is scored-only; `EnrichmentProfile` itself remains a valid configuration type. See `afi-reactor/src/config/froggyPipeline.ts`.
+
 ## Overview
 
 **EnrichmentProfile** is a first-class configuration type that specifies which enrichment categories should be applied to a signal and how they should be parameterized. It serves as the "enrichment design" that personas like **Pixel Rick** (and similar engineering/configuration agents) will construct and attach to signals entering Froggy-style pipelines.

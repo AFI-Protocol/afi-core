@@ -36,7 +36,7 @@ interface UniversalWeightingRuleConfig {
 
 ### Call Sites
 - `afi-core/analysts/froggy.trend_pullback_v1.ts::scoreFroggyTrendPullback()`
-- Used by: Froggy analyst, Prize Demo pipeline
+- Used by: Froggy analyst (afi-reactor scored-only pipeline)
 
 ---
 
@@ -45,7 +45,7 @@ interface UniversalWeightingRuleConfig {
 ### Implementation
 - **Core Math**: `afi-math/src/decay/decayModels.ts`
 - **AFI Integration**: `afi-core/validators/SignalDecay.ts`
-- **Status**: ✅ Production Ready (dormant in Prize Demo)
+- **Status**: ✅ Production Ready (dormant in the scored-only reactor pipeline)
 
 ### Functions
 ```typescript
@@ -68,7 +68,7 @@ applyVolatilityAdjustedDecay(uwrScore, ageHours, volatility, conviction)
 - **Coverage**: Time decay, volatility adjustment, half-life calculations
 
 ### Call Sites
-- **Current**: None (ready but not wired into Prize Demo)
+- **Current**: None (ready but not wired into the scored-only reactor pipeline)
 - **Future**: `afi-core/analysts/froggy.trend_pullback_v1.ts` (when timestamps added)
 
 ---
@@ -149,35 +149,37 @@ interface NoveltyResult {
 ## Integration Map
 
 ```
-Signal Flow (Prize Demo):
+Signal Flow (afi-reactor, scored-only):
 ┌─────────────────────────────────────────────────────────────┐
-│ 1. Alpha Scout Ingest                                       │
-│    └─> TradingView payload → reactor signal envelope        │
+│ 1. Signal Ingest                                             │
+│    └─> TradingView webhook → canonical USS v1.1 (rawUss)     │
 ├─────────────────────────────────────────────────────────────┤
-│ 2. Signal Structurer (Pixel Rick)                           │
-│    └─> Normalize to USS (Universal Signal Schema)           │
+│ 2. USS Telemetry Deriver                                     │
+│    └─> Derive routing/debug fields into context.telemetry    │
 ├─────────────────────────────────────────────────────────────┤
-│ 3. Froggy Enrichment Adapter (Pixel Rick)                   │
-│    └─> Apply enrichment legos (technical, pattern, etc.)    │
+│ 3. Enrichment (parallel branches → adapter merge)            │
+│    ├─> Tech + Pattern (OHLCV indicators, chart patterns)     │
+│    ├─> Sentiment + News (external APIs)                       │
+│    └─> Enrichment Adapter merges legos + optional AI/ML       │
 ├─────────────────────────────────────────────────────────────┤
-│ 4. Froggy Analyst                                            │
+│ 4. Froggy Analyst (trend_pullback_v1)                        │
 │    ├─> Build UWR axes from enriched signal                   │
 │    ├─> ✅ computeUwrScore(axes) → uwrScore                   │
-│    └─> Return FroggyTrendPullbackScore                       │
-├─────────────────────────────────────────────────────────────┤
-│ 5. Validator Decision Evaluator (Val Dook)                  │
-│    ├─> Evaluate uwrScore against thresholds                  │
 │    ├─> ⚠️ (Future) computeNoveltyScore() → noveltyResult    │
 │    ├─> ⚠️ (Future) applyTimeDecay() → decayedScore          │
-│    └─> Return ValidatorDecision (approve/reject/flag)        │
+│    └─> Return ReactorScoredSignalV1 (analystScore + axes)    │
 ├─────────────────────────────────────────────────────────────┤
-│ 6. Execution Agent Sim                                       │
-│    └─> Simulate trade execution (no real trading)            │
+│ 5. TSSD Vault Write                                          │
+│    └─> Persist scored signal (Reactor-owned collection)      │
 └─────────────────────────────────────────────────────────────┘
 
-Future Emissions Flow:
+Note: Validator certification and execution are NOT reactor stages.
+The reactor emits a scored-only ReactorScoredSignalV1; downstream
+certification (external) and mint orchestration (afi-mint) consume it.
+
+Future Emissions Flow (downstream of the reactor, in afi-mint):
 ┌─────────────────────────────────────────────────────────────┐
-│ After Validator Approval:                                    │
+│ After external certification of a scored signal:             │
 │ ├─> EmissionsCoordinator.calculateEmissions()               │
 │ │   ├─> Input: uwrScore, noveltyResult, decayedScore        │
 │ │   ├─> Apply proportional allocation                        │

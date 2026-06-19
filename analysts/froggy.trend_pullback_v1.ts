@@ -236,6 +236,7 @@ function buildAnalystScoreTemplate(
     // Time / horizon
     signalTimeframe: enriched?.timeframe || "1h", // default to 1h if not available
     holdingHorizon: "swing", // Froggy trend_pullback_v1 is typically swing trading
+    scoredAt: new Date().toISOString(), // ISO 8601 — when scoring completed (required for decay)
 
     // Direction & risk
     direction,

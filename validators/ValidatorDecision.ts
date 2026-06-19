@@ -9,7 +9,7 @@
 
 import type { NoveltyResult } from "./NoveltyTypes.js";
 import { applyTimeDecayToUwrScore, calculateAdjustedHalfLife } from "./SignalDecay.js";
-import type { AnalystScoreTemplate } from "../analyst/AnalystScoreTemplate.js";
+import type { AnalystScoreTemplate } from "../src/analyst/AnalystScoreTemplate.js";
 
 /**
  * Allowed validator decision kinds.

@@ -64,7 +64,7 @@ export const defaultUwrConfig: Readonly<UniversalWeightingRuleConfig> = {
  *   UWR = (structure * w_s + execution * w_e + risk * w_r + insight * w_i) / total_weight
  *
  * This is the canonical UWR implementation. Analysts (e.g., Froggy) and validators
- * (e.g., Val Dook) MUST use this function after translating strategy-specific metrics
+ * (e.g., certification validators) MUST use this function after translating strategy-specific metrics
  * into {@link UwrAxesInput}.
  *
  * @param axes - Normalized axis inputs supplied by scoring agents (each in [0,1])

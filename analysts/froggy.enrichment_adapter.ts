@@ -8,7 +8,7 @@ import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 /**
  * EnrichmentProfile - Configuration for which enrichment categories to apply
  *
- * This is the "enrichment design" that Pixel Rick (and similar personas) will configure.
+ * This is the "enrichment design" that the enrichment designer (and similar personas) will configure.
  * It specifies which enrichment categories should be enabled and how they should be parameterized.
  *
  * Categories map to DAG enrichment nodes:

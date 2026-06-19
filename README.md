@@ -82,7 +82,6 @@ npm test
 
 `afi-core` is one of several composable modules in the Agentic Financial Intelligence Protocol. Other modules include:
 
-- `afi-agents` – Persona logic and mentor pairing  
 - `afi-infra` – Infra bus + observer daemons  
 - `afi-cli` – Command-line agent interface  
 - `afi-docs` – Specs and documentation

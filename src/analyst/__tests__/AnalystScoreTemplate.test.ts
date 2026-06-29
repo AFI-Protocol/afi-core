@@ -4,10 +4,12 @@
  * These tests verify that TypeScript interfaces are correctly defined
  * and that type guards work as expected.
  *
- * This file uses type assertions to verify type compatibility
- * without requiring a test framework.
+ * The bulk of this file uses compile-time type assertions to verify type
+ * compatibility; the runtime `describe` block at the end exercises the
+ * exported type guards so vitest registers a suite for the file.
  */
 
+import { describe, it, expect } from 'vitest';
 import type {
   AnalystScoreTemplate,
   AFIDAGConfig,
@@ -256,6 +258,36 @@ function processAnalystScoreTemplateWithAFIDAG(template: AnalystScoreTemplateWit
 processAFIDAGConfig(validAFIDAGConfig);
 processAnalystScoreTemplate(baseTemplate);
 processAnalystScoreTemplateWithAFIDAG(extendedTemplate);
+
+// ============================================================================
+// Runtime tests for the exported type guards
+// ============================================================================
+
+describe('AnalystScoreTemplate type guards', () => {
+  it('isAFIDAGConfig accepts valid configs', () => {
+    expect(isAFIDAGConfig(validAFIDAGConfig)).toBe(true);
+    expect(isAFIDAGConfig(minimalAFIDAGConfig)).toBe(true);
+  });
+
+  it('isAFIDAGConfig rejects non-configs', () => {
+    expect(isAFIDAGConfig(null)).toBe(false);
+    expect(isAFIDAGConfig({})).toBe(false);
+    expect(isAFIDAGConfig({ enrichmentNodes: ['a'] })).toBe(false); // missing parallelProcessing
+  });
+
+  it('isAnalystScoreTemplateWithAFIDAG accepts valid templates', () => {
+    // The runtime guard additionally requires a `scoredAt` string (which the
+    // compile-time fixtures above omit, since the type marks it optional).
+    const scoredAt = '2026-01-01T00:00:00.000Z';
+    expect(isAnalystScoreTemplateWithAFIDAG({ ...validAnalystScoreTemplateWithAFIDAG, scoredAt })).toBe(true);
+    expect(isAnalystScoreTemplateWithAFIDAG({ ...minimalAnalystScoreTemplateWithAFIDAG, scoredAt })).toBe(true);
+  });
+
+  it('isAnalystScoreTemplateWithAFIDAG rejects non-templates', () => {
+    expect(isAnalystScoreTemplateWithAFIDAG(null)).toBe(false);
+    expect(isAnalystScoreTemplateWithAFIDAG({})).toBe(false);
+  });
+});
 
 // ============================================================================
 // Export for type checking

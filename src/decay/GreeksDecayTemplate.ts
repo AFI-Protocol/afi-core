@@ -14,6 +14,7 @@
  */
 
 import { z } from "zod";
+import { decay } from "@afi-protocol/afi-math";
 import type { AnalystScoreTemplate } from "../analyst/AnalystScoreTemplate.js";
 
 /**
@@ -226,6 +227,10 @@ export function pickDecayParamsForAnalystScore(
  * Uses half-life decay formula:
  * `decayed = baseScore * 0.5 ^ (elapsedMinutes / halfLifeMinutes)`
  *
+ * Kernel delegated to afi-math `decay.remainingAfterHalfLives` (bit-exact:
+ * the same `Math.pow(0.5, x)` operation) per math-authority-v0.1.md §8 (PR-7).
+ * Decay-engine canonicality (UP-8) remains OPEN; this delegation does not resolve it.
+ *
  * @param baseScore - The original score (typically in [0, 1] range)
  * @param scoredAtIso - ISO 8601 timestamp when the score was computed
  * @param nowIso - ISO 8601 timestamp representing "now"
@@ -267,8 +272,15 @@ export function applyTimeDecay(
   const elapsedMs = now.getTime() - scoredAt.getTime();
   const elapsedMinutes = Math.max(0, elapsedMs / (1000 * 60));
 
-  // Apply exponential decay
-  const decayed = baseScore * Math.pow(0.5, elapsedMinutes / params.halfLifeMinutes);
+  // Apply exponential decay — kernel delegated to afi-math (PR-7).
+  // decay.remainingAfterHalfLives({ halfLives: x }) is Math.pow(0.5, x): the
+  // same IEEE-754 operations in the same order as the previous local kernel,
+  // so outputs are bit-identical (proven in applyTimeDecay.mathEquivalence.test.ts).
+  const decayed =
+    baseScore *
+    decay.remainingAfterHalfLives({
+      halfLives: elapsedMinutes / params.halfLifeMinutes,
+    });
 
   // Clamp to [0, 1] if baseScore was in that range
   if (baseScore >= 0 && baseScore <= 1) {

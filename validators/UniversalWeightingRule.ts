@@ -41,7 +41,11 @@ export interface UniversalWeightingRuleConfig {
 /**
  * Default UWR configuration placeholder.
  *
- * TODO: Replace with governance-approved weights sourced from afi-config.
+ * TODO: Runtime replacement of this stub by the registered afi-config profile
+ * is governed by afi-governance decisions/uwr-runtime-consumption-v0.1.md.
+ * The pure loader/validator exists (PR-UWR-RUNTIME-LOADER,
+ * ./UwrProfileLoader.ts); the runtime registry read and any change to this
+ * constant remain separately authorized (PR-UWR-RUNTIME-READ, RC-8).
  */
 export const defaultUwrConfig: Readonly<UniversalWeightingRuleConfig> = {
   id: "uwr-default-stub",

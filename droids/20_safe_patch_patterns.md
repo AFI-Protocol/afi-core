@@ -174,7 +174,6 @@ const signal = {
 
 ### Affected repos
 - afi-reactor (update DAG nodes)
-- afi-plugins (update signal processors)
 ```
 
 **Why**: Breaking changes need clear migration paths.

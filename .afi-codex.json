@@ -20,8 +20,7 @@
     "afi-math"
   ],
   "consumers": [
-    "afi-reactor",
-    "afi-plugins"
+    "afi-reactor"
   ],
   "droid_ready": true,
   "notes": [

@@ -67,7 +67,6 @@ Frequent tasks with step-by-step instructions.
 
 1. **Check downstream impact**:
    - afi-reactor uses this schema
-   - afi-plugins may use this schema
    - Ask before proceeding
 
 2. **Update schema**:

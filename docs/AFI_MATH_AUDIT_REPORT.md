@@ -280,7 +280,6 @@ export function computeNoveltyScore(
 **Off-Chain** (⚠️ Stubbed):
 - `afi-token/logic/emissions_with_novelty.ts` — Pseudocode only
 - `afi-token/models/emissions_logic.ts` — Placeholder logic
-- `afi-skills/skills/scoring/epoch-pulse-emissions.md` — Documentation only
 
 ### What's Missing
 

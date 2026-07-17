@@ -130,7 +130,6 @@ interface NoveltyResult {
 ### Off-Chain (Stubbed ⚠️)
 - **Pseudocode**: `afi-token/logic/emissions_with_novelty.ts`
 - **Models**: `afi-token/models/emissions_logic.ts`
-- **Documentation**: `afi-skills/skills/scoring/epoch-pulse-emissions.md`
 
 ### Missing Components
 - [ ] EmissionsCoordinator (off-chain policy engine)

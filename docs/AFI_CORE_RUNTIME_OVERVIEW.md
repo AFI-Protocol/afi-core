@@ -29,7 +29,7 @@ AFI-Core does **NOT** handle:
 
 ❌ **Token Contract Definitions** - That's `afi-token` (AFIToken, AFISignalReceipt, AFIMintCoordinator)  
 ❌ **DAG Topology / Policy** - That's `afi-reactor` (15-node DAG, pipeline definitions, orchestration rules)  
-❌ **Infrastructure / Deployment** - That's `afi-infra` or `afi-ops` (Kubernetes, Terraform, CI/CD)  
+❌ **Infrastructure / Deployment** - That's `afi-infra` (Kubernetes, Terraform, CI/CD)  
 ❌ **Direct On-Chain Writes** - AFI-Core generates instructions; execution happens via Safe/backend/droid
 
 ---

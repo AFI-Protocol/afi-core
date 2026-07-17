@@ -28,7 +28,7 @@ Core runtime for agent signal validation, ElizaOS integration, and PoI/PoInsight
 **This repo does NOT handle**:
 - ❌ DAG orchestration (that's afi-reactor)
 - ❌ UI/frontend (that's afi-research-site)
-- ❌ Deployment (that's afi-ops)
+- ❌ Deployment (that's afi-infra)
 - ❌ Smart contracts (that's afi-token)
 
 ---

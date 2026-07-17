@@ -49,7 +49,7 @@ This droid is a **schema and validator specialist** for afi-core. It:
 - `afi-reactor/` — DAG wiring, orchestration logic (that's the orchestrator's job)
 - `afi-token/` — Smart contracts, emissions, tokenomics
 - `afi-gateway/` — Eliza agents, gateway configs, runtime agent behavior
-- `afi-ops/`, `afi-infra/` — Deployment, infrastructure
+- `afi-infra/` — Deployment, infrastructure
 - Production secrets, deployment configs, or chain IDs
 
 ### Responsibilities
@@ -173,7 +173,7 @@ This droid MUST NOT:
    - Do NOT modify afi-gateway
 
 4. **Touch infra/ops**:
-   - Do NOT modify deployment configs, Terraform, K8s, or CI/CD in afi-ops or afi-infra
+   - Do NOT modify deployment configs, Terraform, K8s, or CI/CD in afi-infra
 
 5. **Introduce PoI/PoInsight as signal fields**:
    - Do NOT add `poi`, `poinsight`, `proof_of_intelligence`, or similar fields to signal schemas

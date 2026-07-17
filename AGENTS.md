@@ -76,7 +76,7 @@ npm run mentor-eval
 - `src/clients/` — Client libraries for AFI services
 - `test/` — Vitest tests
 
-**Consumed by**: afi-reactor (orchestration), afi-ops (deployment), Eliza gateways (types/clients)
+**Consumed by**: afi-reactor (orchestration), Eliza gateways (types/clients)
 **Depends on**: afi-config (schemas)
 
 **Boundary with afi-reactor**:

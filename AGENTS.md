@@ -81,7 +81,7 @@ npm run mentor-eval
 
 **Boundary with afi-reactor**:
 - `afi-core` = runtime behavior (validators, scoring)
-- `afi-reactor` = orchestration (DAG wiring, pipeline execution)
+- `afi-reactor` = orchestration (manifest-driven pipeline composition + execution)
 
 **Eliza integration**:
 - `afi-core` defines shared types, client libraries, and helpers used by AFI services and Eliza plugins.
@@ -159,7 +159,6 @@ npm run mentor-eval
 - Small, well-scoped changes to validators, types, runtime glue when requested
 - Add tests for existing validators
 - Improve ElizaOS integration with clear spec
-- Update `.afi-codex.json` if capabilities change
 
 **Forbidden**:
 - Large-scale refactors without explicit spec

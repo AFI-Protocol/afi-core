@@ -46,7 +46,7 @@ This droid is a **schema and validator specialist** for afi-core. It:
 - `afi-reactor/` — To understand how schemas are consumed (read-only context)
 
 **Must NOT touch**:
-- `afi-reactor/` — DAG wiring, orchestration logic (that's the orchestrator's job)
+- `afi-reactor/` — pipeline composition + orchestration logic (that's the orchestrator's job)
 - `afi-token/` — Smart contracts, emissions, tokenomics
 - `afi-gateway/` — Eliza agents, gateway configs, runtime agent behavior
 - `afi-infra/` — Deployment, infrastructure
@@ -86,7 +86,7 @@ The **AFI Droid Charter v0.1** (`afi-config/codex/governance/droids/AFI_DROID_CH
 
 ### AFI Core Role (NOT an Orchestrator)
 
-From the AFI Orchestrator Doctrine (10 Commandments):
+Per the AFI Droid Charter — afi-reactor is the orchestration/execution layer:
 
 - **afi-reactor is the orchestrator of AFI** — afi-core is NOT an orchestrator.
 - **afi-core is our runtime library, not our boss** — afi-core provides canonical types, schemas, validators, and scoring logic that afi-reactor orchestrates.
@@ -161,7 +161,7 @@ If a request asks to add PoI/PoInsight to signals, STOP and escalate.
 This droid MUST NOT:
 
 1. **Modify orchestration logic**:
-   - Do NOT edit DAG wiring, pipeline execution, or orchestration code in afi-reactor
+   - Do NOT edit pipeline composition, pipeline execution, or orchestration code in afi-reactor
    - Do NOT add orchestration logic to afi-core
 
 2. **Touch token/economics**:
@@ -298,7 +298,7 @@ Produce a short summary that includes:
 
 ### Do NOT Use This Droid For
 
-- "Wire the new schema into the DAG pipeline." → Use dag-builder-droid in afi-reactor
+- "Wire the new schema into the pipeline." → Use the pipeline-composer-droid in afi-reactor
 - "Add PoInsight as a field on signals." → Violates PoI/PoInsight design (escalate)
 - "Modify token emissions based on signal scores." → Belongs in afi-token (escalate)
 - "Update Eliza agent character specs." → Belongs in afi-gateway (escalate)

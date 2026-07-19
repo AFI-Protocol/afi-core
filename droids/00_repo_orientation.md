@@ -6,7 +6,7 @@
 
 ## What This Repo Does
 
-Core runtime for agent signal validation, ElizaOS integration, and PoI/PoInsight validation. This is where signals get validated before entering the DAG pipeline.
+Core runtime for agent signal validation, ElizaOS integration, and PoI/PoInsight validation. This is where signals get validated before entering the scoring pipeline.
 
 **Key Capabilities**:
 - Signal validation (PoI, PoInsight)
@@ -26,8 +26,8 @@ Core runtime for agent signal validation, ElizaOS integration, and PoI/PoInsight
 - ✅ Core schemas
 
 **This repo does NOT handle**:
-- ❌ DAG orchestration (that's afi-reactor)
-- ❌ UI/frontend (that's afi-research-site)
+- ❌ Pipeline orchestration (that's afi-reactor)
+- ❌ UI/frontend
 - ❌ Deployment (that's afi-infra)
 - ❌ Smart contracts (that's afi-token)
 
@@ -88,7 +88,7 @@ See `10_common_tasks.md` for detailed workflows.
 
 **Before making changes**:
 1. Read `AGENTS.md` for constraints
-2. Check `.afi-codex.json` for dependencies
+2. Check `package.json` for dependencies
 3. Run tests locally
 4. Ensure no breaking changes to signal schema
 

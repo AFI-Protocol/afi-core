@@ -173,7 +173,7 @@ const signal = {
 \`\`\`
 
 ### Affected repos
-- afi-reactor (update DAG nodes)
+- afi-reactor (update pipeline composition)
 ```
 
 **Why**: Breaking changes need clear migration paths.

@@ -50,10 +50,6 @@
     "./analysts/*": {
       "import": "./dist/analysts/*",
       "types": "./dist/analysts/*"
-    },
-    "./runtime/*": {
-      "import": "./dist/runtime/*",
-      "types": "./dist/runtime/*"
     }
   },
   "scripts": {

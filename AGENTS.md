@@ -102,7 +102,7 @@ npm run mentor-eval
 
 ## Git Workflows
 
-- **Base branch**: `main` or `migration/multi-repo-reorg`
+- **Base branch**: `main`
 - **Branch naming**: `feat/`, `fix/`, `refactor/`
 - **Commit messages**: Conventional commits (e.g., `feat(validators): add PoInsight v2`)
 - **Before committing**: Run `npm test && npm run validate-all`

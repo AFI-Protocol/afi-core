@@ -112,14 +112,3 @@ export interface MinimalSignalPayload {
   /** Arbitrary metadata */
   metadata?: Record<string, unknown>;
 }
-
-// ============================================================================
-// Re-exports for convenience
-// ============================================================================
-
-/**
- * Type alias for backward compatibility.
- * Use SignalPayload directly in new code.
- * @deprecated Use SignalPayload instead
- */
-export type Signal = SignalPayload;

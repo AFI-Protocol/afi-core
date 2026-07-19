@@ -14,7 +14,7 @@ and is never consumed by runtime code.
 | Merge commit (PR #17) | `fe329164919f0c1c9dc24bb5c279978fb680e983` |
 | Content commit | `7809af4b0308f7db47488947770a0ab9f236268d` |
 | Git blob SHA-1 | `276be9e9348b4e0c2e92e5a9c59d05b50bfeb75d` |
-| sha256 (file bytes) | `ff2f63956038b1d5c01109184e2ddddb2606c11405d2420c35b7decb5eb36546` |
+| sha256 (file bytes) | `e66e8397e9b55507abaff07ccd9d1085d759603cde1b5b468a36ee37bbae0b44` |
 | Executed against afi-core | `254185381c3c9be91da303454c1f7a27e8818983` (main, PR #16 merge) |
 | Profile | `uwr-weighted-lifts-v0.1` (afi-governance `decisions/uwr-profile-pin-v0.1.md`) |
 

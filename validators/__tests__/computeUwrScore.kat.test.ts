@@ -3,10 +3,10 @@
  * `computeUwrScore` (UP-11 item 1).
  *
  * Fixture: ./kats/compute-uwr-score.kat.json — a byte-identical vendored copy
- * of afi-config `kats/uwr-profile/v0/compute-uwr-score.kat.json` @ merge
- * commit fe329164919f0c1c9dc24bb5c279978fb680e983 (PR #17), content commit
- * 7809af4b0308f7db47488947770a0ab9f236268d, blob
- * 276be9e9348b4e0c2e92e5a9c59d05b50bfeb75d. Full provenance and change
+ * of afi-config `kats/uwr-profile/v0/compute-uwr-score.kat.json`, re-vendored
+ * under R1-GOV (D-R1-7) from afi-config content commit
+ * d6f2504805059ffa09d8c1bfcecb67cd47abcea2, blob
+ * ac6f74e88eda1a6266dca40642a5f9312d0163b9. Full provenance and change
  * control: ./kats/README.md. The KAT's engine.sourceCommit 390b440 pin is
  * exact for this suite: validators/UniversalWeightingRule.ts is
  * blob-identical between 390b440 and the executed-against commit 2541853.
@@ -50,7 +50,7 @@ const SIBLING_URL = new URL(
 
 /** sha256 of the vendored bytes, pinned at vendoring time (PR-UWR-KAT-EXEC). */
 const PINNED_SHA256 =
-  "ff2f63956038b1d5c01109184e2ddddb2606c11405d2420c35b7decb5eb36546";
+  "e66e8397e9b55507abaff07ccd9d1085d759603cde1b5b468a36ee37bbae0b44";
 
 const DRIFT_MESSAGE =
   "Vendored copy or upstream KAT changed — requires a new scoped " +
@@ -227,10 +227,9 @@ describe("PR-UWR-KAT-EXEC: computeUwrScore vs afi-config KAT vectors", () => {
     });
 
     it("uwr-score-d2m2-golden-anchor: the 0.1875 golden anchor reproduces bit-exactly", () => {
-      // Decision-named anchor (D2 M2 golden replay:
-      // afi-reactor/test/pipeheads/fixtures/golden.json @ 79c4a6f). Byte-
-      // stability of the D2 M2 goldens is an acceptance criterion (UP-5,
-      // UP-11) — called out explicitly on top of the generic loop above.
+      // Decision-named anchor (Signal Evaluation deterministic golden replay).
+      // Byte-stability of the golden is an acceptance criterion (UP-5, UP-11)
+      // — called out explicitly on top of the generic loop above.
       const v = kat.vectors.find(
         vec => vec.vectorId === "uwr-score-d2m2-golden-anchor"
       );

@@ -61,6 +61,12 @@ export interface FroggyEnrichedView {
      * governed change.
      */
     trendBias?: "bullish" | "bearish" | "range" | null;
+    /**
+     * ATR-percentile volatility regime projected from the technical lane —
+     * the governed lane fact this adapter READS (AR-GOV D-AR-3). Closed
+     * vocabulary; absent or unrecognized maps to "normal".
+     */
+    atrRegime?: "low" | "normal" | "high" | "extreme" | null;
   };
 
   pattern?: {
@@ -203,8 +209,15 @@ export function buildFroggyTrendPullbackInputFromEnriched(
     )
   );
 
-  // ATR/regime: default to normal until we have a reliable indicator mapping.
-  const atrRegime = "normal" as const; // TODO: map from ATR percentile indicators.
+  // ATR regime is the technical lane's governed percentile fact (AR-GOV
+  // D-AR-2/D-AR-3). Absent (regime-less signal, pre-AR record, or the
+  // defensive unknown-string branch) -> "normal", preserving prior behavior.
+  const atrRegime =
+    technical.atrRegime === "low" ||
+    technical.atrRegime === "high" ||
+    technical.atrRegime === "extreme"
+      ? technical.atrRegime
+      : "normal";
 
   // HTF bias defaults neutral (could be extended when HTF context is available).
   const weeklyBias = "neutral" as const;

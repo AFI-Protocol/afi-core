@@ -113,4 +113,51 @@ describe("froggy.enrichment_adapter", () => {
       expect(input.triggerPatternQuality).toBe(0);
     });
   });
+
+  // AR-GOV D-AR-3: the ATR regime is the technical lane's governed fact.
+  // Absent or unrecognized -> "normal" (behavior-preserving); each closed
+  // vocabulary value passes through to the scorer input.
+  describe("atrRegime mapping (AR-GOV D-AR-3)", () => {
+    const enrichedWithRegime = (
+      atrRegime?: "low" | "normal" | "high" | "extreme" | null
+    ): FroggyEnrichedView => ({
+      signalId: `regime-${String(atrRegime)}`,
+      symbol: "BTC",
+      market: "crypto",
+      timeframe: "1h",
+      technical: { emaDistancePct: 0.5, atrRegime }
+    });
+
+    it.each([["low"], ["normal"], ["high"], ["extreme"]] as const)(
+      "passes the lane fact %s through to the scorer input",
+      (regime) => {
+        const input = buildFroggyTrendPullbackInputFromEnriched(
+          enrichedWithRegime(regime)
+        );
+        expect(input.atrRegime).toBe(regime);
+      }
+    );
+
+    it("maps an absent regime to normal (regime-less signals keep today's behavior)", () => {
+      const input = buildFroggyTrendPullbackInputFromEnriched(
+        enrichedWithRegime(undefined)
+      );
+      expect(input.atrRegime).toBe("normal");
+
+      const noTechnical = buildFroggyTrendPullbackInputFromEnriched({
+        signalId: "regime-no-technical",
+        symbol: "BTC",
+        market: "crypto",
+        timeframe: "1h"
+      });
+      expect(noTechnical.atrRegime).toBe("normal");
+    });
+
+    it("maps an unrecognized string to normal (defensive; the lane vocabulary is closed)", () => {
+      const input = buildFroggyTrendPullbackInputFromEnriched(
+        enrichedWithRegime("volatile" as unknown as "normal")
+      );
+      expect(input.atrRegime).toBe("normal");
+    });
+  });
 });

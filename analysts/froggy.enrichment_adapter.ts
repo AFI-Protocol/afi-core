@@ -163,7 +163,15 @@ export interface FroggyEnrichedView {
   };
 }
 
-const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+// Map patternConfidence (0..100) to triggerPatternQuality (0..3) at the
+// emitted grade boundaries (EQ-GOV D-EQ-2): >=75 -> 3, >=65 -> 2, >0 -> 1.
+// A present-but-zero-confidence pattern stays 0, like the absent case.
+const quantisePatternConfidence = (confidence: number): 0 | 1 | 2 | 3 => {
+  if (confidence >= 75) return 3;
+  if (confidence >= 65) return 2;
+  if (confidence > 0) return 1;
+  return 0;
+};
 
 /**
  * Map an enriched view into Froggy's strategy-specific input.
@@ -180,11 +188,10 @@ export function buildFroggyTrendPullbackInputFromEnriched(
   const pulledBackIntoSweetSpot = technical.isInValueSweetSpot ?? false;
   const brokeEmaWithBody = technical.brokeEmaWithBody ?? false;
 
-  // Map patternConfidence (0..100) to triggerPatternQuality (0..3) conservatively.
   const triggerPatternQuality =
-    (pattern.patternConfidence != null
-      ? Math.round(clamp01(pattern.patternConfidence / 100) * 3)
-      : 0) as 0 | 1 | 2 | 3;
+    pattern.patternConfidence != null
+      ? quantisePatternConfidence(pattern.patternConfidence)
+      : 0;
 
   // Simple liquidity sweep hint from pattern name or sentiment tags.
   const sweepHints = [pattern.patternName, ...(sentiment.tags ?? [])]

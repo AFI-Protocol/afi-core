@@ -49,11 +49,34 @@ export interface FroggyEnrichedView {
     isInValueSweetSpot?: boolean | null;
     brokeEmaWithBody?: boolean | null;
     indicators?: Record<string, number | null> | null;
+    /**
+     * ATR(14) projected from the technical lane. Context only — NOT read by
+     * this adapter or any scorer input; wiring it into an axis is a separately
+     * governed change.
+     */
+    atr14?: number | null;
+    /**
+     * EMA20-vs-EMA50 trend bias projected from the technical lane. Context
+     * only — NOT read by this adapter; wiring it into an axis is a separately
+     * governed change.
+     */
+    trendBias?: "bullish" | "bearish" | "range" | null;
   };
 
   pattern?: {
     patternName?: string | null;
     patternConfidence?: number | null;
+    /**
+     * SAME-TIMEFRAME structure read projected from the pattern lane. Context
+     * only — NOT read by this adapter, and never a higher-timeframe bias
+     * (weeklyBias/dailyBias remain a separate future capability).
+     */
+    structureBias?: "higher-highs" | "lower-lows" | "choppy" | null;
+    /**
+     * SAME-TIMEFRAME pullback confirmation projected from the pattern lane.
+     * Context only — NOT read by this adapter.
+     */
+    trendPullbackConfirmed?: boolean | null;
     regime?: {
       cyclePhase?:
         | "early_bull"

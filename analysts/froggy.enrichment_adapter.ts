@@ -58,10 +58,17 @@ export interface FroggyEnrichedView {
      * Values are `| undefined` because the producing lane payload marks some
      * readings optional (e.g. TechnicalLensV1.volumeRatio): the projecting node
      * writes the key with an `undefined` value rather than omitting it or
-     * substituting null. That distinction is load-bearing — canonical JSON drops
-     * an `undefined`-valued key but retains a `null`-valued one — so this type
-     * describes what is actually produced instead of forcing a coercion that
-     * would move hashes.
+     * substituting null.
+     *
+     * The type is widened to match that rather than coercing at the producer
+     * because widening is the only option that provably changes nothing. The
+     * alternatives do not: canonical JSON drops an `undefined`-valued key but
+     * retains a `null`-valued one, and omitting the key changes `Object.keys()`.
+     * This view reaches no live hash preimage today (`enrichmentHash` is taken
+     * over the raw lane payloads, not this renamed projection), but
+     * `strategyLocalViewHash` is a declared-but-unproduced pin over exactly this
+     * view — so a coercion here would become hash-relevant the moment that
+     * producer is wired up.
      */
     indicators?: Record<string, number | null | undefined> | null;
     /**

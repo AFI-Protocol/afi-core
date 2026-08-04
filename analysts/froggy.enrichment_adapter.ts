@@ -38,6 +38,16 @@ export interface FroggyAiMlV1 {
   notes?: string | null;
 }
 
+/**
+ * Declared stub for `brokeEmaWithBody` until a modelling filing implements a
+ * candle-derived producer (D5 / D5-GOV zero-movement option).
+ *
+ * Live reactor `viewTechnical` pins this exact value. It is **not** a silent
+ * missing-data default: it is the explicit, unimplemented-input law. Changing
+ * it, or wiring a real producer, is a score-moving Tier-F act.
+ */
+export const BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB = false as const;
+
 export interface FroggyEnrichedView {
   signalId: string;
   symbol: string;
@@ -214,7 +224,10 @@ export function buildFroggyTrendPullbackInputFromEnriched(
 
   const distanceFromDailyEmaPct = technical.emaDistancePct ?? 0;
   const pulledBackIntoSweetSpot = technical.isInValueSweetSpot ?? false;
-  const brokeEmaWithBody = technical.brokeEmaWithBody ?? false;
+  // Explicit stub law (not a silent default): absent/undefined → declared
+  // unimplemented stub. A future producer must land via a score-moving filing.
+  const brokeEmaWithBody =
+    technical.brokeEmaWithBody ?? BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB;
 
   const triggerPatternQuality =
     pattern.patternConfidence != null

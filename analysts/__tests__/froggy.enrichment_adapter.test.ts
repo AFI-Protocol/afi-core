@@ -4,6 +4,7 @@ import {
   type FroggyTrendPullbackScore
 } from "../froggy.trend_pullback_v1";
 import {
+  BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB,
   buildFroggyTrendPullbackInputFromEnriched,
   type FroggyEnrichedView
 } from "../froggy.enrichment_adapter";
@@ -159,5 +160,17 @@ describe("froggy.enrichment_adapter", () => {
       );
       expect(input.atrRegime).toBe("normal");
     });
+  });
+
+  it("uses the declared brokeEmaWithBody stub when technical omits the field (D5 zero-movement)", () => {
+    expect(BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB).toBe(false);
+    const input = buildFroggyTrendPullbackInputFromEnriched({
+      signalId: "stub-broke",
+      symbol: "BTC",
+      market: "crypto",
+      timeframe: "1h",
+      technical: { emaDistancePct: 0.5, isInValueSweetSpot: true }
+    });
+    expect(input.brokeEmaWithBody).toBe(BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB);
   });
 });

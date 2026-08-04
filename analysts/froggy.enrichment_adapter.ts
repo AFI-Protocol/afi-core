@@ -48,7 +48,22 @@ export interface FroggyEnrichedView {
     emaDistancePct?: number | null;
     isInValueSweetSpot?: boolean | null;
     brokeEmaWithBody?: boolean | null;
-    indicators?: Record<string, number | null> | null;
+    /**
+     * Raw indicator readings projected from the technical lane
+     * (rsi / ema_20 / ema_50 / volume_ratio). Context only — NOT read by this
+     * adapter or any scorer input; wiring one into an axis is a separately
+     * governed change. Documented here to match its siblings below, which
+     * already carry this annotation.
+     *
+     * Values are `| undefined` because the producing lane payload marks some
+     * readings optional (e.g. TechnicalLensV1.volumeRatio): the projecting node
+     * writes the key with an `undefined` value rather than omitting it or
+     * substituting null. That distinction is load-bearing — canonical JSON drops
+     * an `undefined`-valued key but retains a `null`-valued one — so this type
+     * describes what is actually produced instead of forcing a coercion that
+     * would move hashes.
+     */
+    indicators?: Record<string, number | null | undefined> | null;
     /**
      * ATR(14) projected from the technical lane. Context only — NOT read by
      * this adapter or any scorer input; wiring it into an axis is a separately

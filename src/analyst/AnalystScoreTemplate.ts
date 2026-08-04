@@ -72,7 +72,12 @@ export interface AnalystScoreTemplate {
   direction: "long" | "short" | "neutral" | "unknown";
   /** Risk bucket: low, medium, high, extreme */
   riskBucket: "low" | "medium" | "high" | "extreme";
-  /** Conviction level (0-1 scale, where 0 = no conviction, 1 = maximum conviction) */
+  /**
+   * Conviction on [0,1]. For froggy `trend_pullback_v1` this is a **declared
+   * alias of `uwrScore`** (same number under two names) — not an independent
+   * metric. Do not combine with `uwrScore` in a weighted sum without an
+   * explicit modelling filing; that would double-count UWR.
+   */
   conviction: number;
 
   // ========== Greeks (Optional: mostly for derivatives) ==========

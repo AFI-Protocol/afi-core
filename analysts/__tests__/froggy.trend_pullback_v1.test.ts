@@ -76,6 +76,11 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
     expect(result.analystScore.direction).toBe("long"); // baseGoodInput has long bias
   });
 
+  it("declares conviction as an alias of uwrScore (D5 zero-movement)", () => {
+    const result = scoreFroggyTrendPullback(baseGoodInput);
+    expect(result.analystScore.conviction).toBe(result.analystScore.uwrScore);
+  });
+
   it("emits AnalystScoreTemplate with enriched view context", () => {
     const enrichedView: FroggyEnrichedView = {
       signalId: "test-signal-123",

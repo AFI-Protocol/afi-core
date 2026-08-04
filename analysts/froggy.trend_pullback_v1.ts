@@ -182,8 +182,10 @@ function buildAnalystScoreTemplate(
     input.atrRegime === "normal" ? "medium" :
     input.atrRegime === "high" ? "high" : "extreme";
 
-  // Derive conviction from UWR score (simple mapping: uwrScore is already 0-1)
-  const conviction = uwrScore;
+  // D5 / D5-GOV zero-movement: conviction is a *declared alias* of uwrScore,
+  // not an independently computed metric. Emitting both names is intentional
+  // record shape; do not treat them as separable quality numbers.
+  const conviction: number = uwrScore;
 
   // Derive direction from bias
   const direction: "long" | "short" | "neutral" | "unknown" =

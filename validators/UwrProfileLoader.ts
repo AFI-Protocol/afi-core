@@ -9,20 +9,24 @@
  * resolution, no afi-config dependency — the caller supplies the parsed
  * document. Nothing here reads the registry at runtime; the composition-root
  * read is separately authorized (PR-UWR-RUNTIME-READ, RC-3/RC-4), and
- * `defaultUwrConfig` remains the live config unchanged (RC-8).
+ * `defaultUwrConfig` remains the compile-time fallback of last resort (RC-8,
+ * as demoted by CFG-GOV D-CFG-4(2)).
+ *
+ * CFG-GOV D-CFG-4(1) retired RC-5's identity predicate: a validated registry
+ * document's own weight values now flow into the returned config. This loader
+ * no longer compares anything to `defaultUwrConfig`.
  */
 
-import {
-  defaultUwrConfig,
-  type UniversalWeightingRuleConfig
-} from "./UniversalWeightingRule.js";
+import { type UniversalWeightingRuleConfig } from "./UniversalWeightingRule.js";
 
 /** Document-format id accepted by this loader (RC-2 "schema id"). */
 export const UWR_PROFILE_SCHEMA_ID = "afi.uwr-profile.v0";
 
 /**
- * The single registrable profile id (UP-2/UP-10 pin; RC-5 condition 3).
- * Any other id — including `defaultUwrConfig.id` itself — is refused.
+ * The first registered profile id. **No longer a loader gate** — recognition is
+ * registration-driven (CFG-GOV D-CFG-4(3)); the loader checks the document
+ * against the id the caller's registration named. Retained as a
+ * documentation/fixture constant.
  */
 export const PINNED_UWR_PROFILE_ID = "uwr-weighted-lifts-v0.1";
 
@@ -58,8 +62,7 @@ export type UwrProfileLoadErrorReason =
   | "profile-id-mismatch"
   | "supersedes-mismatch"
   | "axes-mismatch"
-  | "weights-shape-mismatch"
-  | "weight-value-mismatch";
+  | "weights-shape-mismatch";
 
 /** Refusal error thrown by {@link loadUwrProfile}; never swallowed here. */
 export class UwrProfileLoadError extends Error {
@@ -92,13 +95,17 @@ function ownValue(record: Record<string, unknown>, key: string): unknown {
  * Validate a parsed UWR profile registry document and map it onto
  * {@link UniversalWeightingRuleConfig}.
  *
- * Enforces the RC-5 identity predicate against {@link defaultUwrConfig}:
- * 1. the four weights equal `defaultUwrConfig`'s per axis;
- * 2. the axes array equals the pinned registry in content and order;
- * 3. `profileId` equals the pinned `uwr-weighted-lifts-v0.1` AND
- *    `supersedes` equals `defaultUwrConfig.id`;
- * 4. id fields are deliberately NOT compared for direct equality — the ids
- *    differ by design (supersession, not equality, is the pinned relation).
+ * Validates the document and maps it, per CFG-GOV D-CFG-4(1):
+ * 1. the four weights are present, exactly keyed, and finite — their VALUES
+ *    are the document's own and flow into the result (RC-5's per-axis value
+ *    equality is retired);
+ * 2. the axes array equals the pinned registry in content and order (UP-4,
+ *    unchanged by D-CFG-4(7));
+ * 3. `profileId` equals the id the caller's registration named (D-CFG-4(3));
+ *    `supersedes`, when present, must be a string — its value equality is
+ *    retired with the rest of the predicate;
+ * 4. validation fails closed on a malformed, mis-identified, or schema-invalid
+ *    document (RC-4, retained in full by D-CFG-4(1)). There is no fallback.
  *
  * Fields this loader does not consume (engine, outputSurface, decaySurface,
  * qualification, scorerIdentity, katRefs, doctrineRefs, …) are ignored, not
@@ -106,17 +113,16 @@ function ownValue(record: Record<string, unknown>, key: string): unknown {
  * its CI pin guards.
  *
  * @param profileJson - Already-parsed registry document (caller does the I/O)
- * @returns Frozen config whose weight values are `defaultUwrConfig`'s own
- *          (identity by construction — the predicate proved the document's
- *          values equal them, so registry-supplied numbers never flow into
- *          the result) and whose `id` is the registered profile id. The `id`
- *          records which governed profile the values were validated against;
- *          it does NOT signal that any registry was read at runtime — stamp
- *          and consumption semantics remain governed by RC-6/RC-8.
+ * @param expectedProfileId - The profile id the resolving registration named
+ * @returns Frozen config whose weight values are the DOCUMENT's own validated
+ *          numbers and whose `id` is the document's `profileId`. Nothing is
+ *          spread from `defaultUwrConfig`. Stamp semantics remain governed by
+ *          RC-6 as extended by D-CFG-4(5).
  * @throws UwrProfileLoadError on any shape or predicate violation
  */
 export function loadUwrProfile(
-  profileJson: unknown
+  profileJson: unknown,
+  expectedProfileId: string
 ): Readonly<UniversalWeightingRuleConfig> {
   if (
     typeof profileJson !== "object" ||
@@ -135,21 +141,24 @@ export function loadUwrProfile(
     );
   }
 
-  // RC-5 condition 3 (first half): only the pinned profile id is loadable.
+  // D-CFG-4(3): the document must be the profile the registration named.
+  // Recognition is registration-driven; refusal stays fail-closed (RC-4).
   const profileId = ownValue(doc, "profileId");
-  if (profileId !== PINNED_UWR_PROFILE_ID) {
+  if (typeof profileId !== "string" || profileId !== expectedProfileId) {
     fail(
       "profile-id-mismatch",
-      `expected profileId "${PINNED_UWR_PROFILE_ID}", got ${describe(profileId)}`
+      `expected profileId "${expectedProfileId}", got ${describe(profileId)}`
     );
   }
 
-  // RC-5 condition 3 (second half): supersession is checked as data.
+  // D-CFG-4(1): RC-5 condition 3's value equality is retired with the rest of
+  // the identity predicate. Shape is still enforced (a non-string supersedes is
+  // a malformed document, RC-4).
   const supersedes = ownValue(doc, "supersedes");
-  if (supersedes !== defaultUwrConfig.id) {
+  if (supersedes !== undefined && typeof supersedes !== "string") {
     fail(
       "supersedes-mismatch",
-      `expected supersedes "${defaultUwrConfig.id}", got ${describe(supersedes)}`
+      `supersedes must be a string when present, got ${describe(supersedes)}`
     );
   }
 
@@ -167,8 +176,8 @@ export function loadUwrProfile(
   }
 
   // RC-2 weight shape: exactly the four pinned keys as own enumerable
-  // properties, each read once; RC-5 condition 1: each value strictly equal
-  // to defaultUwrConfig's.
+  // properties, each read once. D-CFG-4(1): the per-key value equality of
+  // RC-5 condition 1 is retired — shape and finiteness are the only gates.
   const weights = ownValue(doc, "weights");
   if (typeof weights !== "object" || weights === null || Array.isArray(weights)) {
     fail("weights-shape-mismatch", `expected a weights object, got ${describe(weights)}`);
@@ -184,27 +193,27 @@ export function loadUwrProfile(
       `expected exactly keys [${WEIGHT_KEYS.join(", ")}], got [${presentKeys.join(", ")}]`
     );
   }
+  const resolvedWeights: Record<string, number> = {};
   for (const key of WEIGHT_KEYS) {
     const value = weightRecord[key];
     if (typeof value !== "number" || !Number.isFinite(value)) {
       fail("weights-shape-mismatch", `${key} must be a finite number, got ${describe(value)}`);
     }
-    if (value !== defaultUwrConfig[key]) {
-      fail(
-        "weight-value-mismatch",
-        `${key} must equal defaultUwrConfig.${key} (${defaultUwrConfig[key]}), got ${String(value)}`
-      );
-    }
+    resolvedWeights[key] = value as number;
   }
 
-  // RC-5 condition 4 is enforced by omission: no profileId === defaultUwrConfig.id
-  // comparison exists anywhere above.
-  //
-  // Identity by construction: the predicate just proved the document's weight
-  // values equal defaultUwrConfig's, so the returned config spreads
-  // defaultUwrConfig itself — emitting registry-supplied numbers is
-  // structurally impossible, whatever future edits do to the checks above.
-  return Object.freeze({ ...defaultUwrConfig, id: PINNED_UWR_PROFILE_ID });
+  // D-CFG-4(1): the identity predicate is retired. The returned config carries
+  // the DOCUMENT's validated weights and the DOCUMENT's profileId — nothing is
+  // spread from defaultUwrConfig. Validation above is the only gate, and it
+  // fails closed (RC-4): a malformed, mis-identified, or schema-invalid
+  // document yields a throw, never a defaulted config.
+  return Object.freeze({
+    id: profileId,
+    structureWeight: resolvedWeights.structureWeight,
+    executionWeight: resolvedWeights.executionWeight,
+    riskWeight: resolvedWeights.riskWeight,
+    insightWeight: resolvedWeights.insightWeight,
+  });
 }
 
 /** Compact value description for refusal messages (never throws). */

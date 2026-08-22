@@ -93,11 +93,12 @@ function validRegistryDocument(): Record<string, unknown> {
 
 function expectRefusal(
   document: unknown,
-  reason: UwrProfileLoadErrorReason
+  reason: UwrProfileLoadErrorReason,
+  expectedProfileId: string = PINNED_UWR_PROFILE_ID
 ): void {
   let caught: unknown;
   try {
-    loadUwrProfile(document);
+    loadUwrProfile(document, expectedProfileId);
   } catch (error) {
     caught = error;
   }
@@ -109,7 +110,7 @@ function expectRefusal(
 
 describe("PR-UWR-RUNTIME-LOADER: loadUwrProfile happy path", () => {
   it("maps the registered document onto UniversalWeightingRuleConfig", () => {
-    const config = loadUwrProfile(validRegistryDocument());
+    const config = loadUwrProfile(validRegistryDocument(), PINNED_UWR_PROFILE_ID);
     expect(config).toEqual({
       id: "uwr-weighted-lifts-v0.1",
       structureWeight: 0.25,
@@ -122,7 +123,7 @@ describe("PR-UWR-RUNTIME-LOADER: loadUwrProfile happy path", () => {
   it("returns a frozen config and does not mutate the input", () => {
     const document = validRegistryDocument();
     const snapshot = structuredClone(document);
-    const config = loadUwrProfile(document);
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
     expect(Object.isFrozen(config)).toBe(true);
     expect(document).toEqual(snapshot);
   });
@@ -139,30 +140,59 @@ describe("PR-UWR-RUNTIME-LOADER: loadUwrProfile happy path", () => {
   });
 });
 
-describe("PR-UWR-RUNTIME-LOADER: RC-5 identity with defaultUwrConfig", () => {
-  it("loaded weights are strictly equal to defaultUwrConfig's per axis (condition 1)", () => {
-    const config = loadUwrProfile(validRegistryDocument());
-    expect(Object.is(config.structureWeight, defaultUwrConfig.structureWeight)).toBe(true);
-    expect(Object.is(config.executionWeight, defaultUwrConfig.executionWeight)).toBe(true);
-    expect(Object.is(config.riskWeight, defaultUwrConfig.riskWeight)).toBe(true);
-    expect(Object.is(config.insightWeight, defaultUwrConfig.insightWeight)).toBe(true);
-  });
-
-  it("ids relate by supersession, not equality (conditions 3 and 4)", () => {
+describe("CFG-GOV D-CFG-4(1): registry values flow into the config", () => {
+  it("the document's own weight values are what the loader returns", () => {
     const document = validRegistryDocument();
-    const config = loadUwrProfile(document);
-    expect(config.id).not.toBe(defaultUwrConfig.id);
-    expect(document.supersedes).toBe(defaultUwrConfig.id);
+    document.weights = {
+      structureWeight: 0.4,
+      executionWeight: 0.3,
+      riskWeight: 0.2,
+      insightWeight: 0.1
+    };
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
+    expect(config.structureWeight).toBe(0.4);
+    expect(config.executionWeight).toBe(0.3);
+    expect(config.riskWeight).toBe(0.2);
+    expect(config.insightWeight).toBe(0.1);
+    // The retired predicate would have refused this document outright.
   });
 
-  it("a document carrying defaultUwrConfig's own id is refused (only the pin loads)", () => {
+  it("weights that differ from defaultUwrConfig are accepted, not refused", () => {
+    const drifted = validRegistryDocument();
+    drifted.weights = {
+      structureWeight: 0.2499,
+      executionWeight: 0.25,
+      riskWeight: 0.25,
+      insightWeight: 0.2501
+    };
+    const config = loadUwrProfile(drifted, PINNED_UWR_PROFILE_ID);
+    expect(config.structureWeight).toBe(0.2499);
+    expect(config.insightWeight).toBe(0.2501);
+    expect(config.structureWeight).not.toBe(defaultUwrConfig.structureWeight);
+  });
+
+  it("the returned id is the document's own profileId", () => {
+    const document = validRegistryDocument();
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
+    expect(config.id).toBe(document.profileId);
+  });
+
+  it("a document whose profileId is not the one the registration named is refused", () => {
     const document = validRegistryDocument();
     document.profileId = "uwr-default-stub";
     expectRefusal(document, "profile-id-mismatch");
   });
 
-  it("computeUwrScore is bit-identical under loaded vs default config (zero behavior change)", () => {
-    const config = loadUwrProfile(validRegistryDocument());
+  it("recognition is registration-driven: the same document refuses under a different expected id", () => {
+    expectRefusal(validRegistryDocument(), "profile-id-mismatch", "uwr-some-other-profile-v1");
+  });
+
+  it("CFG-WEIGHTS GATE: the 0.25x4 registered profile still yields the 0.1875 UP-5 anchor", () => {
+    // The gate for this slot. uwr-weighted-lifts-v0.1 registers 0.25 on every
+    // axis, so routing froggy through the registry is numerically identical to
+    // the compile-time defaults. RC-10 makes anchor stability an acceptance
+    // criterion for every program PR.
+    const config = loadUwrProfile(validRegistryDocument(), PINNED_UWR_PROFILE_ID);
     const vectors: UwrAxesInput[] = [
       // D2 M2 golden anchor axes (UP-5): expected uwrScore 0.1875.
       { structureAxis: 0.15, executionAxis: 0, riskAxis: 0.2, insightAxis: 0.4 },
@@ -176,10 +206,6 @@ describe("PR-UWR-RUNTIME-LOADER: RC-5 identity with defaultUwrConfig", () => {
         Object.is(computeUwrScore(axes, config), computeUwrScore(axes, defaultUwrConfig))
       ).toBe(true);
     }
-    // The absolute UP-5 golden anchor, asserted here on purpose even though
-    // ./computeUwrScore.kat.test.ts owns the anchor generally: RC-10 makes
-    // anchor stability an acceptance criterion for every program PR, so the
-    // loader suite braces it against a drifted defaultUwrConfig too.
     expect(
       computeUwrScore(
         { structureAxis: 0.15, executionAxis: 0, riskAxis: 0.2, insightAxis: 0.4 },
@@ -222,14 +248,24 @@ describe("PR-UWR-RUNTIME-LOADER: shape refusals", () => {
     expectRefusal(missingId, "profile-id-mismatch");
   });
 
-  it("refuses a wrong or missing supersedes", () => {
-    const wrongSupersedes = validRegistryDocument();
-    wrongSupersedes.supersedes = "uwr-default-stub-v2";
-    expectRefusal(wrongSupersedes, "supersedes-mismatch");
+  it("accepts any string supersedes, and its absence, but refuses a non-string", () => {
+    // D-CFG-4(1): RC-5 condition 3's second half is retired with the rest of
+    // the identity predicate. Shape survives; value equality does not.
+    const otherSupersedes = validRegistryDocument();
+    otherSupersedes.supersedes = "uwr-default-stub-v2";
+    expect(loadUwrProfile(otherSupersedes, PINNED_UWR_PROFILE_ID).id).toBe(
+      PINNED_UWR_PROFILE_ID
+    );
 
     const missingSupersedes = validRegistryDocument();
     delete missingSupersedes.supersedes;
-    expectRefusal(missingSupersedes, "supersedes-mismatch");
+    expect(loadUwrProfile(missingSupersedes, PINNED_UWR_PROFILE_ID).id).toBe(
+      PINNED_UWR_PROFILE_ID
+    );
+
+    const nonString = validRegistryDocument();
+    nonString.supersedes = 42;
+    expectRefusal(nonString, "supersedes-mismatch");
   });
 
   it("refuses axes drift: reorder, drop, extend, rename, non-array", () => {
@@ -297,41 +333,11 @@ describe("PR-UWR-RUNTIME-LOADER: shape refusals", () => {
     expectRefusal(nonObject, "weights-shape-mismatch");
   });
 
-  it("refuses weight value drift, including near-misses (RC-5 condition 1)", () => {
-    const nearMissLow = validRegistryDocument();
-    nearMissLow.weights = {
-      structureWeight: 0.2499,
-      executionWeight: 0.25,
-      riskWeight: 0.25,
-      insightWeight: 0.25
-    };
-    expectRefusal(nearMissLow, "weight-value-mismatch");
-
-    // One ULP above 0.25 — the smallest representable drift.
-    const nearMissUlp = validRegistryDocument();
-    nearMissUlp.weights = {
-      structureWeight: 0.25 + 2 ** -54,
-      executionWeight: 0.25,
-      riskWeight: 0.25,
-      insightWeight: 0.25
-    };
-    expectRefusal(nearMissUlp, "weight-value-mismatch");
-
-    const negated = validRegistryDocument();
-    negated.weights = {
-      structureWeight: -0.25,
-      executionWeight: 0.25,
-      riskWeight: 0.25,
-      insightWeight: 0.25
-    };
-    expectRefusal(negated, "weight-value-mismatch");
-  });
-
   it("ignores fields the loader does not consume", () => {
     const document = validRegistryDocument();
     document.decaySurface = { family: "GreeksDecayTemplate", version: "v1" };
     document["x-futureField"] = { anything: true };
-    expect(loadUwrProfile(document).id).toBe("uwr-weighted-lifts-v0.1");
+    expect(loadUwrProfile(document, PINNED_UWR_PROFILE_ID).id).toBe("uwr-weighted-lifts-v0.1");
   });
 });
 
@@ -348,12 +354,12 @@ describe("PR-UWR-RUNTIME-LOADER: hostile-input hardening (fail-closed)", () => {
       riskWeight: 0.25,
       insightWeight: 0.25
     };
-    const config = loadUwrProfile(document);
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
     expect(reads).toBe(1);
     expect(Object.is(config.structureWeight, 0.25)).toBe(true);
   });
 
-  it("refuses an accessor that lies on its first (only) read", () => {
+  it("an accessor's single read is the value that flows (D-CFG-4(1))", () => {
     const document = validRegistryDocument();
     document.weights = {
       get structureWeight() {
@@ -363,7 +369,35 @@ describe("PR-UWR-RUNTIME-LOADER: hostile-input hardening (fail-closed)", () => {
       riskWeight: 0.25,
       insightWeight: 0.25
     };
-    expectRefusal(document, "weight-value-mismatch");
+    // Under the retired predicate this refused as weight-value-mismatch. The
+    // surviving property is that the one read is authoritative: 9 is finite,
+    // so it validates and it is what the config carries.
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
+    expect(config.structureWeight).toBe(9);
+  });
+
+  it("an accessor returning a non-finite or non-number value still fails closed", () => {
+    const nonFinite = validRegistryDocument();
+    nonFinite.weights = {
+      get structureWeight() {
+        return Number.NaN;
+      },
+      executionWeight: 0.25,
+      riskWeight: 0.25,
+      insightWeight: 0.25
+    };
+    expectRefusal(nonFinite, "weights-shape-mismatch");
+
+    const nonNumber = validRegistryDocument();
+    nonNumber.weights = {
+      get structureWeight() {
+        return "0.25";
+      },
+      executionWeight: 0.25,
+      riskWeight: 0.25,
+      insightWeight: 0.25
+    };
+    expectRefusal(nonNumber, "weights-shape-mismatch");
   });
 
   it("inherited (prototype-supplied) fields never satisfy the predicate", () => {
@@ -384,12 +418,26 @@ describe("PR-UWR-RUNTIME-LOADER: hostile-input hardening (fail-closed)", () => {
     expectRefusal(document, "weights-shape-mismatch");
   });
 
-  it("returned weight values are defaultUwrConfig's own (identity by construction)", () => {
-    const config = loadUwrProfile(validRegistryDocument());
-    expect(config.structureWeight).toBe(defaultUwrConfig.structureWeight);
-    expect(config.executionWeight).toBe(defaultUwrConfig.executionWeight);
-    expect(config.riskWeight).toBe(defaultUwrConfig.riskWeight);
-    expect(config.insightWeight).toBe(defaultUwrConfig.insightWeight);
+  it("returned weight values are the DOCUMENT's own, never defaultUwrConfig's", () => {
+    const document = validRegistryDocument();
+    document.weights = {
+      structureWeight: 0.7,
+      executionWeight: 0.1,
+      riskWeight: 0.1,
+      insightWeight: 0.1
+    };
+    const config = loadUwrProfile(document, PINNED_UWR_PROFILE_ID);
+    expect(config.structureWeight).toBe(0.7);
+    expect(config.structureWeight).not.toBe(defaultUwrConfig.structureWeight);
+    // Nothing is spread from defaultUwrConfig: mutating the returned config is
+    // impossible (frozen), and no key arrives that the document did not supply.
+    expect(Object.keys(config).sort()).toEqual([
+      "executionWeight",
+      "id",
+      "insightWeight",
+      "riskWeight",
+      "structureWeight"
+    ]);
   });
 });
 
@@ -398,7 +446,7 @@ describe("PR-UWR-RUNTIME-LOADER: sibling registry integration (dev-only)", () =>
     "the live sibling afi-config registry document loads through the RC-5 predicate",
     () => {
       const sibling = JSON.parse(readFileSync(SIBLING_REGISTRY_URL, "utf8"));
-      const config = loadUwrProfile(sibling);
+      const config = loadUwrProfile(sibling, PINNED_UWR_PROFILE_ID);
       expect(config).toEqual({
         id: PINNED_UWR_PROFILE_ID,
         structureWeight: 0.25,

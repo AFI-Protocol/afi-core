@@ -60,7 +60,12 @@ export function computeValidatorScore(
   
   // Calculate adjusted half-life based on conviction
   // Higher conviction → longer half-life (signal stays relevant longer)
-  const baseHalfLifeHours = 24; // Default 24 hours
+  // DLC-GOV D-DLC-3(2) conformance: every half-life here is an EXPLICIT
+  // parameter of this dormant surface — no silent library default is
+  // reachable. The canonical live derivation is src/decay applyTimeDecay,
+  // driven by the determination's stamped decayParams (D-DLC-1); the
+  // adjusted-half-life family stays unwired per D-DLC-3(4).
+  const baseHalfLifeHours = 24; // this module's own declared base (hours)
   const adjustedHalfLife = calculateAdjustedHalfLife(
     baseHalfLifeHours,
     volatility,

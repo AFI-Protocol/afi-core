@@ -12,15 +12,14 @@ import {
   applyTimeDecayToUwrScore,
   calculateAdjustedHalfLife,
   applyVolatilityAdjustedDecay,
-  remainingAfterHalfLives,
-  DEFAULT_SIGNAL_HALF_LIFE_HOURS
+  remainingAfterHalfLives
 } from "../SignalDecay.js";
 
 describe("SignalDecay - Time-based UWR Decay", () => {
   describe("applyTimeDecayToUwrScore", () => {
     it("should not decay a fresh signal (age = 0)", () => {
       const uwrScore = 0.8;
-      const decayed = applyTimeDecayToUwrScore(uwrScore, 0);
+      const decayed = applyTimeDecayToUwrScore(uwrScore, 0, 24);
       
       expect(decayed).toBe(0.8);
     });
@@ -54,13 +53,13 @@ describe("SignalDecay - Time-based UWR Decay", () => {
       expect(decayed).toBeGreaterThan(uwrScore * 0.5);
     });
 
-    it("should use default half-life of 24 hours", () => {
+    it("requires an explicit half-life — the silent 24h default is retired (DLC-GOV D-DLC-3(2))", () => {
       const uwrScore = 0.8;
       const ageHours = 24;
-      
-      const decayed = applyTimeDecayToUwrScore(uwrScore, ageHours);
-      
-      // After 24 hours with default half-life, should be 0.8 * 0.5 = 0.4
+
+      const decayed = applyTimeDecayToUwrScore(uwrScore, ageHours, 24);
+
+      // After 24 hours with an EXPLICIT 24h half-life: 0.8 * 0.5 = 0.4
       expect(decayed).toBeCloseTo(0.4, 6);
     });
   });
@@ -98,8 +97,8 @@ describe("SignalDecay - Time-based UWR Decay", () => {
       const uwrScore = 0.8;
       const ageHours = 24;
       
-      const normalDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 1.0);
-      const highVolDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 2.0, 1.0);
+      const normalDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 1.0, 24);
+      const highVolDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 2.0, 1.0, 24);
       
       // High volatility should cause more decay
       expect(highVolDecay).toBeLessThan(normalDecay);
@@ -109,8 +108,8 @@ describe("SignalDecay - Time-based UWR Decay", () => {
       const uwrScore = 0.8;
       const ageHours = 24;
       
-      const normalDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 1.0);
-      const highConvictionDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 2.0);
+      const normalDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 1.0, 24);
+      const highConvictionDecay = applyVolatilityAdjustedDecay(uwrScore, ageHours, 1.0, 2.0, 24);
       
       // High conviction should cause less decay
       expect(highConvictionDecay).toBeGreaterThan(normalDecay);
@@ -126,7 +125,8 @@ describe("SignalDecay - Time-based UWR Decay", () => {
         uwrScore,
         ageHours,
         volatility,
-        conviction
+        conviction,
+        24
       );
       
       // Should be between 0 and original score

@@ -17,30 +17,34 @@
 import { decay } from "@afi-protocol/afi-math";
 
 /**
- * Default half-life for signal decay (in hours).
- * 
- * Signals lose 50% of their value after this many hours.
- * Default: 24 hours (1 day)
- * 
- * TODO: Source from governance config (afi-config)
+ * DLC-GOV D-DLC-3(2): the silent 24h default (`DEFAULT_SIGNAL_HALF_LIFE_HOURS`)
+ * is RETIRED — a half-life a caller never chose is never quietly substituted.
+ * Every entry point below requires the half-life explicitly. The canonical,
+ * minutes-based production derivation is `applyTimeDecay` in `src/decay`
+ * (KAT-bound to afi-config's governed 32-vector apply-time-decay KAT);
+ * this hour-unit wrapper survives only for the dormant validator surface
+ * (ValidatorDecision), which always passes explicit parameters.
  */
-export const DEFAULT_SIGNAL_HALF_LIFE_HOURS = 24;
 
 /**
  * Apply time-based decay to a UWR score.
- * 
+ *
  * Formula: decayed_score = uwr_score * e^(-λ * age)
  * where λ = ln(2) / half_life
- * 
+ *
+ * SUPERSEDED for production use by the minutes-based `applyTimeDecay`
+ * (`src/decay`, DLC-GOV D-DLC-1) — hour-unit, explicit-parameter wrapper
+ * kept for the dormant validator surface only (D-DLC-3(2)).
+ *
  * @param uwrScore - Base UWR score in [0, 1]
  * @param ageHours - Signal age in hours
- * @param halfLifeHours - Half-life in hours (default: 24)
+ * @param halfLifeHours - Half-life in hours (required — no default)
  * @returns Time-decayed score in [0, 1]
  */
 export function applyTimeDecayToUwrScore(
   uwrScore: number,
   ageHours: number,
-  halfLifeHours: number = DEFAULT_SIGNAL_HALF_LIFE_HOURS
+  halfLifeHours: number
 ): number {
   return decay.timeWeightedScore({
     baseScore: uwrScore,
@@ -81,7 +85,10 @@ export function calculateAdjustedHalfLife(
  * @param ageHours - Signal age in hours
  * @param volatility - Volatility factor (1.0 = normal)
  * @param conviction - Conviction factor (1.0 = normal)
- * @param baseHalfLifeHours - Base half-life in hours
+ * @param baseHalfLifeHours - Base half-life in hours (required — no default,
+ *   D-DLC-3(2); note this adjusted-half-life family is expressly NOT wired
+ *   by DLC-GOV D-DLC-3(4) — an adjusted half-life is a different declared
+ *   parameter, introducible only by a future filing)
  * @returns Volatility-adjusted decayed score in [0, 1]
  */
 export function applyVolatilityAdjustedDecay(
@@ -89,7 +96,7 @@ export function applyVolatilityAdjustedDecay(
   ageHours: number,
   volatility: number,
   conviction: number,
-  baseHalfLifeHours: number = DEFAULT_SIGNAL_HALF_LIFE_HOURS
+  baseHalfLifeHours: number
 ): number {
   const adjustedHalfLife = calculateAdjustedHalfLife(
     baseHalfLifeHours,

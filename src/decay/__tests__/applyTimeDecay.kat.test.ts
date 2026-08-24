@@ -22,7 +22,9 @@
  * binary64 — `Object.is` bit-exactness for all 32 vectors, no tolerance.
  *
  * Scope: profile uwr-weighted-lifts-v0.1 is testnet-provisional
- * (x-afiStatus: draft-non-implementation). Execution ≠ wiring — this suite
+ * (x-afiStatus: implemented since DLC-APPLY — the reactor serving-path
+ * derivation executes these vectors in production; DKS-GOV re-vendor).
+ * Execution ≠ wiring beyond that — this suite
  * executes vectors against the engine and nothing more: no reward, mint, or
  * validator-scoring path is touched and no registry is consumed at runtime
  * (the KAT JSON is imported only by this test). The KAT description's
@@ -52,7 +54,7 @@ const SIBLING_URL = new URL(
 
 /** sha256 of the vendored bytes, pinned at vendoring time (PR-UWR-KAT-EXEC). */
 const PINNED_SHA256 =
-  "1a1240cc9f8cc8ed70b22f4aa00e7cdfe1176f4f1d3c6b1e10e886b0cfe81b78";
+  "eb342a9c0a6ae0534c871930724e2b6ac2f5d6ee716699834e71f2a5c15cad1d";
 
 const DRIFT_MESSAGE =
   "Vendored copy or upstream KAT changed — requires a new scoped " +
@@ -107,7 +109,7 @@ describe("PR-UWR-KAT-EXEC: applyTimeDecay vs afi-config KAT vectors", () => {
 
   it("KAT metadata pins are intact", () => {
     expect(kat.schema, DRIFT_MESSAGE).toBe("afi.uwr-decay-kat.v0");
-    expect(kat["x-afiStatus"], DRIFT_MESSAGE).toBe("draft-non-implementation");
+    expect(kat["x-afiStatus"], DRIFT_MESSAGE).toBe("implemented");
     expect(kat.profileId, DRIFT_MESSAGE).toBe("uwr-weighted-lifts-v0.1");
     expect(kat.status, DRIFT_MESSAGE).toBe("testnet-provisional");
     expect(kat.decisionRef, DRIFT_MESSAGE).toBe(

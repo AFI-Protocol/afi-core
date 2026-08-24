@@ -20,6 +20,13 @@
  * to the retired bespoke code" — a discarded value is not a fallback; where a
  * determination exists the fragment is unconditionally authoritative, and an
  * interpreter refusal means no determination at all, D-DEM-5(7)).
+ *
+ * SINCE THE FINAL BOUNDED STEP (mappingRef required; DEM-BIND (e2)): the
+ * reactor's scorer node has NO legacy branch — it refuses to score without a
+ * resolved mapping, so this composer is the ONLY assembly of the froggy
+ * scorer input at runtime. The adapter export's remaining consumers are the
+ * test-side byte-equivalence oracles and this module's residual Pick — see
+ * the retirement note in froggy.enrichment_adapter.ts (D-DEM-2(7), ruling R1).
  */
 
 import type { FroggyEnrichedView } from "./froggy.enrichment_adapter.js";

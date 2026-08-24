@@ -2,6 +2,22 @@
 // This view intentionally mirrors the shape of an enriched signal (similar to infra EnrichedSignalCore)
 // but lives locally in afi-core to avoid cross-repo coupling. Future work may swap this
 // to a shared @afi/domain type once a domain package exists.
+//
+// RETIREMENT STATUS (DEM-BIND final bounded step, DEM-GOV D-DEM-2(7)):
+// the EXPRESSIBLE half of this adapter (the four mapping-declared targets)
+// is retired from the live scoring path — the registered enrichment mapping's
+// interpreter fragment is authoritative there, and the reactor's scorer node
+// refuses to score without a resolved mapping (D-DEM-2(6), no fallback).
+// The export below survives, byte-for-byte, in exactly two sanctioned roles
+// (design ruling R1, reports/DEM-BIND-PLAN.md §0):
+//   1. the TEST-SIDE BYTE-EQUIVALENCE ORACLE — the FLPR-GOV inertness
+//      guards, the oracle golden harness, and the interpreter equivalence
+//      suites all import it read-only to prove the mapping path reproduces
+//      it exactly over the full non-refusal domain;
+//   2. the callee of froggy.residual_builder.ts, which Picks only the six
+//      UNEXPRESSIBLE fields (D-DEM-3) and discards the expressible outputs.
+// Physical deletion would re-home those guards and is reserved to a future
+// owner-gated act — outside every DEM-GOV slot.
 
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 
@@ -214,6 +230,11 @@ const quantisePatternConfidence = (confidence: number): 0 | 1 | 2 | 3 => {
 /**
  * Map an enriched view into Froggy's strategy-specific input.
  * Uses conservative defaults; avoids guessy heuristics.
+ *
+ * NOT LIVE-PATH CODE since the DEM-BIND final bounded step: the expressible
+ * half computed here is authoritative NOWHERE at runtime (D-DEM-2(7)) — see
+ * the retirement note in this file's header. Kept byte-identical as the
+ * test-side byte-equivalence oracle and the residual builder's callee.
  */
 export function buildFroggyTrendPullbackInputFromEnriched(
   enriched: FroggyEnrichedView

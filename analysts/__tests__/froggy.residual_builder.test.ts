@@ -1,76 +1,35 @@
 /**
- * DEM-BIND (a'): the residual builder + composer.
+ * DEM-BIND (a') as generalized by DEM-PRODUCER-PLAN: the residual builder +
+ * composer.
  *
- * The load-bearing property: for every enriched view,
+ * The load-bearing property (the equivalence the reactor's scorer node relies
+ * on): for every enriched view,
  *   compose(interpret(registeredMapping, view).fragment, residual(view))
- * byte-equals the untouched legacy adapter's FULL output. This is the
- * equivalence DEM-BIND's runtime seam relies on, proven here at the afi-core
+ * equals the retired adapter's output on every field the adapter still
+ * computes, plus — for the fields whose producers have landed — the value the
+ * registered mapping binds from the lane fact (or its declared default when
+ * the producer legitimately emitted nothing). Proven here at the afi-core
  * layer against the same adapter export the FLPR-GOV guards pin.
  */
 
-import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 import {
   buildFroggyResidualInput,
   composeFroggyTrendPullbackInput,
+  FROGGY_INPUT_FIELDS,
 } from "../froggy.residual_builder.js";
 import {
   buildFroggyTrendPullbackInputFromEnriched,
   type FroggyEnrichedView,
 } from "../froggy.enrichment_adapter.js";
 import { interpretEnrichmentMapping } from "../../validators/EnrichmentMappingInterpreter.js";
+import {
+  froggyMapping110,
+  loadRegisteredFroggyMapping,
+  NEWEST_REGISTERED_FROGGY_MAPPING_VERSION,
+} from "./support/froggyMappings.js";
 
-const SIBLING_MAPPING = new URL(
-  "../../../afi-config/examples/enrichment-mapping/v1/enrichment-mapping.example.json",
-  import.meta.url
-).pathname;
-
-/** Inline copy of the canonical froggy mapping's bindings (byte-locked to the
- * afi-config example by the DEM-CONTRACT interpreter test's sibling describe;
- * duplicated minimally here so this suite stays hermetic). */
-function froggyMapping(): Record<string, unknown> {
-  if (existsSync(SIBLING_MAPPING)) {
-    return JSON.parse(readFileSync(SIBLING_MAPPING, "utf8"));
-  }
-  return {
-    schema: "afi.enrichment-mapping.v1",
-    mappingId: "froggy-trend-pullback",
-    version: "1.0.0",
-    namespaceDefaults: ["technical", "pattern"],
-    bindings: {
-      distanceFromDailyEmaPct: {
-        operator: "bind",
-        source: { lane: "technical", path: "emaDistancePct" },
-        type: "number",
-        optionality: { ground: "grandfather", default: 0 },
-      },
-      pulledBackIntoSweetSpot: {
-        operator: "bind",
-        source: { lane: "technical", path: "isInValueSweetSpot" },
-        type: "boolean",
-        optionality: { ground: "grandfather", default: false },
-      },
-      triggerPatternQuality: {
-        operator: "band",
-        source: { lane: "pattern", path: "patternConfidence" },
-        rows: [
-          { when: { gte: 75 }, value: 3 },
-          { when: { gte: 65 }, value: 2 },
-          { when: { gt: 0 }, value: 1 },
-        ],
-        otherwise: 0,
-        absent: 0,
-      },
-      atrRegime: {
-        operator: "recode",
-        source: { lane: "technical", path: "atrRegime" },
-        table: { low: "low", high: "high", extreme: "extreme" },
-        fallback: "normal",
-        absent: "normal",
-      },
-    },
-  };
-}
+const REGISTERED = loadRegisteredFroggyMapping(NEWEST_REGISTERED_FROGGY_MAPPING_VERSION, froggyMapping110);
 
 function view(overrides: Partial<FroggyEnrichedView>): FroggyEnrichedView {
   return {
@@ -86,9 +45,10 @@ function view(overrides: Partial<FroggyEnrichedView>): FroggyEnrichedView {
 }
 
 /** The full-domain probe set: every adapter branch the mapping expresses,
- * plus residual-relevant variation (sweep hints on/off). */
+ * residual-relevant variation (sweep hints on/off), and the PLAN producer's
+ * fact present / partial / absent. */
 const PROBES: Array<[string, FroggyEnrichedView]> = [
-  ["baseline", view({})],
+  ["baseline (no plan)", view({})],
   ["band 75", view({ pattern: { patternConfidence: 75 } })],
   ["band 74.999", view({ pattern: { patternConfidence: 74.999 } })],
   ["band 65", view({ pattern: { patternConfidence: 65 } })],
@@ -108,66 +68,118 @@ const PROBES: Array<[string, FroggyEnrichedView]> = [
   ["sweep hints off", view({ sentiment: { score: 0.1, tags: [] }, pattern: { patternName: "doji", patternConfidence: 50 } })],
   ["stop-hunt hint", view({ sentiment: { score: 0.1, tags: ["stop hunt"] } })],
   ["negative distance out of sweet spot", view({ technical: { emaDistancePct: -3.2, isInValueSweetSpot: false, atrRegime: "low" } })],
+  ["plan present: rr 1.4286", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 50000, stopPrice: 49300, firstTargetPrice: 51000, rrToFirstTarget: 1.4286, targetCount: 1 } } })],
+  ["plan present: rr 2.5", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 100, stopPrice: 98, firstTargetPrice: 105, rrToFirstTarget: 2.5, targetCount: 2 } } })],
+  ["plan present but incomplete (entry only → no R:R fact)", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 3001.5, targetCount: 0 } } })],
+  ["plan block null", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: null } })],
 ];
 
-describe("DEM-BIND (a'): compose(fragment, residual) === legacy adapter, byte-for-byte", () => {
+/** What the registered mapping must yield for the PLAN-produced field. */
+function expectedRr(v: FroggyEnrichedView): number {
+  const rr = v.technical?.plan?.rrToFirstTarget;
+  return typeof rr === "number" ? rr : 1;
+}
+
+describe(`compose(fragment(${NEWEST_REGISTERED_FROGGY_MAPPING_VERSION}), residual) partitions the scorer input exactly`, () => {
+  it("the inline registered mapping is byte-content-identical to the sibling registry file (when present)", () => {
+    if (!REGISTERED.fromSibling) return; // hermetic checkout: inline copy is the vector
+    expect(REGISTERED.doc).toStrictEqual(froggyMapping110());
+  });
+
   for (const [label, v] of PROBES) {
     it(label, () => {
-      const mapping = froggyMapping();
-      const result = interpretEnrichmentMapping(mapping, v);
+      const result = interpretEnrichmentMapping(REGISTERED.doc, v);
       const residual = buildFroggyResidualInput(v);
       const composed = composeFroggyTrendPullbackInput(result.fragment, residual);
-      const legacy = buildFroggyTrendPullbackInputFromEnriched(v);
-      expect(composed).toStrictEqual(legacy);
+      const adapter = buildFroggyTrendPullbackInputFromEnriched(v);
+      expect(composed).toStrictEqual({ ...adapter, rrMultiplePlanned: expectedRr(v) });
+      // The PLAN fact rides the mapping, never the adapter: the adapter's
+      // output carries no rrMultiplePlanned at all (synthesis deleted).
+      expect(Object.keys(adapter)).not.toContain("rrMultiplePlanned");
+      // A missing R:R fact fires the declared default and is RECORDED.
+      const rrFired = result.firedDefaults.includes("rrMultiplePlanned");
+      expect(rrFired).toBe(typeof v.technical?.plan?.rrToFirstTarget !== "number");
     });
   }
 
-  it("the residual carries exactly the six unexpressible fields", () => {
+  it("the residual carries exactly the still-unexpressible fields (CANDLE + HTF placeholders + liquiditySwept)", () => {
     const residual = buildFroggyResidualInput(view({}));
     expect(Object.keys(residual).sort()).toEqual([
       "brokeEmaWithBody",
       "dailyBias",
       "haFlatBackConfirmed",
       "liquiditySwept",
+      "weeklyBias",
+    ]);
+  });
+
+  it("FROGGY_INPUT_FIELDS is the scorer input's complete field set", () => {
+    expect([...FROGGY_INPUT_FIELDS].sort()).toEqual([
+      "atrRegime",
+      "brokeEmaWithBody",
+      "dailyBias",
+      "distanceFromDailyEmaPct",
+      "haFlatBackConfirmed",
+      "liquiditySwept",
+      "pulledBackIntoSweetSpot",
       "rrMultiplePlanned",
+      "triggerPatternQuality",
       "weeklyBias",
     ]);
   });
 });
 
-describe("DEM-BIND (a'): the composer fails closed (D-DEM-5(2))", () => {
+describe("the composer fails closed (D-DEM-5(2))", () => {
   const residual = buildFroggyResidualInput(view({}));
+  const goodFragment = {
+    distanceFromDailyEmaPct: 1,
+    pulledBackIntoSweetSpot: true,
+    triggerPatternQuality: 2,
+    atrRegime: "low",
+    rrMultiplePlanned: 2,
+  };
 
-  it("refuses a fragment missing a declared target", () => {
-    expect(() =>
-      composeFroggyTrendPullbackInput(
-        { distanceFromDailyEmaPct: 1, pulledBackIntoSweetSpot: true, triggerPatternQuality: 2 },
-        residual
-      )
-    ).toThrow(/exactly/);
+  it("composes a complete partition", () => {
+    const out = composeFroggyTrendPullbackInput(goodFragment, residual);
+    expect(Object.keys(out).sort()).toEqual([...FROGGY_INPUT_FIELDS].sort());
+    expect(out.rrMultiplePlanned).toBe(2);
   });
 
-  it("refuses a fragment carrying an extra target", () => {
-    expect(() =>
-      composeFroggyTrendPullbackInput(
-        { distanceFromDailyEmaPct: 1, pulledBackIntoSweetSpot: true, triggerPatternQuality: 2, atrRegime: "low", extra: 1 },
-        residual
-      )
-    ).toThrow(/exactly/);
+  it("refuses a fragment missing a target the residual does not supply", () => {
+    const { rrMultiplePlanned: _rr, ...missingRr } = goodFragment;
+    expect(() => composeFroggyTrendPullbackInput(missingRr, residual)).toThrow(/exactly[\s\S]*missing \[rrMultiplePlanned\]/);
   });
 
-  it("refuses wrong-typed targets, including an out-of-grade integer", () => {
+  it("refuses a fragment carrying an unknown target", () => {
     expect(() =>
-      composeFroggyTrendPullbackInput(
-        { distanceFromDailyEmaPct: "1", pulledBackIntoSweetSpot: true, triggerPatternQuality: 2, atrRegime: "low" },
-        residual
-      )
-    ).toThrow(/number/);
+      composeFroggyTrendPullbackInput({ ...goodFragment, extra: 1 }, residual)
+    ).toThrow(/exactly[\s\S]*extra \[extra\]/);
+  });
+
+  it("refuses a fragment that also supplies a residual field (no dual source)", () => {
     expect(() =>
-      composeFroggyTrendPullbackInput(
-        { distanceFromDailyEmaPct: 1, pulledBackIntoSweetSpot: true, triggerPatternQuality: 7, atrRegime: "low" },
-        residual
-      )
+      composeFroggyTrendPullbackInput({ ...goodFragment, weeklyBias: "long" }, residual)
+    ).toThrow(/both supply \[weeklyBias\]/);
+  });
+
+  it("refuses wrong-typed targets, including an out-of-grade integer and a non-finite number", () => {
+    expect(() =>
+      composeFroggyTrendPullbackInput({ ...goodFragment, distanceFromDailyEmaPct: "1" }, residual)
+    ).toThrow(/distanceFromDailyEmaPct must be finite number/);
+    expect(() =>
+      composeFroggyTrendPullbackInput({ ...goodFragment, triggerPatternQuality: 7 }, residual)
     ).toThrow(/0\|1\|2\|3/);
+    expect(() =>
+      composeFroggyTrendPullbackInput({ ...goodFragment, rrMultiplePlanned: Number.NaN }, residual)
+    ).toThrow(/rrMultiplePlanned must be finite number/);
+    expect(() =>
+      composeFroggyTrendPullbackInput({ ...goodFragment, atrRegime: "volatile" }, residual)
+    ).toThrow(/atrRegime must be low\|normal\|high\|extreme/);
+  });
+
+  it("refuses a residual value outside its domain (the residual is checked too)", () => {
+    expect(() =>
+      composeFroggyTrendPullbackInput(goodFragment, { ...residual, weeklyBias: "sideways" as never })
+    ).toThrow(/weeklyBias must be long\|short\|neutral/);
   });
 });

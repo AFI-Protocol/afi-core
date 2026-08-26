@@ -1,13 +1,29 @@
 import { describe, it, expect } from "vitest";
 import {
-  scoreFroggyTrendPullbackFromEnriched,
+  scoreFroggyTrendPullback,
   type FroggyTrendPullbackScore
 } from "../froggy.trend_pullback_v1";
+import { defaultUwrConfig } from "../../validators/UniversalWeightingRule";
 import {
   BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB,
   buildFroggyTrendPullbackInputFromEnriched,
   type FroggyEnrichedView
 } from "../froggy.enrichment_adapter";
+import {
+  buildFroggyResidualInput,
+  composeFroggyTrendPullbackInput
+} from "../froggy.residual_builder";
+import { interpretEnrichmentMapping } from "../../validators/EnrichmentMappingInterpreter";
+import { NEWEST_REGISTERED_FROGGY_MAPPING } from "./support/froggyMappings";
+
+/** The live scoring path (scorer node shape): registered mapping fragment +
+ * residual → composer → rubric. The adapter-only convenience wrapper left
+ * with DEM-PRODUCER-PLAN (the adapter no longer emits a full input). */
+function scoreViaMapping(enriched: FroggyEnrichedView): FroggyTrendPullbackScore {
+  const { fragment } = interpretEnrichmentMapping(NEWEST_REGISTERED_FROGGY_MAPPING(), enriched);
+  const input = composeFroggyTrendPullbackInput(fragment, buildFroggyResidualInput(enriched));
+  return scoreFroggyTrendPullback(input, defaultUwrConfig, enriched);
+}
 
 describe("froggy.enrichment_adapter", () => {
   it("produces a high-ish score for a strong enriched setup", () => {
@@ -19,7 +35,11 @@ describe("froggy.enrichment_adapter", () => {
       technical: {
         emaDistancePct: 0.5,
         isInValueSweetSpot: true,
-        brokeEmaWithBody: false
+        brokeEmaWithBody: false,
+        // DEM-PRODUCER-PLAN: a strong setup carries a verified plan; the
+        // risk axis reads the provider's R:R through the mapping (a plan-less
+        // submission scores the declared floor).
+        plan: { entryPrice: 100, stopPrice: 98, firstTargetPrice: 104, rrToFirstTarget: 2, targetCount: 1 }
       },
       pattern: {
         patternName: "liquidity sweep + reversal",
@@ -31,7 +51,7 @@ describe("froggy.enrichment_adapter", () => {
     };
 
     const result: FroggyTrendPullbackScore =
-      scoreFroggyTrendPullbackFromEnriched(enriched);
+      scoreViaMapping(enriched);
 
     // All scoring data is now in analystScore (canonical)
     expect(result.analystScore.uwrAxes.structure).toBeGreaterThan(0.3);
@@ -50,7 +70,7 @@ describe("froggy.enrichment_adapter", () => {
       // no technical/pattern/sentiment/news/aiMl
     };
 
-    const result = scoreFroggyTrendPullbackFromEnriched(enriched);
+    const result = scoreViaMapping(enriched);
 
     // All scoring data is now in analystScore (canonical)
     expect(result.analystScore.uwrAxes.structure).toBeDefined();

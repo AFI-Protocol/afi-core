@@ -1,11 +1,28 @@
 import { describe, expect, it } from "vitest";
 import {
   scoreFroggyTrendPullback,
-  scoreFroggyTrendPullbackFromEnriched,
   type FroggyTrendPullbackInput
 } from "../froggy.trend_pullback_v1";
 import { AnalystScoreTemplateSchema } from "../../src/analyst/AnalystScoreTemplate.js";
 import type { FroggyEnrichedView } from "../froggy.enrichment_adapter.js";
+import { defaultUwrConfig } from "../../validators/UniversalWeightingRule";
+import {
+  buildFroggyResidualInput,
+  composeFroggyTrendPullbackInput
+} from "../froggy.residual_builder";
+import { interpretEnrichmentMapping } from "../../validators/EnrichmentMappingInterpreter";
+import { NEWEST_REGISTERED_FROGGY_MAPPING } from "./support/froggyMappings";
+
+/** The live composition (registered mapping fragment + residual → rubric);
+ * the adapter-only wrapper left with DEM-PRODUCER-PLAN. */
+function scoreViaMapping(enriched: FroggyEnrichedView) {
+  const { fragment } = interpretEnrichmentMapping(NEWEST_REGISTERED_FROGGY_MAPPING(), enriched);
+  return scoreFroggyTrendPullback(
+    composeFroggyTrendPullbackInput(fragment, buildFroggyResidualInput(enriched)),
+    defaultUwrConfig,
+    enriched
+  );
+}
 
 const baseGoodInput: FroggyTrendPullbackInput = {
   weeklyBias: "long",
@@ -98,7 +115,7 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
       },
     };
 
-    const result = scoreFroggyTrendPullbackFromEnriched(enrichedView);
+    const result = scoreViaMapping(enrichedView);
 
     // Verify analystScore uses enriched view data
     expect(result.analystScore.baseAsset).toBe("ETH");

@@ -9,11 +9,11 @@
  * inertness guards import, and as the callee that still computes the
  * placeholders whose producers have not landed yet. The residual builder CALLS
  * it and picks ONLY the fields the registered mapping cannot express (D-DEM-3):
- * the placeholders still awaiting their producer slots (CANDLE: brokeEmaWithBody
- * + haFlatBackConfirmed; HTF: weeklyBias + dailyBias) plus liquiditySwept (a
- * two-lane read, inexpressible by construction — D-DEM-3(5), reserved).
- * rrMultiplePlanned left the residual with DEM-PRODUCER-PLAN: it is a
- * provider fact the technical lane produces and the mapping binds.
+ * the HTF bias placeholders awaiting DEM-PRODUCER-HTF (weeklyBias + dailyBias)
+ * plus liquiditySwept (a two-lane read, inexpressible by construction —
+ * D-DEM-3(5), reserved). rrMultiplePlanned left the residual with
+ * DEM-PRODUCER-PLAN and brokeEmaWithBody + haFlatBackConfirmed with
+ * DEM-PRODUCER-CANDLE: computed lane facts the mapping binds.
  *
  * On the live mapping path the adapter's expressible computation still
  * executes here and its expressible outputs are DISCARDED — only the
@@ -37,11 +37,11 @@ import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_a
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 import type { EnrichmentMappingResult } from "../validators/EnrichmentMappingInterpreter.js";
 
-/** The fields the mapping cannot express yet (D-DEM-3): the placeholders
- * awaiting DEM-PRODUCER-CANDLE / DEM-PRODUCER-HTF + the reserved liquiditySwept. */
+/** The fields the mapping cannot express yet (D-DEM-3): the HTF bias
+ * placeholders awaiting DEM-PRODUCER-HTF + the reserved liquiditySwept. */
 export type FroggyResidualInput = Pick<
   FroggyTrendPullbackInput,
-  "weeklyBias" | "dailyBias" | "haFlatBackConfirmed" | "brokeEmaWithBody" | "liquiditySwept"
+  "weeklyBias" | "dailyBias" | "liquiditySwept"
 >;
 
 type FroggyInputField = keyof FroggyTrendPullbackInput;
@@ -105,8 +105,6 @@ export function buildFroggyResidualInput(
   return {
     weeklyBias: full.weeklyBias,
     dailyBias: full.dailyBias,
-    haFlatBackConfirmed: full.haFlatBackConfirmed,
-    brokeEmaWithBody: full.brokeEmaWithBody,
     liquiditySwept: full.liquiditySwept,
   };
 }

@@ -95,9 +95,42 @@ export function froggyMapping110(): Record<string, unknown> {
   };
 }
 
+/** DEM-PRODUCER-CANDLE: 1.1.0 + the two candle-structure facts as REQUIRED binds
+ * (no optionality — a window below the kernel floor refuses, D-DEM-5(2)). */
+export function froggyMapping120(): Record<string, unknown> {
+  const base = froggyMapping110();
+  return {
+    ...base,
+    version: "1.2.0",
+    description:
+      "DEM-PRODUCER-CANDLE: the 1.1.0 bindings plus brokeEmaWithBody and haFlatBackConfirmed bound to the technical lane's COMPUTED candle-structure facts (the latest bar's body closed on the counter-trend side of EMA20; the Heikin-Ashi flat-back agreeing with the lane's trend law) — required binds: a window below the 50-bar kernel floor emits no technical payload and the determination refuses (D-DEM-5(2)). The D5-GOV stub and the haFlatBackConfirmed literal are retired.",
+    bindings: {
+      ...(base.bindings as Record<string, unknown>),
+      brokeEmaWithBody: {
+        operator: "bind",
+        source: {
+          lane: "technical",
+          path: "brokeEmaWithBody",
+          producedBy: { pluginId: "afi-analysis-technical", pluginVersion: "2.0.0" },
+        },
+        type: "boolean",
+      },
+      haFlatBackConfirmed: {
+        operator: "bind",
+        source: {
+          lane: "technical",
+          path: "haFlatBackConfirmed",
+          producedBy: { pluginId: "afi-analysis-technical", pluginVersion: "2.0.0" },
+        },
+        type: "boolean",
+      },
+    },
+  };
+}
+
 /** The newest registered mapping this afi-core revision composes against. */
-export const NEWEST_REGISTERED_FROGGY_MAPPING = froggyMapping110;
-export const NEWEST_REGISTERED_FROGGY_MAPPING_VERSION = "1.1.0";
+export const NEWEST_REGISTERED_FROGGY_MAPPING = froggyMapping120;
+export const NEWEST_REGISTERED_FROGGY_MAPPING_VERSION = "1.2.0";
 
 /** Prefer the sibling registry file when present (and let the suite drift-check it). */
 export function loadRegisteredFroggyMapping(version: string, inline: () => Record<string, unknown>): {

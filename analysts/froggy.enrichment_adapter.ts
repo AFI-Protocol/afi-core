@@ -19,10 +19,12 @@
 // DEM-PRODUCER-PLAN (owner-authorized 2026-08-25) deleted the rrMultiplePlanned
 // synthesis: the planned R:R is a PROVIDER fact the technical lane produces
 // from the submitted trade plan (verified against the fetched candles,
-// D-DEM-5(6)) and the registered mapping binds; this builder no longer emits
-// it, so its output is FroggyAdapterOutput, not a full scorer input. The
-// remaining placeholders leave with their producer slots (CANDLE, HTF) and
-// the residue with DEM-PLACEHOLDER-GUARD.
+// D-DEM-5(6)) and the registered mapping binds. DEM-PRODUCER-CANDLE deleted
+// BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB and the `haFlatBackConfirmed: false`
+// literal: both are computed lane facts the mapping binds (required). This
+// builder's output is FroggyAdapterOutput, not a full scorer input. The HTF
+// bias placeholders leave with DEM-PRODUCER-HTF and the residue with
+// DEM-PLACEHOLDER-GUARD.
 
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 
@@ -59,16 +61,6 @@ export interface FroggyAiMlV1 {
   notes?: string | null;
 }
 
-/**
- * Declared stub for `brokeEmaWithBody` until a modelling filing implements a
- * candle-derived producer (D5 / D5-GOV zero-movement option).
- *
- * Live reactor `viewTechnical` pins this exact value. It is **not** a silent
- * missing-data default: it is the explicit, unimplemented-input law. Changing
- * it, or wiring a real producer, is a score-moving Tier-F act.
- */
-export const BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB = false as const;
-
 export interface FroggyEnrichedView {
   signalId: string;
   symbol: string;
@@ -78,7 +70,16 @@ export interface FroggyEnrichedView {
   technical?: {
     emaDistancePct?: number | null;
     isInValueSweetSpot?: boolean | null;
+    /**
+     * DEM-PRODUCER-CANDLE: the technical lane's COMPUTED candle-structure
+     * facts (the D5-GOV stub is retired): the latest bar's body closed on the
+     * counter-trend side of EMA20; the Heikin-Ashi flat-back side and its
+     * agreement with the lane's trend law. Read only through the registered
+     * mapping (required binds); this adapter never reads them.
+     */
     brokeEmaWithBody?: boolean | null;
+    haFlatBack?: "bullish" | "bearish" | "none" | null;
+    haFlatBackConfirmed?: boolean | null;
     /**
      * Raw indicator readings projected from the technical lane
      * (rsi / ema_20 / ema_50 / volume_ratio). Context only — NOT read by this
@@ -262,10 +263,14 @@ const quantisePatternConfidence = (confidence: number): 0 | 1 | 2 | 3 => {
  */
 /**
  * What this retired builder still emits: every scorer input EXCEPT the ones
- * whose producers have landed (DEM-PRODUCER-PLAN: `rrMultiplePlanned` is a
- * mapping-bound provider fact and is never synthesized here again).
+ * whose producers have landed — DEM-PRODUCER-PLAN (`rrMultiplePlanned`) and
+ * DEM-PRODUCER-CANDLE (`brokeEmaWithBody`, `haFlatBackConfirmed`) are
+ * mapping-bound lane facts and are never stubbed or synthesized here again.
  */
-export type FroggyAdapterOutput = Omit<FroggyTrendPullbackInput, "rrMultiplePlanned">;
+export type FroggyAdapterOutput = Omit<
+  FroggyTrendPullbackInput,
+  "rrMultiplePlanned" | "brokeEmaWithBody" | "haFlatBackConfirmed"
+>;
 
 export function buildFroggyTrendPullbackInputFromEnriched(
   enriched: FroggyEnrichedView
@@ -276,10 +281,6 @@ export function buildFroggyTrendPullbackInputFromEnriched(
 
   const distanceFromDailyEmaPct = technical.emaDistancePct ?? 0;
   const pulledBackIntoSweetSpot = technical.isInValueSweetSpot ?? false;
-  // Explicit stub law (not a silent default): absent/undefined → declared
-  // unimplemented stub. A future producer must land via a score-moving filing.
-  const brokeEmaWithBody =
-    technical.brokeEmaWithBody ?? BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB;
 
   const triggerPatternQuality =
     pattern.patternConfidence != null
@@ -313,10 +314,8 @@ export function buildFroggyTrendPullbackInputFromEnriched(
   return {
     weeklyBias,
     dailyBias,
-    haFlatBackConfirmed: false, // TODO: map from enriched technical context when available
     distanceFromDailyEmaPct,
     pulledBackIntoSweetSpot,
-    brokeEmaWithBody,
     liquiditySwept,
     triggerPatternQuality,
     atrRegime,

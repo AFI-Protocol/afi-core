@@ -24,12 +24,16 @@ import {
 } from "../froggy.enrichment_adapter.js";
 import { interpretEnrichmentMapping } from "../../validators/EnrichmentMappingInterpreter.js";
 import {
-  froggyMapping110,
+  froggyMapping120,
   loadRegisteredFroggyMapping,
   NEWEST_REGISTERED_FROGGY_MAPPING_VERSION,
 } from "./support/froggyMappings.js";
 
-const REGISTERED = loadRegisteredFroggyMapping(NEWEST_REGISTERED_FROGGY_MAPPING_VERSION, froggyMapping110);
+const REGISTERED = loadRegisteredFroggyMapping(NEWEST_REGISTERED_FROGGY_MAPPING_VERSION, froggyMapping120);
+
+/** The technical lane's candle-structure facts (DEM-PRODUCER-CANDLE) every
+ * probe view carries — the mapping binds them as REQUIRED. */
+const CANDLE = { brokeEmaWithBody: false, haFlatBack: "none" as const, haFlatBackConfirmed: false };
 
 function view(overrides: Partial<FroggyEnrichedView>): FroggyEnrichedView {
   return {
@@ -37,7 +41,7 @@ function view(overrides: Partial<FroggyEnrichedView>): FroggyEnrichedView {
     symbol: "BTCUSDT",
     market: "crypto",
     timeframe: "4h",
-    technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low" },
+    technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", ...CANDLE },
     pattern: { patternName: "bull flag", patternConfidence: 80 },
     sentiment: { score: 0.4, tags: ["liquidity sweep"] },
     ...overrides,
@@ -55,23 +59,23 @@ const PROBES: Array<[string, FroggyEnrichedView]> = [
   ["band 0.5", view({ pattern: { patternConfidence: 0.5 } })],
   ["band present-zero", view({ pattern: { patternConfidence: 0 } })],
   ["band absent", view({ pattern: { patternName: "bull flag" } })],
-  ["recode high", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "high" } })],
-  ["recode extreme", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "extreme" } })],
-  ["recode present-normal", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "normal" } })],
-  ["recode unrecognized", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "weird" } })],
-  ["recode absent", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true } })],
-  ["grandfathers fire (empty technical)", view({ technical: {} })],
-  ["technical namespace missing", (() => { const v = view({}); delete (v as Record<string, unknown>).technical; return v; })()],
-  ["pattern namespace missing", (() => { const v = view({}); delete (v as Record<string, unknown>).pattern; return v; })()],
-  ["null namespace", view({ technical: null } as unknown as Partial<FroggyEnrichedView>)],
-  ["null-valued sources", view({ technical: { emaDistancePct: null, isInValueSweetSpot: null, atrRegime: null } } as unknown as Partial<FroggyEnrichedView>)],
+  ["recode high", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "high", ...CANDLE } })],
+  ["recode extreme", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "extreme", ...CANDLE } })],
+  ["recode present-normal", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "normal", ...CANDLE } })],
+  ["recode unrecognized", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "weird", ...CANDLE } })],
+  ["recode absent", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, ...CANDLE } })],
+  ["grandfathers fire (technical carries only the candle facts)", view({ technical: { ...CANDLE } })],
+    ["pattern namespace missing", (() => { const v = view({}); delete (v as Record<string, unknown>).pattern; return v; })()],
+    ["null-valued sources", view({ technical: { emaDistancePct: null, isInValueSweetSpot: null, atrRegime: null, ...CANDLE } } as unknown as Partial<FroggyEnrichedView>)],
   ["sweep hints off", view({ sentiment: { score: 0.1, tags: [] }, pattern: { patternName: "doji", patternConfidence: 50 } })],
   ["stop-hunt hint", view({ sentiment: { score: 0.1, tags: ["stop hunt"] } })],
-  ["negative distance out of sweet spot", view({ technical: { emaDistancePct: -3.2, isInValueSweetSpot: false, atrRegime: "low" } })],
-  ["plan present: rr 1.4286", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 50000, stopPrice: 49300, firstTargetPrice: 51000, rrToFirstTarget: 1.4286, targetCount: 1 } } })],
-  ["plan present: rr 2.5", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 100, stopPrice: 98, firstTargetPrice: 105, rrToFirstTarget: 2.5, targetCount: 2 } } })],
-  ["plan present but incomplete (entry only → no R:R fact)", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: { entryPrice: 3001.5, targetCount: 0 } } })],
-  ["plan block null", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", plan: null } })],
+  ["negative distance out of sweet spot", view({ technical: { emaDistancePct: -3.2, isInValueSweetSpot: false, atrRegime: "low", ...CANDLE } })],
+  ["plan present: rr 1.4286", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", ...CANDLE, plan: { entryPrice: 50000, stopPrice: 49300, firstTargetPrice: 51000, rrToFirstTarget: 1.4286, targetCount: 1 } } })],
+  ["plan present: rr 2.5", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", ...CANDLE, plan: { entryPrice: 100, stopPrice: 98, firstTargetPrice: 105, rrToFirstTarget: 2.5, targetCount: 2 } } })],
+  ["plan present but incomplete (entry only → no R:R fact)", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", ...CANDLE, plan: { entryPrice: 3001.5, targetCount: 0 } } })],
+  ["candle facts: broke + confirmed", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", brokeEmaWithBody: true, haFlatBack: "bullish", haFlatBackConfirmed: true } })],
+  ["candle facts: flat-back present but unconfirmed", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", brokeEmaWithBody: false, haFlatBack: "bearish", haFlatBackConfirmed: false } })],
+  ["plan block null", view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low", ...CANDLE, plan: null } })],
 ];
 
 /** What the registered mapping must yield for the PLAN-produced field. */
@@ -83,7 +87,7 @@ function expectedRr(v: FroggyEnrichedView): number {
 describe(`compose(fragment(${NEWEST_REGISTERED_FROGGY_MAPPING_VERSION}), residual) partitions the scorer input exactly`, () => {
   it("the inline registered mapping is byte-content-identical to the sibling registry file (when present)", () => {
     if (!REGISTERED.fromSibling) return; // hermetic checkout: inline copy is the vector
-    expect(REGISTERED.doc).toStrictEqual(froggyMapping110());
+    expect(REGISTERED.doc).toStrictEqual(froggyMapping120());
   });
 
   for (const [label, v] of PROBES) {
@@ -92,25 +96,34 @@ describe(`compose(fragment(${NEWEST_REGISTERED_FROGGY_MAPPING_VERSION}), residua
       const residual = buildFroggyResidualInput(v);
       const composed = composeFroggyTrendPullbackInput(result.fragment, residual);
       const adapter = buildFroggyTrendPullbackInputFromEnriched(v);
-      expect(composed).toStrictEqual({ ...adapter, rrMultiplePlanned: expectedRr(v) });
-      // The PLAN fact rides the mapping, never the adapter: the adapter's
-      // output carries no rrMultiplePlanned at all (synthesis deleted).
-      expect(Object.keys(adapter)).not.toContain("rrMultiplePlanned");
+      expect(composed).toStrictEqual({
+        ...adapter,
+        rrMultiplePlanned: expectedRr(v),
+        // DEM-PRODUCER-CANDLE: the lane's computed facts, bound verbatim.
+        brokeEmaWithBody: v.technical!.brokeEmaWithBody,
+        haFlatBackConfirmed: v.technical!.haFlatBackConfirmed,
+      });
+      // The producer facts ride the mapping, never the adapter (synthesis,
+      // stub, and literal deleted).
+      for (const gone of ["rrMultiplePlanned", "brokeEmaWithBody", "haFlatBackConfirmed"]) {
+        expect(Object.keys(adapter)).not.toContain(gone);
+      }
       // A missing R:R fact fires the declared default and is RECORDED.
       const rrFired = result.firedDefaults.includes("rrMultiplePlanned");
       expect(rrFired).toBe(typeof v.technical?.plan?.rrToFirstTarget !== "number");
     });
   }
 
-  it("the residual carries exactly the still-unexpressible fields (CANDLE + HTF placeholders + liquiditySwept)", () => {
+  it("the residual carries exactly the still-unexpressible fields (HTF placeholders + liquiditySwept)", () => {
     const residual = buildFroggyResidualInput(view({}));
-    expect(Object.keys(residual).sort()).toEqual([
-      "brokeEmaWithBody",
-      "dailyBias",
-      "haFlatBackConfirmed",
-      "liquiditySwept",
-      "weeklyBias",
-    ]);
+    expect(Object.keys(residual).sort()).toEqual(["dailyBias", "liquiditySwept", "weeklyBias"]);
+  });
+
+  it("a view without the candle facts REFUSES at the interpreter (required binds; D-DEM-5(2)) — never a default", () => {
+    const bare = view({ technical: { emaDistancePct: 1.5, isInValueSweetSpot: true, atrRegime: "low" } });
+    expect(() => interpretEnrichmentMapping(REGISTERED.doc, bare)).toThrow(/required-source-absent|brokeEmaWithBody/);
+    const noTechnical = view({}); delete (noTechnical as Record<string, unknown>).technical;
+    expect(() => interpretEnrichmentMapping(REGISTERED.doc, noTechnical)).toThrow(/required-source-absent|brokeEmaWithBody/);
   });
 
   it("FROGGY_INPUT_FIELDS is the scorer input's complete field set", () => {
@@ -137,6 +150,8 @@ describe("the composer fails closed (D-DEM-5(2))", () => {
     triggerPatternQuality: 2,
     atrRegime: "low",
     rrMultiplePlanned: 2,
+    brokeEmaWithBody: false,
+    haFlatBackConfirmed: true,
   };
 
   it("composes a complete partition", () => {

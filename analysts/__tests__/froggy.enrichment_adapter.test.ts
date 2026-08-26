@@ -5,7 +5,6 @@ import {
 } from "../froggy.trend_pullback_v1";
 import { defaultUwrConfig } from "../../validators/UniversalWeightingRule";
 import {
-  BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB,
   buildFroggyTrendPullbackInputFromEnriched,
   type FroggyEnrichedView
 } from "../froggy.enrichment_adapter";
@@ -35,7 +34,10 @@ describe("froggy.enrichment_adapter", () => {
       technical: {
         emaDistancePct: 0.5,
         isInValueSweetSpot: true,
+        // DEM-PRODUCER-CANDLE: the lane's computed candle-structure facts.
         brokeEmaWithBody: false,
+        haFlatBack: "bullish",
+        haFlatBackConfirmed: true,
         // DEM-PRODUCER-PLAN: a strong setup carries a verified plan; the
         // risk axis reads the provider's R:R through the mapping (a plan-less
         // submission scores the declared floor).
@@ -61,7 +63,7 @@ describe("froggy.enrichment_adapter", () => {
     expect(result.analystScore.uwrScore).toBeGreaterThan(0.3);
   });
 
-  it("falls back to safe defaults when optional sections are missing", () => {
+  it("REFUSES when the technical lane is absent — the candle facts are required binds (D-DEM-5(2)); no safe default", () => {
     const enriched: FroggyEnrichedView = {
       signalId: "enriched-2",
       symbol: "ETH",
@@ -69,15 +71,7 @@ describe("froggy.enrichment_adapter", () => {
       timeframe: "4h"
       // no technical/pattern/sentiment/news/aiMl
     };
-
-    const result = scoreViaMapping(enriched);
-
-    // All scoring data is now in analystScore (canonical)
-    expect(result.analystScore.uwrAxes.structure).toBeDefined();
-    expect(result.analystScore.uwrAxes.execution).toBeDefined();
-    expect(result.analystScore.uwrAxes.risk).toBeDefined();
-    expect(result.analystScore.uwrAxes.insight).toBeDefined();
-    expect(result.analystScore.uwrScore).toBeDefined();
+    expect(() => scoreViaMapping(enriched)).toThrow(/required-source-absent|brokeEmaWithBody/);
   });
 
   // EQ-GOV D-EQ-2: the confidence -> triggerPatternQuality threshold map is
@@ -182,15 +176,15 @@ describe("froggy.enrichment_adapter", () => {
     });
   });
 
-  it("uses the declared brokeEmaWithBody stub when technical omits the field (D5 zero-movement)", () => {
-    expect(BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB).toBe(false);
+  it("emits neither brokeEmaWithBody nor haFlatBackConfirmed (DEM-PRODUCER-CANDLE: computed lane facts, mapping-bound)", () => {
     const input = buildFroggyTrendPullbackInputFromEnriched({
-      signalId: "stub-broke",
+      signalId: "no-stub",
       symbol: "BTC",
       market: "crypto",
       timeframe: "1h",
       technical: { emaDistancePct: 0.5, isInValueSweetSpot: true }
     });
-    expect(input.brokeEmaWithBody).toBe(BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB);
+    expect(Object.keys(input)).not.toContain("brokeEmaWithBody");
+    expect(Object.keys(input)).not.toContain("haFlatBackConfirmed");
   });
 });

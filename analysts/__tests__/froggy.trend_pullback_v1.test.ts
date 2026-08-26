@@ -108,6 +108,8 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
         emaDistancePct: 0.5,
         isInValueSweetSpot: true,
         brokeEmaWithBody: false,
+        haFlatBack: "none",
+        haFlatBackConfirmed: false,
       },
       pattern: {
         patternName: "bullish_engulfing",

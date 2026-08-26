@@ -186,7 +186,26 @@ function buildAnalystScoreTemplate(
   // record shape; do not treat them as separable quality numbers.
   const conviction: number = uwrScore;
 
-  // Derive direction from bias
+  // The ANALYST'S OWN verdict, derived from the analyst's higher-timeframe
+  // bias inputs — never from the submitted side (DIR-GOV D-DIR-3; the
+  // submitted side rides scoredSignal.direction, and disagreement between the
+  // two is signal, not defect).
+  //
+  // DEM-PRODUCER-HTF resolves the "unknown" branch DIR-GOV's scope-guard
+  // reserved (its semantics could not be settled while both biases were
+  // hardcoded "neutral" and the branch was unreachable). With real HTF facts
+  // the four cases are exhaustive and each means something:
+  //   long / short  — both timeframes agree on a non-neutral side;
+  //   neutral       — at least one timeframe has NO directional bias (a range
+  //                   regime, or a window the producer could not compute), so
+  //                   the analyst asserts no direction;
+  //   unknown       — both timeframes are directional and DISAGREE (weekly up
+  //                   vs daily down, or the reverse): a higher-timeframe
+  //                   CONFLICT. It is not an error and not an absence — it is
+  //                   the analyst declining to call a direction while the
+  //                   timeframes contradict each other. It feeds no axis (the
+  //                   axes are computed above), and it never reaches
+  //                   scoredSignal.direction, which carries the submitted side.
   const direction: "long" | "short" | "neutral" | "unknown" =
     input.weeklyBias === "long" && input.dailyBias === "long" ? "long" :
     input.weeklyBias === "short" && input.dailyBias === "short" ? "short" :

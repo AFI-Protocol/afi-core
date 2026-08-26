@@ -5,7 +5,6 @@ import {
   type UwrAxesInput
 } from "../validators/UniversalWeightingRule.js";
 import type { FroggyEnrichedView } from "./froggy.enrichment_adapter.js";
-import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_adapter.js";
 import {
   type AnalystScoreTemplate,
   AnalystScoreTemplateSchema
@@ -307,11 +306,4 @@ export function scoreFroggyTrendPullback(
     analystScore,
     notes: notes.length ? notes : undefined,
   };
-}
-
-export function scoreFroggyTrendPullbackFromEnriched(
-  enriched: FroggyEnrichedView
-): FroggyTrendPullbackScore {
-  const input = buildFroggyTrendPullbackInputFromEnriched(enriched);
-  return scoreFroggyTrendPullback(input, defaultUwrConfig, enriched);
 }

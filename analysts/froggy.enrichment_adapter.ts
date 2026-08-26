@@ -14,10 +14,15 @@
 //      guards, the oracle golden harness, and the interpreter equivalence
 //      suites all import it read-only to prove the mapping path reproduces
 //      it exactly over the full non-refusal domain;
-//   2. the callee of froggy.residual_builder.ts, which Picks only the six
+//   2. the callee of froggy.residual_builder.ts, which Picks only the still-
 //      UNEXPRESSIBLE fields (D-DEM-3) and discards the expressible outputs.
-// Physical deletion would re-home those guards and is reserved to a future
-// owner-gated act — outside every DEM-GOV slot.
+// DEM-PRODUCER-PLAN (owner-authorized 2026-08-25) deleted the rrMultiplePlanned
+// synthesis: the planned R:R is a PROVIDER fact the technical lane produces
+// from the submitted trade plan (verified against the fetched candles,
+// D-DEM-5(6)) and the registered mapping binds; this builder no longer emits
+// it, so its output is FroggyAdapterOutput, not a full scorer input. The
+// remaining placeholders leave with their producer slots (CANDLE, HTF) and
+// the residue with DEM-PLACEHOLDER-GUARD.
 
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 
@@ -115,6 +120,25 @@ export interface FroggyEnrichedView {
      * vocabulary; absent or unrecognized maps to "normal".
      */
     atrRegime?: "low" | "normal" | "high" | "extreme" | null;
+    /**
+     * DEM-PRODUCER-PLAN: the technical lane's VERIFIED trade-plan facts,
+     * projected from `technical.plan` — a provider fact (the submitted
+     * afi.trade-plan.v1 levels, checked against the candles the lane fetched;
+     * D-DEM-5(6)). Absent when the submission carried no plan. `rrToFirstTarget`
+     * is absent when the plan carries no stop or no target (declared producer
+     * absence, D-DEM-5(4)(b)). Read only through the registered mapping; this
+     * adapter never reads it.
+     */
+    plan?: {
+      entryPrice?: number | null;
+      stopPrice?: number | null;
+      firstTargetPrice?: number | null;
+      rrToFirstTarget?: number | null;
+      targetCount?: number | null;
+      envelopeLow?: number | null;
+      envelopeHigh?: number | null;
+      barCount?: number | null;
+    } | null;
   };
 
   pattern?: {
@@ -236,9 +260,16 @@ const quantisePatternConfidence = (confidence: number): 0 | 1 | 2 | 3 => {
  * the retirement note in this file's header. Kept byte-identical as the
  * test-side byte-equivalence oracle and the residual builder's callee.
  */
+/**
+ * What this retired builder still emits: every scorer input EXCEPT the ones
+ * whose producers have landed (DEM-PRODUCER-PLAN: `rrMultiplePlanned` is a
+ * mapping-bound provider fact and is never synthesized here again).
+ */
+export type FroggyAdapterOutput = Omit<FroggyTrendPullbackInput, "rrMultiplePlanned">;
+
 export function buildFroggyTrendPullbackInputFromEnriched(
   enriched: FroggyEnrichedView
-): FroggyTrendPullbackInput {
+): FroggyAdapterOutput {
   const technical = enriched.technical ?? {};
   const pattern = enriched.pattern ?? {};
   const sentiment = enriched.sentiment ?? {};
@@ -279,9 +310,6 @@ export function buildFroggyTrendPullbackInputFromEnriched(
   const weeklyBias = "neutral" as const;
   const dailyBias = "neutral" as const;
 
-  const rrMultiplePlanned =
-    pulledBackIntoSweetSpot && !brokeEmaWithBody ? 2 : 1;
-
   return {
     weeklyBias,
     dailyBias,
@@ -292,6 +320,5 @@ export function buildFroggyTrendPullbackInputFromEnriched(
     liquiditySwept,
     triggerPatternQuality,
     atrRegime,
-    rrMultiplePlanned, // conservative default; TODO: map from enriched risk cues if present
   };
 }

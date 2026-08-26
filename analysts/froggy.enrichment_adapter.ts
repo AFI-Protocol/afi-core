@@ -21,10 +21,11 @@
 // from the submitted trade plan (verified against the fetched candles,
 // D-DEM-5(6)) and the registered mapping binds. DEM-PRODUCER-CANDLE deleted
 // BROKE_EMA_WITH_BODY_UNIMPLEMENTED_STUB and the `haFlatBackConfirmed: false`
-// literal: both are computed lane facts the mapping binds (required). This
-// builder's output is FroggyAdapterOutput, not a full scorer input. The HTF
-// bias placeholders leave with DEM-PRODUCER-HTF and the residue with
-// DEM-PLACEHOLDER-GUARD.
+// literal, and DEM-PRODUCER-HTF deleted the weeklyBias/dailyBias neutral
+// literals: all five are computed lane facts the registered mapping binds.
+// NOTHING this builder returns is a placeholder any more — its output is
+// FroggyAdapterOutput: the four expressible fields plus the reserved
+// liquiditySwept (D-DEM-3(5)). The D-DEM-4(2) inventory is empty.
 
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 
@@ -130,6 +131,20 @@ export interface FroggyEnrichedView {
      * absence, D-DEM-5(4)(b)). Read only through the registered mapping; this
      * adapter never reads it.
      */
+    /**
+     * DEM-PRODUCER-HTF: the technical lane's higher-timeframe bias facts,
+     * computed by the SAME EMA20/EMA50 trend law over separately fetched
+     * daily/weekly windows (their timeframes are a registered composition
+     * value, never a code constant). A sub-block is absent when its window is
+     * below the kernel floor (declared producer absence). Read only through
+     * the registered mapping, which recodes the lane's trend vocabulary into
+     * the rubric's bias vocabulary; this adapter never reads it, and no
+     * submitted direction reaches it (DIR-GOV D-DIR-3).
+     */
+    htf?: {
+      daily?: { timeframe: string; trendBias: "bullish" | "bearish" | "range"; ema20: number; ema50: number; barCount: number } | null;
+      weekly?: { timeframe: string; trendBias: "bullish" | "bearish" | "range"; ema20: number; ema50: number; barCount: number } | null;
+    } | null;
     plan?: {
       entryPrice?: number | null;
       stopPrice?: number | null;
@@ -269,7 +284,7 @@ const quantisePatternConfidence = (confidence: number): 0 | 1 | 2 | 3 => {
  */
 export type FroggyAdapterOutput = Omit<
   FroggyTrendPullbackInput,
-  "rrMultiplePlanned" | "brokeEmaWithBody" | "haFlatBackConfirmed"
+  "rrMultiplePlanned" | "brokeEmaWithBody" | "haFlatBackConfirmed" | "weeklyBias" | "dailyBias"
 >;
 
 export function buildFroggyTrendPullbackInputFromEnriched(
@@ -307,13 +322,7 @@ export function buildFroggyTrendPullbackInputFromEnriched(
       ? technical.atrRegime
       : "normal";
 
-  // HTF bias defaults neutral (could be extended when HTF context is available).
-  const weeklyBias = "neutral" as const;
-  const dailyBias = "neutral" as const;
-
   return {
-    weeklyBias,
-    dailyBias,
     distanceFromDailyEmaPct,
     pulledBackIntoSweetSpot,
     liquiditySwept,

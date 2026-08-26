@@ -130,3 +130,44 @@ describe("Froggy trend_pullback_v1 analyst mapping", () => {
   });
 });
 
+// ---------------------------------------------------------------------------
+// DEM-PRODUCER-HTF: the analyst's own direction verdict, now reachable
+// (DIR-GOV D-DIR-3's scope-guard required this branch's semantics to be
+// resolved in the slot that makes non-neutral biases reachable).
+// ---------------------------------------------------------------------------
+describe("analystScore.direction — the analyst's verdict from real HTF biases", () => {
+  const withBiases = (weeklyBias: FroggyTrendPullbackInput["weeklyBias"], dailyBias: FroggyTrendPullbackInput["dailyBias"]) =>
+    scoreFroggyTrendPullback({ ...baseGoodInput, weeklyBias, dailyBias }).analystScore.direction;
+
+  it("both timeframes agree on a side → that side", () => {
+    expect(withBiases("long", "long")).toBe("long");
+    expect(withBiases("short", "short")).toBe("short");
+  });
+
+  it("either timeframe has no directional bias → neutral (the analyst asserts no direction)", () => {
+    expect(withBiases("neutral", "long")).toBe("neutral");
+    expect(withBiases("long", "neutral")).toBe("neutral");
+    expect(withBiases("neutral", "neutral")).toBe("neutral");
+  });
+
+  it("both directional and DISAGREEING → 'unknown': a higher-timeframe CONFLICT, not an error or an absence", () => {
+    expect(withBiases("long", "short")).toBe("unknown");
+    expect(withBiases("short", "long")).toBe("unknown");
+  });
+
+  it("the verdict feeds no axis: only the aligned-bias structure term reads the biases, and it is computed before the verdict", () => {
+    const conflict = scoreFroggyTrendPullback({ ...baseGoodInput, weeklyBias: "long", dailyBias: "short" });
+    const neutral = scoreFroggyTrendPullback({ ...baseGoodInput, weeklyBias: "neutral", dailyBias: "neutral" });
+    // Neither pairing is aligned-and-non-neutral, so the +0.4 term fires for
+    // neither: the axes are identical and only the verdict differs.
+    expect(conflict.analystScore.uwrAxes).toEqual(neutral.analystScore.uwrAxes);
+    expect(conflict.analystScore.direction).not.toBe(neutral.analystScore.direction);
+  });
+
+  it("an aligned non-neutral pair is the ONLY pairing that lifts structure (+0.4)", () => {
+    const aligned = scoreFroggyTrendPullback({ ...baseGoodInput, weeklyBias: "long", dailyBias: "long" }).analystScore.uwrAxes.structure;
+    const conflict = scoreFroggyTrendPullback({ ...baseGoodInput, weeklyBias: "long", dailyBias: "short" }).analystScore.uwrAxes.structure;
+    expect(aligned).toBeGreaterThan(conflict);
+    expect(Math.round((aligned - conflict) * 100) / 100).toBe(0.4);
+  });
+});

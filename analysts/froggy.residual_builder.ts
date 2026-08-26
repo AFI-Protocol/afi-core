@@ -9,11 +9,12 @@
  * inertness guards import, and as the callee that still computes the
  * placeholders whose producers have not landed yet. The residual builder CALLS
  * it and picks ONLY the fields the registered mapping cannot express (D-DEM-3):
- * the HTF bias placeholders awaiting DEM-PRODUCER-HTF (weeklyBias + dailyBias)
- * plus liquiditySwept (a two-lane read, inexpressible by construction —
- * D-DEM-3(5), reserved). rrMultiplePlanned left the residual with
- * DEM-PRODUCER-PLAN and brokeEmaWithBody + haFlatBackConfirmed with
- * DEM-PRODUCER-CANDLE: computed lane facts the mapping binds.
+ * `liquiditySwept` alone — a two-lane read, inexpressible by construction
+ * (D-DEM-3(5), expressly reserved). rrMultiplePlanned left with
+ * DEM-PRODUCER-PLAN, brokeEmaWithBody + haFlatBackConfirmed with
+ * DEM-PRODUCER-CANDLE, and weeklyBias + dailyBias with DEM-PRODUCER-HTF:
+ * every one of them is now a registered producer's fact that the registered
+ * mapping binds.
  *
  * On the live mapping path the adapter's expressible computation still
  * executes here and its expressible outputs are DISCARDED — only the
@@ -37,12 +38,11 @@ import { buildFroggyTrendPullbackInputFromEnriched } from "./froggy.enrichment_a
 import type { FroggyTrendPullbackInput } from "./froggy.trend_pullback_v1.js";
 import type { EnrichmentMappingResult } from "../validators/EnrichmentMappingInterpreter.js";
 
-/** The fields the mapping cannot express yet (D-DEM-3): the HTF bias
- * placeholders awaiting DEM-PRODUCER-HTF + the reserved liquiditySwept. */
-export type FroggyResidualInput = Pick<
-  FroggyTrendPullbackInput,
-  "weeklyBias" | "dailyBias" | "liquiditySwept"
->;
+/** The ONLY field the mapping cannot express (D-DEM-3(5)): `liquiditySwept`,
+ * a two-lane read whose disposition is expressly reserved to its own filing.
+ * Every other scorer input is now a registered producer's fact bound by the
+ * registered mapping — the D-DEM-4(2) placeholder inventory is empty. */
+export type FroggyResidualInput = Pick<FroggyTrendPullbackInput, "liquiditySwept">;
 
 type FroggyInputField = keyof FroggyTrendPullbackInput;
 
@@ -102,11 +102,7 @@ export function buildFroggyResidualInput(
   enriched: FroggyEnrichedView
 ): FroggyResidualInput {
   const full = buildFroggyTrendPullbackInputFromEnriched(enriched);
-  return {
-    weeklyBias: full.weeklyBias,
-    dailyBias: full.dailyBias,
-    liquiditySwept: full.liquiditySwept,
-  };
+  return { liquiditySwept: full.liquiditySwept };
 }
 
 function refuse(detail: string): never {

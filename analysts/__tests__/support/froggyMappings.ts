@@ -128,9 +128,41 @@ export function froggyMapping120(): Record<string, unknown> {
   };
 }
 
+/** DEM-PRODUCER-HTF: 1.2.0 + weeklyBias/dailyBias RECODED from the technical
+ * lane's higher-timeframe trend facts. The vocabulary translation
+ * (bullish→long, bearish→short, range→neutral) lives in the MAPPING, never in
+ * the producer (D-DEM-3: no mapping-shaped constant in a producer); `absent`
+ * is a structurally required recode member and fires only on a genuine
+ * producer absence (a window below the kernel floor). */
+export function froggyMapping130(): Record<string, unknown> {
+  const base = froggyMapping120();
+  const recode = (path: string) => ({
+    operator: "recode",
+    source: {
+      lane: "technical",
+      path,
+      producedBy: { pluginId: "afi-analysis-technical", pluginVersion: "2.0.0" },
+    },
+    table: { bullish: "long", bearish: "short", range: "neutral" },
+    fallback: "neutral",
+    absent: "neutral",
+  });
+  return {
+    ...base,
+    version: "1.3.0",
+    description:
+      "DEM-PRODUCER-HTF: the 1.2.0 bindings plus weeklyBias and dailyBias recoded from the technical lane's higher-timeframe trend facts (technical.htf.weekly.trendBias / technical.htf.daily.trendBias), computed by the same EMA law over separately fetched windows whose timeframes are a registered composition value. The vocabulary translation lives here, not in the producer (D-DEM-3). A window below the kernel floor is a declared producer absence and fires the recode's absent member.",
+    bindings: {
+      ...(base.bindings as Record<string, unknown>),
+      weeklyBias: recode("htf.weekly.trendBias"),
+      dailyBias: recode("htf.daily.trendBias"),
+    },
+  };
+}
+
 /** The newest registered mapping this afi-core revision composes against. */
-export const NEWEST_REGISTERED_FROGGY_MAPPING = froggyMapping120;
-export const NEWEST_REGISTERED_FROGGY_MAPPING_VERSION = "1.2.0";
+export const NEWEST_REGISTERED_FROGGY_MAPPING = froggyMapping130;
+export const NEWEST_REGISTERED_FROGGY_MAPPING_VERSION = "1.3.0";
 
 /** Prefer the sibling registry file when present (and let the suite drift-check it). */
 export function loadRegisteredFroggyMapping(version: string, inline: () => Record<string, unknown>): {
